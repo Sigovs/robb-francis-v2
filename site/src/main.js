@@ -5,7 +5,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { initMotion } from './motion/index.js';
-import { attachSnap } from './motion/snap.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,13 +21,11 @@ function startLenis() {
   gsap.ticker.add(lenisRaf);
   gsap.ticker.lagSmoothing(0);
   window.__lenis = lenis; // verification hook: lenis.scrollTo(y, { immediate: true })
-  attachSnap(lenis);
 }
 function lenisRaf(time) { lenis?.raf(time * 1000); }
 function stopLenis() {
   if (!lenis) return;
   gsap.ticker.remove(lenisRaf);
-  attachSnap(null);
   lenis.destroy();
   lenis = null;
   window.__lenis = null;
