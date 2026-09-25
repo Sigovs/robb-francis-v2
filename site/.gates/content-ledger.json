@@ -1,0 +1,12 @@
+{
+  "claims": [
+    { "id": "phone-ca", "claim": "(908) 234-2100", "status": "verified", "sourceType": "client-material", "source": "reference/found/pop up.png (client promo) + Google business summary; confirmed by Alex 2026-09-24 as the California contact", "appearsAt": [".util__item", ".util-call", ".peak__phone", ".closing__phone", ".drawer__util", ".site-footer"] },
+    { "id": "phone-nj", "claim": "(201) 247-0003", "status": "verified", "sourceType": "client-site", "source": "https://www.rfsportscars.com/contact-us/ (2026-09-24)", "appearsAt": [".site-footer"] },
+    { "id": "inventory-names", "claim": "1974 De Tomaso Pantera Custom · 2020 BMW Z4 sDrive M40i · 1982 Chevrolet Corvette · 1973 Chevrolet Corvette · 2010 Harley-Davidson Sportster XL 1200 V-Twin", "status": "verified", "sourceType": "client-site", "source": "https://www.rfsportscars.com/ homepage inventory (2026-09-24)", "appearsAt": [".inv__list", ".chapter--inv", ".caption"] },
+    { "id": "sold-names", "claim": "1965 Sunbeam Tiger 260 · 1948 MG TC · 1933 BSA 249cc · 1988 Ford Mustang GT Convertible · 1999 Land Rover Defender 90", "status": "verified", "sourceType": "client-social", "source": "instagram.com/robbfrancis_sportscars captions, verbatim in reference/sold/SOLD.md (2026-09-24)", "appearsAt": [".salon__item", ".salon"] },
+    { "id": "sold-status", "claim": "Sold · to confirm", "status": "provenance-pending", "safeForPrivate": true, "sourceType": "client-social", "source": "Instagram shows them as featured; SOLD status awaits Robb (BRIEF §9 Q2). Rendered visibly as 'to confirm' (CP4).", "appearsAt": [".salon__item"] },
+    { "id": "hours", "claim": "Mon, Wed–Sat 9:30 AM – 5:00 PM · Tue & Sun by appointment only", "status": "verified", "sourceType": "client-site", "source": "https://www.rfsportscars.com/contact-us/ (2026-09-24)", "appearsAt": [".site-footer"] },
+    { "id": "about", "claim": "Robb Francis Sports Cars is an Independent Full Service Dealership.", "status": "verified", "sourceType": "client-site", "source": "https://www.rfsportscars.com/about-us/ (2026-09-24)", "appearsAt": [".about"] },
+    { "id": "coasts", "claim": "Now purchasing collector and performance vehicles across both coasts", "status": "verified", "sourceType": "client-material", "source": "reference/found/pop up.png (client promo) + rfsportscars.com/contact-us", "appearsAt": [".closing__kicker"] }
+  ]
+}

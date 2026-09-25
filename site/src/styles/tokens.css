@@ -1,0 +1,138 @@
+/* =========================================================================
+   Robb Francis Sports Cars — token layer
+   Every value used by the page resolves here. No magic numbers downstream.
+   ========================================================================= */
+
+/* Licensed display face, when the file lands in /public/fonts/.
+   Guarded (vite.config.js): while PPEditorialNew-Ultralight.woff2 is absent, the block between the two
+   markers is stripped at transform time, so the browser never requests it and the stand-in loads cleanly —
+   no 404, no HTML parsed as a font. Drop the file in and it is picked up on the next request. */
+/* @font-guard PPEditorialNew-Ultralight.woff2 */
+@font-face {
+  font-family: "PP Editorial New";
+  src: url("/fonts/PPEditorialNew-Ultralight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+/* @font-guard-end */
+
+:root {
+  /* ---------- Type: two voices (Forge's grammar) ----------
+     Display = thin narrow didone. Stand-in: Noto Serif Display at wght 250 / wdth 70, chosen in the render
+     against Forge's PP Editorial New Ultralight. THE SWAP POINT: to switch to the licensed face, change only
+     these three lines (--display-wght: 200; --display-wdth: 100%). font-stretch drives the wdth axis on its
+     own (measured: identical advance widths with and without font-variation-settings), so nothing downstream
+     names an axis value.                                                                              */
+  --font-display: "PP Editorial New", "Noto Serif Display", "Didot", "Bodoni 72", Georgia, serif;
+  --display-wght: 250;
+  --display-wdth: 70%;
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Display scale: four ranks, each ≥ 1.6× the next (DNA7, typography I1). Never below 40px (I10).
+       peak   the one phrase that is the page's climax            ~158px @1440
+       d1     act titles: hero, chapters, services, CTA panels, closing (one rank: they never meet on a screen)
+       d2     display prose: the About paragraph and the brands sentence (one rank, was two at 40–50 vs 40–48)
+       count  the chapter numeral; a numeral, not a rank of text  */
+  --fs-peak: clamp(5rem, 11vw, 12.5rem);
+  --fs-d1: clamp(3.5rem, 7.2vw, 7.25rem);
+  --fs-d2: clamp(2.5rem, 3.2vw, 3rem);
+  --fs-count: 2.5rem;
+  --fs-drawer: 2.75rem;      /* mobile drawer items, display face, ≥ 40px */
+
+  /* Sans roles — functional floor 14px (typography I7). */
+  --fs-lead: clamp(1.125rem, 0.6vw + 0.95rem, 1.375rem);  /* the hero sub-line: 18–22px */
+  --fs-body: 1.125rem;       /* 18px */
+  --fs-body-s: 1rem;         /* 16px — vehicle names, footer */
+  --fs-label: 0.875rem;      /* 14px tracked caps */
+  --lh-display: 0.98;
+  --lh-peak: 0.86;
+  --lh-prose: 1.14;          /* display prose (d2) */
+  --lh-lead: 1.4;
+  --lh-body: 1.5;
+  --track-display: -0.02em;  /* ≈ −2px at 100px (Forge) */
+  --track-peak: -0.025em;
+  --track-prose: -0.008em;
+  --track-label: 0.16em;     /* 14px caps: ≥ 0.08em (I4); was 0.18em */
+  --track-nav: 0.12em;       /* the nav row: seven items read as one quiet set */
+
+  /* ---------- Colour — rebuilt from the material (2026-09-24, taste pass) ----------
+     The warm bone/greige ladder is gone. Sources:
+       ground   near-black carrying a ~6% trace of the gallery navy, sampled off the lounge wall
+                (HEIC 180316, wall region → rgb 11,12,33). Not #000 (color D1).
+       ink      cool near-white: equal R/G, a point more blue. Not cream.
+       ink-2/3  neutral greys with a slight cool bias (B ≥ R), no yellow.
+       oxblood  the door-frame red, sampled off HEIC 180304 (117,18,5). Fills only; lifted for focus/active.
+     Ratios on --c-ground (measured, WCAG): ink 17.1 · ink-2 8.5 · ink-3 6.2 · oxblood-lit 3.96 (non-text ≥ 3). */
+  --c-ground: #0a0b0f;          /* page ground */
+  --c-ground-2: #101218;        /* service text half: one step up, same hue */
+  --c-deep: #06070a;            /* closing + footer: the one step down (was #000) */
+  --c-ink: #eceef1;             /* primary text */
+  --c-ink-2: #a7abb2;           /* secondary text */
+  --c-ink-3: #8c9199;           /* tertiary text (labels, captions only) */
+  --c-hair: rgba(236, 238, 241, 0.2);         /* hairlines, rule track */
+  --c-hair-strong: rgba(236, 238, 241, 0.5);  /* button border */
+  --c-sheen: rgba(236, 238, 241, 0.045);      /* the peak's overhead pool of light on the ground */
+  --c-oxblood: #751205;         /* sampled door-frame red — fills only */
+  --c-oxblood-lit: #c8412c;     /* same hue lifted: focus ring, active mark, rule head */
+  --c-scrim: 8, 9, 13;          /* rgb triplet for scrims: the ground's hue, a step darker */
+
+  /* ---------- Space — one scale (spacing I3) ---------- */
+  --s-1: 0.25rem;   /* 4 */
+  --s-2: 0.5rem;    /* 8 */
+  --s-3: 0.75rem;   /* 12 */
+  --s-4: 1rem;      /* 16 */
+  --s-5: 1.5rem;    /* 24 */
+  --s-6: 2rem;      /* 32 */
+  --s-7: 3rem;      /* 48 */
+  --s-8: 4rem;      /* 64 */
+  --s-9: 6rem;      /* 96 */
+  --s-10: 8rem;     /* 128 */
+  --s-11: 12rem;    /* 192 */
+
+  /* ---------- Grid / frame ---------- */
+  --gutter: var(--s-5);                     /* chrome inset (Forge 24px) */
+  --text-inset: clamp(1.5rem, 9.4vw, 8.5rem); /* Forge service text starts ~9% from the left edge */
+  --measure: 34ch;
+  --rule-inset: var(--s-4);                 /* progress rule 16px from the edges */
+  --header-h: 6.5rem;                       /* utility row + nav row (tightened from 7.25rem); the safe zone every plate holds */
+
+  /* ---------- Chrome sizes ---------- */
+  --btn-h: 3.25rem;           /* 52px (Forge ~54) */
+  --btn-h-sm: 2.75rem;        /* 44px min target */
+  --icon: 1.25rem;
+  --shield-h: 2.75rem;        /* 44px: the mark leads the header without shouting (was 52) */
+
+  /* ---------- Motion tokens — the ONLY source of event durations and easing (motion I3, G4).
+     src/motion/tokens.js reads these at runtime; scrubbed sequences map to scroll ranges instead. ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);     /* entering, expanding */
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);      /* exiting, collapsing */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);  /* state swaps in place */
+  --dur-1: 160ms;   /* hover, focus */
+  --dur-2: 320ms;   /* small state change */
+  --dur-3: 640ms;   /* one line / one element arriving */
+  --dur-4: 1200ms;  /* the whole entrance (hero), ceiling */
+  --stagger-1: 80ms;   /* words / small items */
+  --stagger-2: 120ms;  /* lines */
+  --rise: 0.5rem;      /* max travel for text settling (motion D1: ≤ 8px) */
+  --unlit: 0.42;       /* opacity of an unlit word: ink at .42 on ground ≈ 3.5:1, AA for ≥ 24px type */
+
+  /* ---------- Layers ---------- */
+  --z-plate: 0;
+  --z-scrim: 1;
+  --z-copy: 2;
+  --z-header: 50;
+  --z-drawer: 40;
+
+  color-scheme: dark;
+}
+
+@media (max-width: 767.98px) {
+  :root {
+    --gutter: var(--s-4);
+    --text-inset: var(--s-5);
+    --header-h: 5.5rem;        /* Menu · shield · Call + the By Appointment Only row */
+    --shield-h: 2.5rem;
+    --fs-body: 1.0625rem;
+  }
+}

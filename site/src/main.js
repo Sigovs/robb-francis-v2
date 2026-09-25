@@ -1,0 +1,134 @@
+// Robb Francis Sports Cars — index.
+// Scroll layer is live from the first build (DNA90). The choreography lives in src/motion/ (BRIEF §7–8),
+// inside one gsap.matchMedia scoped to <main> — desktop, mobile and reduced motion authored separately.
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+import { initMotion } from './motion/index.js';
+import { attachSnap } from './motion/snap.js';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const isMobile = window.matchMedia('(max-width: 767.98px)');
+const drawerMode = window.matchMedia('(max-width: 1180px)'); // the nav lives in the drawer up to 1180px (critique: tablet band)
+
+/* ---------- Lenis: one loop, on gsap.ticker; never constructed under reduced motion ---------- */
+let lenis = null;
+function startLenis() {
+  if (lenis || reduceMotion.matches) return;
+  lenis = new Lenis({ autoRaf: false, anchors: true, lerp: 0.1, wheelMultiplier: 1 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(lenisRaf);
+  gsap.ticker.lagSmoothing(0);
+  window.__lenis = lenis; // verification hook: lenis.scrollTo(y, { immediate: true })
+  attachSnap(lenis);
+}
+function lenisRaf(time) { lenis?.raf(time * 1000); }
+function stopLenis() {
+  if (!lenis) return;
+  gsap.ticker.remove(lenisRaf);
+  attachSnap(null);
+  lenis.destroy();
+  lenis = null;
+  window.__lenis = null;
+}
+startLenis();
+reduceMotion.addEventListener('change', () => (reduceMotion.matches ? stopLenis() : startLenis()));
+
+/* ---------- Motion scope (G1, G5): matchMedia is the context; revert() tears every branch down ---------- */
+const ctx = initMotion(document.querySelector('main'));
+
+/* ---------- Hero film: plays only when motion is allowed; the visitor keeps a pause control (MJ6) ---------- */
+function initHeroVideo() {
+  const video = document.querySelector('.hero__video');
+  const toggle = document.querySelector('[data-video-toggle]');
+  if (!video || !toggle) return;
+  const label = toggle.querySelector('[data-video-label]');
+
+  const pickSource = () => {
+    if (isMobile.matches) return video.dataset.srcMobile;
+    const av1 = video.canPlayType('video/mp4; codecs="av01.0.08M.08"');
+    return av1 === 'probably' ? video.dataset.srcDesktopAv1 : video.dataset.srcDesktop;
+  };
+  const setState = (playing) => {
+    toggle.setAttribute('aria-pressed', String(!playing));
+    label.textContent = playing ? 'Pause film' : 'Play film';
+  };
+
+  toggle.hidden = false;
+  let userPaused = false; // only the visitor's own Pause stops the film for good (MJ6)
+  video.addEventListener('playing', () => { video.classList.add('is-playing'); setState(true); });
+  video.addEventListener('pause', () => setState(false));
+
+  const load = () => { if (!video.src) { video.src = pickSource(); } };
+  const play = () => { load(); video.play().catch(() => setState(false)); };
+
+  toggle.addEventListener('click', () => {
+    if (video.paused) { userPaused = false; play(); } else { userPaused = true; video.pause(); }
+  });
+
+  if (reduceMotion.matches) { userPaused = true; setState(false); return; } // poster + Play, per BRIEF §7
+  // stream after LCP (the poster <img> is the LCP element)
+  const start = () => play();
+  if (document.readyState === 'complete') requestIdleCallback?.(start) ?? setTimeout(start, 200);
+  else window.addEventListener('load', () => setTimeout(start, 150), { once: true });
+
+  // pause offscreen / hidden tab (DNA94); resume when it comes back — the film keeps playing
+  let inView = true;
+  const sync = () => {
+    if (userPaused) return; // visitor paused it: respect that
+    if (inView && document.visibilityState === 'visible') { if (video.src && video.paused) video.play().catch(() => {}); }
+    else if (!video.paused) video.pause();
+  };
+  new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: 0.1 }).observe(video);
+  document.addEventListener('visibilitychange', sync);
+}
+initHeroVideo();
+
+/* ---------- Mobile drawer ---------- */
+function initDrawer() {
+  const btn = document.querySelector('[data-menu-toggle]');
+  const drawer = document.querySelector('[data-drawer]');
+  if (!btn || !drawer) return;
+  const label = btn.querySelector('.menu-toggle__label');
+  const set = (open) => {
+    drawer.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Close' : 'Menu';
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    open ? lenis?.stop() : lenis?.start();
+    if (open) drawer.querySelector('a')?.focus();
+  };
+  btn.addEventListener('click', () => set(drawer.hidden));
+  drawer.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !drawer.hidden) { set(false); btn.focus(); } });
+  drawerMode.addEventListener('change', () => { if (!drawerMode.matches) set(false); });
+}
+initDrawer();
+
+/* ---------- Header: collapses to its shield row after the hero on the way DOWN, returns on the way UP ----------
+   (critique: content kept sliding under two rows of chrome; closer to Forge). Never collapsed over the hero, never
+   while it holds focus, never while the drawer is open. Driven by the native scroll Lenis produces. */
+function initHeaderCollapse() {
+  const header = document.querySelector('[data-header]');
+  const hero = document.querySelector('.act-hero');
+  if (!header || !hero) return;
+  let last = window.scrollY, ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = window.scrollY, dy = y - last;
+    if (Math.abs(dy) < 4) return;
+    const past = y > hero.offsetHeight * 0.8;
+    const drawerOpen = document.querySelector('[data-drawer]')?.hidden === false;
+    const focused = header.contains(document.activeElement) && document.activeElement !== document.body;
+    header.classList.toggle('is-collapsed', past && dy > 0 && !drawerOpen && !focused);
+    last = y;
+  };
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  header.addEventListener('focusin', () => header.classList.remove('is-collapsed'));
+}
+initHeaderCollapse();
+
+// Teardown hook for a future router (G1)
+window.addEventListener('pagehide', () => { ctx.revert(); stopLenis(); });

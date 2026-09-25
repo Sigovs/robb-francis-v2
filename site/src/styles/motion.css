@@ -1,0 +1,75 @@
+/* =========================================================================
+   Motion hooks — owned by the motion pass (src/motion/*).
+   Every rule here is gated behind a class that JS adds ONLY when motion is allowed
+   and GSAP initialised (.is-live / .is-stack / .rule--live). Without JS, or under
+   prefers-reduced-motion, none of this applies and the page is the designed static build (G7, MJ5, MJ9).
+   Colours come from tokens only.
+   ========================================================================= */
+
+/* ---------- Act 2 · the door: panels tip back onto the overhead track ---------- */
+.door.is-live { perspective: 1000px; perspective-origin: 50% 0%; }
+.door.is-live .door__panel { will-change: transform; }
+/* the glass darkens as it turns away from the street light, towards the dark track */
+.door.is-live .door__panel::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: rgb(var(--c-scrim));
+  opacity: var(--shade, 0);
+}
+/* The door must read as a door, in front of the room — not merge with it (taste pass, 2026-09-24).
+   Two depth cues, both true to the scene (U9): the room behind is unlit until the door clears (--dim, driven
+   by the roll), so the street-lit glass reads as the nearer surface; and every panel's bottom rail throws a
+   short contact shadow onto the room beneath it — the leading edge of the rising door. */
+.door.is-live .door__interior { will-change: transform; }
+.door.is-live .door__interior::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: rgb(var(--c-scrim));
+  opacity: calc(var(--dim, 0) * 0.72);
+}
+.door.is-live .door__panel {
+  box-shadow: 0 var(--s-4) var(--s-6) 0 rgba(var(--c-scrim), calc(0.85 * var(--lift, 0)));
+}
+
+/* ---------- Progress rule, live: fill by scaleX, head by translateX (transform only, I4) ---------- */
+/* (.rule.rule--live: this file is imported before main.css, so it must out-rank `.rule span`) */
+.rule.rule--live span { width: 100%; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+.rule.rule--live span::after { display: none; }
+.rule.rule--live::after {
+  content: ""; position: absolute; left: -1px; top: -1.5px; width: 3px; height: 4px;
+  background: var(--c-oxblood-lit);
+  transform: translateX(calc(var(--p, 0) * var(--rule-w, 0px)));
+}
+
+/* ---------- Act 3 · chapters and Act 5 · services: one pinned stage, panels stacked ---------- */
+.act-chapters.is-stack, .act-services.is-stack {
+  position: relative; height: 100vh; height: 100svh; min-height: 40rem; overflow: hidden;
+}
+.act-chapters.is-stack .chapter, .act-services.is-stack .svc { position: absolute; inset: 0; }
+.act-chapters.is-stack .chapter:not(.is-active), .act-services.is-stack .svc:not(.is-active) { pointer-events: none; }
+/* services share one ground so the incoming panel's text half never covers the outgoing text */
+.act-services.is-stack { background: var(--c-ground-2); }
+.act-services.is-stack .svc { background: transparent; }
+.act-services.is-stack .svc__media { will-change: clip-path; }
+
+/* ---------- Act 4 · statement: words light with the scroll; only opacity moves ---------- */
+.statement.is-live .word { opacity: var(--unlit); }
+
+/* ---------- Act 6 · peak: the car layer composited on its own ---------- */
+/* The body is cropped to its silhouette with a thin margin that still carries the key light's halo; a narrow
+   feather at the crop edges takes it off so no rectangle ever shows against the ground. */
+.peak__car {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%), linear-gradient(180deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%), linear-gradient(180deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%);
+  mask-composite: intersect;
+}
+.peak__stage.is-live .peak__car,
+.peak__stage.is-live .peak__flank { will-change: transform; }
+
+/* ---------- Act 7 · sold wall: gallery light — the frame under the cursor stays lit, the wall dims ----------
+   Feedback only: no action or information is gated behind it (labels are always visible), so it owes no
+   keyboard equivalent beyond the page's focus styles (I2). Hover-capable pointers only. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .salon__item picture { transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out); }
+  .salon:hover .salon__item:not(:hover) picture { opacity: 0.45; }
+  .salon__item:hover picture { transform: translateY(-2px); }
+}

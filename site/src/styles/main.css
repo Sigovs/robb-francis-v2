@@ -1,0 +1,715 @@
+@import "lenis/dist/lenis.css";
+@import "./tokens.css";
+@import "./motion.css";
+
+/* =========================================================================
+   Base
+   ========================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--c-ground);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+img, video, picture, svg { display: block; max-width: 100%; }
+img { height: auto; }
+figure, h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--c-oxblood-lit);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(var(--c-scrim), 0.7);
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: absolute; left: var(--gutter); top: var(--s-2); z-index: 100;
+  padding: var(--s-3) var(--s-4); background: var(--c-ink); color: var(--c-ground);
+  font-size: var(--fs-label); transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* ---------- Type roles ---------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: var(--display-wght);
+  font-stretch: var(--display-wdth);
+  letter-spacing: var(--track-display);
+  line-height: var(--lh-display);
+  font-optical-sizing: auto;
+}
+.display--hero, .display--l, .display--xl { font-size: var(--fs-d1); text-wrap: balance; }
+.display--hero .hl { display: block; } /* stacked "Collector, / Classic"; one line on tablet portrait (no <br>: SplitText treats a <br> as a hard break whatever CSS says) */
+.display--about { font-size: var(--fs-d2); line-height: var(--lh-prose); letter-spacing: var(--track-prose); text-wrap: pretty; }
+
+/* Lead: a sentence that continues a display line. Sentence case, never tracked caps (I4: caps stay short). */
+.lead {
+  font-family: var(--font-sans); font-size: var(--fs-lead); font-weight: 400;
+  line-height: var(--lh-lead); color: var(--c-ink-2); letter-spacing: 0; text-transform: none;
+  text-wrap: balance;
+}
+/* Vehicle name: one role, one casing, everywhere a car is named (I8). Its proper name, not caps. */
+.vehicle {
+  font-family: var(--font-sans); font-size: var(--fs-body-s); font-weight: 500;
+  line-height: 1.35; letter-spacing: 0; text-transform: none; color: var(--c-ink);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.label--ink { color: var(--c-ink); }
+.label--quiet { color: var(--c-ink-3); }
+.body { font-size: var(--fs-body); line-height: var(--lh-body); color: var(--c-ink-2); max-width: var(--measure); text-wrap: pretty; }
+.body--quiet { color: var(--c-ink-3); }
+.tnum { font-variant-numeric: tabular-nums lining-nums; }
+.nobr { white-space: nowrap; } /* binds a phrase so a line never breaks after a preposition (I6) */
+.caption { color: var(--c-ink-2); }
+
+/* ---------- Button: Forge's outlined rectangle ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--btn-h);
+  padding: 0 var(--s-6);
+  border: 1px solid var(--c-hair-strong);
+  font-size: var(--fs-label); font-weight: 500;
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  color: var(--c-ink);
+  background: rgba(var(--c-scrim), 0.35);
+  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+  white-space: nowrap;
+}
+.btn:hover { background: var(--c-ink); color: var(--c-ground); border-color: var(--c-ink); }
+.btn--sm { min-height: var(--btn-h-sm); padding: 0 var(--s-5); }
+.btn--solid { background: var(--c-ground); }
+
+/* ---------- Progress rule (Forge: hairline 16px from the bottom, filled part bone, accent head) ---------- */
+.rule {
+  position: absolute; left: var(--rule-inset); right: var(--rule-inset); bottom: var(--rule-inset);
+  height: 1px; background: var(--c-hair); z-index: var(--z-copy);
+}
+.rule span {
+  position: absolute; inset: 0 auto 0 0; width: calc(var(--p, 0) * 100%);
+  height: 2px; top: -0.5px; background: var(--c-ink);
+}
+.rule span::after {
+  content: ""; position: absolute; right: -1px; top: -1px; width: 3px; height: 4px; background: var(--c-oxblood-lit);
+}
+
+/* ---------- Scrims: siblings of the copy, never children (DNA21). Hold the header safe zone on plates. ---------- */
+.scrim { position: absolute; inset: 0; pointer-events: none; z-index: var(--z-scrim); }
+
+/* ---------- Stand-in label (GI3 / CP4): visibly a stand-in ---------- */
+.standin {
+  position: absolute; z-index: var(--z-copy);
+  right: var(--gutter); bottom: calc(var(--rule-inset) + var(--s-4));
+  font-size: var(--fs-label); letter-spacing: 0.06em;
+  color: var(--c-ink-2); background: rgba(var(--c-scrim), 0.72);
+  padding: var(--s-1) var(--s-3);
+  border: 1px dashed var(--c-hair-strong);
+}
+
+/* =========================================================================
+   Chrome — transparent, never goes opaque over moving plates (U16)
+   ========================================================================= */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: var(--z-header);
+  padding: var(--s-4) var(--gutter) 0;
+  pointer-events: none;
+}
+.site-header a, .site-header button { pointer-events: auto; }
+/* Header safe zone: a soft falloff that holds AA for the chrome over any plate. No hard edge, never opaque
+   (U13) — on the black acts it paints black on black and is invisible. Counted as part of the composition (U10).
+   Critique pass: held at ≥ 0.86 down to 108px (18 of 70 stops failed at 0.74 over the brightest plates),
+   then released over 64px. When the header collapses to the shield row it contracts with it (scaleY). */
+.site-header::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; z-index: -1;
+  height: calc(var(--header-h) + var(--s-1) + var(--s-8));
+  background: linear-gradient(180deg,
+    rgba(var(--c-scrim), 0.9) 0,
+    rgba(var(--c-scrim), 0.86) calc(var(--header-h) + var(--s-1)),
+    rgba(var(--c-scrim), 0) 100%);
+  transform-origin: 50% 0;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+/* Two rows, one register. The shield leads; the utility row is in the secondary ink, the nav in full ink
+   (critique: ink-2 failed AA over the brightest plates), both at one tracking; the current page carries the
+   oxblood mark. Social moved to the footer (it is not part of the fixed IA; the footer carries both links).
+   After the hero the header collapses to its shield row on the way down and returns on the way up (Forge);
+   keyboard focus inside it always returns it. Transform and opacity only. */
+.util {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  min-height: var(--btn-h-sm);
+}
+.util__left, .util__right { display: flex; align-items: center; gap: var(--s-6); }
+.util__right { justify-content: flex-end; }
+.util__item {
+  font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--track-nav); text-transform: uppercase;
+  color: var(--c-ink-2);
+}
+a.util__item { display: inline-block; line-height: var(--btn-h-sm); transition: color var(--dur-1) var(--ease-out); } /* inline-block, not flex: flex ate the space before (00) */
+a.util__item:hover { color: var(--c-ink); }
+.util .btn--sm { letter-spacing: var(--track-nav); }
+.brand { display: block; justify-self: center; }
+.brand img { height: var(--shield-h); width: auto; }
+.nav { margin-top: var(--s-1); }
+.nav ul { display: flex; justify-content: center; gap: clamp(1.25rem, 2.4vw, 2.5rem); }
+.nav a {
+  display: inline-flex; align-items: center; min-height: var(--btn-h-sm);
+  font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--track-nav); text-transform: uppercase;
+  color: var(--c-ink); position: relative;
+  transition: color var(--dur-1) var(--ease-out);
+}
+.nav a:hover { color: var(--c-ink-2); }
+/* Active state: ink + the oxblood mark, not an underline (anti-patterns D5). Two channels, not hue alone (I2). */
+.nav a[aria-current="page"]::before {
+  content: ""; position: absolute; left: 50%; bottom: var(--s-1); width: var(--s-1); height: var(--s-1); margin-left: calc(var(--s-1) / -2);
+  background: var(--c-oxblood-lit);
+}
+.footer__social a { display: inline-flex; align-items: center; min-height: var(--btn-h-sm); }
+.menu-toggle, .util-call { display: none; }
+
+.drawer {
+  position: fixed; inset: 0; z-index: var(--z-drawer);
+  background: var(--c-ground);
+  padding: calc(var(--header-h) + var(--s-5)) var(--gutter) var(--s-7);
+  display: flex; flex-direction: column; justify-content: space-between; gap: var(--s-7);
+  overflow-y: auto;
+}
+.drawer[hidden] { display: none; }
+.drawer__nav a {
+  display: block; padding: var(--s-2) 0;
+  font-family: var(--font-display); font-weight: var(--display-wght); font-stretch: var(--display-wdth);
+  font-size: var(--fs-drawer); line-height: 1.05; letter-spacing: var(--track-display);
+}
+.drawer__util { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-4); font-size: var(--fs-body); }
+.drawer__util a:not(.btn) { min-height: var(--btn-h-sm); display: inline-flex; align-items: center; }
+
+/* =========================================================================
+   Acts
+   ========================================================================= */
+.act { position: relative; isolation: isolate; }
+
+/* ---------- ACT 1 · HERO ---------- */
+.act-hero { height: 100vh; height: 100svh; min-height: 36rem; overflow: hidden; }
+.hero__media, .hero__poster, .hero__video { position: absolute; inset: 0; z-index: var(--z-plate); }
+.hero__poster img, .hero__video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+.hero__video { opacity: 0; transition: opacity var(--dur-3) var(--ease-out); }
+.hero__video.is-playing { opacity: 1; }
+/* The frame's dark upper-left forest is the reading zone. Scrim constructed as a top band (header) +
+   a left falloff (H1) — measured per frame, see _shots/contrast.json. */
+.scrim--hero {
+  background:
+    linear-gradient(90deg, rgba(var(--c-scrim), 0.74) 0, rgba(var(--c-scrim), 0.62) 34%, rgba(var(--c-scrim), 0.22) 50%, rgba(var(--c-scrim), 0) 64%),
+    linear-gradient(0deg, rgba(var(--c-scrim), 0.55) 0, rgba(var(--c-scrim), 0) 9rem);
+}
+.hero__copy {
+  position: absolute; z-index: var(--z-copy);
+  left: var(--text-inset); top: calc(var(--header-h) + clamp(2rem, 9vh, 6rem));
+  max-width: 44rem;
+}
+/* landscape: the copy holds the air LEFT of the car (gates, hero.json: the lead ran into the car on the first frame).
+   The film is height-bound in cover here, so the car's left edge sits at ~50vw − 0.24 × (film width); 34vw keeps
+   the copy's box clear of it at 1280–1920. */
+@media (min-aspect-ratio: 1/1) {
+  .hero__copy { max-width: calc(34vw - var(--text-inset)); }
+}
+/* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
+   so the car lands mid-screen. The car keeps the upper field; the copy moves beneath it, across the full measure,
+   on a bottom-up falloff — the reading zone is the dark road, not the car. */
+@media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+  .hero__copy {
+    top: auto; right: var(--gutter); max-width: none;
+    bottom: calc(var(--s-6) + var(--btn-h-sm) + var(--s-5));
+  }
+  /* one line: the car's lowest point across the loop is y ≈ 0.72 of the frame (gates, worst sample), which leaves
+     ~210px above the pause control — room for one display line, not two */
+  .act-hero .display--hero .hl { display: inline; }
+  .act-hero .hero__kicker { margin-bottom: var(--s-3); }
+  .act-hero .hero__title { gap: var(--s-3); }
+  .scrim--hero {
+    background:
+      linear-gradient(0deg, rgba(var(--c-scrim), 0.86) 0, rgba(var(--c-scrim), 0.78) 30%, rgba(var(--c-scrim), 0) 52%);
+  }
+}
+.hero__kicker { color: var(--c-ink); margin-bottom: var(--s-5); }
+.hero__title { display: flex; flex-direction: column; gap: var(--s-5); font-weight: inherit; }
+.hero__title .lead { max-width: 30ch; color: var(--c-ink); }
+.hero__foot {
+  position: absolute; z-index: var(--z-copy);
+  left: var(--text-inset); right: var(--gutter); bottom: var(--s-6);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-5);
+}
+.scroll-cue { display: inline-flex; align-items: center; gap: var(--s-3); min-height: var(--btn-h-sm); margin-left: auto; }
+.scroll-cue__line { width: var(--s-7); height: 1px; background: var(--c-ink); }
+.hero__pause { min-height: var(--btn-h-sm); padding: 0 var(--s-4); border: 1px solid var(--c-hair-strong); }
+
+/* ---------- ACT 2 · THE DOOR ---------- */
+.act-door { background: var(--c-ground); }
+.door-pin {
+  position: relative; height: 100vh; height: 100svh; min-height: 34rem;
+  display: grid; place-items: center; overflow: hidden;
+}
+.door__kicker {
+  position: absolute; z-index: var(--z-copy);
+  left: var(--gutter); bottom: calc(var(--s-6));
+  color: var(--c-ink-2);
+}
+/* The plate fills the pinned screen (critique): 100svh under the header falloff, no letterbox, no dead band.
+   Covered on the plate's own ratio, centred on the post between the two doors; the sides crop. */
+.door-stage {
+  position: absolute; left: 50%; top: 50%; overflow: hidden;
+  width: max(100vw, calc(100svh * 5139 / 2375));
+  aspect-ratio: var(--ar);
+  transform: translate(-50%, -50%);
+}
+/* the kicker sits on the plate's pavement: a bottom falloff at the background layer holds it (color I4) */
+.door-pin::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: var(--s-10); z-index: 1; pointer-events: none;
+  /* held at ≥ 0.86 through the label's band before it releases: a straight 0.82→0 ramp left ~0.56 behind the
+     glyphs over the bright pavement (measured 2.21) */
+  background: linear-gradient(0deg, rgba(var(--c-scrim), 0.9) 0, rgba(var(--c-scrim), 0.86) 45%, rgba(var(--c-scrim), 0) 100%);
+}
+.door-stage__frame, .door-stage__frame img { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* A door is the opening rectangle, in fractions of the plate (--l --t --w --h). */
+.door {
+  position: absolute; overflow: hidden;
+  left: calc(var(--l) * 100%); top: calc(var(--t) * 100%);
+  width: calc(var(--w) * 100%); height: calc(var(--h) * 100%);
+}
+.door__interior { position: absolute; inset: 0; }
+/* the interior plate covers the whole stage, seen through this opening */
+.door__interior img {
+  position: absolute; max-width: none; object-fit: cover; object-position: 50% 45%; /* the plate is already the gallery crop (art wall, bikes, rooflines) */
+  width: calc(100% / var(--w)); height: calc(100% / var(--h));
+  left: calc(-100% * var(--l) / var(--w)); top: calc(-100% * var(--t) / var(--h));
+}
+/* A panel is one aluminium-framed glass section, cut on its rails. It carries its own slice of the plate,
+   so the motion pass can lift and hinge each one independently. */
+.door__panel {
+  position: absolute; left: 0; width: 100%; overflow: hidden;
+  top: calc(var(--pt) * 100%); height: calc(var(--ph) * 100%);
+  transform-origin: 50% 0%;
+  backface-visibility: hidden;
+}
+.door__panel img {
+  position: absolute; max-width: none;
+  width: calc(100% / var(--w));
+  height: calc(100% / (var(--ph) * var(--h)));
+  left: calc(-100% * var(--l) / var(--w));
+  top: calc(-100% * (var(--t) + var(--pt) * var(--h)) / (var(--ph) * var(--h)));
+}
+.door-stage--m { display: none; }
+
+.about {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
+  padding: var(--s-10) var(--gutter) var(--s-11);
+}
+.about__kicker { grid-column: 2 / span 2; color: var(--c-ink-2); padding-top: 0.9rem; }
+.display--about { grid-column: 4 / span 8; max-width: 30ch; }
+.about__foot {
+  grid-column: 4 / span 8; margin-top: var(--s-8);
+  display: flex; align-items: center; gap: var(--s-7); color: var(--c-ink-2);
+}
+
+/* ---------- ACT 3 · CHAPTERS (Forge d00 proportions) ---------- */
+.chapter {
+  position: relative; height: 100vh; height: 100svh; min-height: 40rem; overflow: hidden;
+  display: grid; grid-template-columns: 17.8% 31.1% 10.5% 1fr; align-items: center;
+}
+.chapter__field { position: absolute; inset: 0; z-index: var(--z-plate); }
+.chapter__field img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.08); filter: saturate(0.9); }
+.chapter__field::after { content: ""; position: absolute; inset: 0; background: rgba(var(--c-scrim), 0.5); }
+.chapter__inset { grid-column: 2; position: relative; z-index: var(--z-copy); }
+.chapter__inset img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.chapter__inset .caption { position: absolute; left: 0; top: calc(100% + var(--s-3)); }
+.chapter__text { grid-column: 4; position: relative; z-index: var(--z-copy); padding-right: var(--gutter); align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+.chapter__count {
+  position: absolute; top: calc(var(--header-h) + var(--s-2));
+  font-size: var(--fs-count); line-height: 1; display: flex; gap: 0.18em; color: var(--c-ink);
+}
+.chapter__slash, .chapter__of { color: var(--c-ink-2); }
+.chapter__text .display--l { margin-bottom: var(--s-5); }
+.chapter__text .body { color: var(--c-ink); }   /* was 0.86: chapter 02 failed at rest (4.27) */
+
+/* ---------- ACT 4 · STATEMENT ---------- */
+.act-statement {
+  min-height: 100vh; display: grid; place-items: center;
+  padding: var(--s-10) var(--gutter);
+}
+.statement {
+  max-width: 34ch; text-align: center;
+  font-family: var(--font-display); font-weight: var(--display-wght); font-stretch: var(--display-wdth);
+  font-size: var(--fs-d2); line-height: var(--lh-prose); letter-spacing: var(--track-prose);
+  color: var(--c-ink);
+  text-wrap: balance;
+}
+.statement__lead { font-size: inherit; letter-spacing: inherit; line-height: inherit; }
+
+/* ---------- ACT 5 · SERVICES (Forge d01–d04: 50/50, text at ~9%) ---------- */
+.svc {
+  position: relative; height: 100vh; height: 100svh; min-height: 40rem;
+  display: grid; grid-template-columns: 1fr 1fr; background: var(--c-ground-2);
+}
+.svc__text {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  padding: var(--header-h) var(--gutter) var(--s-9) var(--text-inset);
+}
+.svc__text .label { color: var(--c-ink-2); margin-bottom: var(--s-5); }
+.svc__text .display--l { margin-bottom: var(--s-6); }
+.svc__text .body { margin-bottom: 0; color: var(--c-ink); }
+/* The title IS the route (critique): four identical buttons under four titles were the same ask four times
+   (anti-patterns D6). The arrow is the established "go" glyph, set in the display voice at half size, so the
+   route reads as one before any hover (U12); hover moves only the arrow. */
+.svc__title a { display: inline-flex; align-items: baseline; gap: 0.18em; color: var(--c-ink); }
+.svc__go { font-family: var(--font-sans); font-weight: 400; font-stretch: 100%; letter-spacing: 0; font-size: clamp(1.5rem, 0.36em, 2.5rem); color: var(--c-ink-2); /* the sans voice: a glyph, and below 40px the thin didone stops being drawn (I10) */ transition: transform var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out); }
+.svc__title a:hover .svc__go, .svc__title a:focus-visible .svc__go { transform: translateX(var(--s-2)); color: var(--c-ink); }
+.svc__media { position: relative; overflow: hidden; }
+.svc__media picture { position: absolute; inset: 0; }
+.svc__media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+
+/* ---------- ACT 6 · PEAK ---------- */
+.act-peak { background: var(--c-ground); }
+.peak__silence {
+  height: 50vh; display: grid; place-items: center;
+  color: var(--c-ink-2);
+}
+.peak__stage {
+  position: relative; height: 100vh; height: 100svh; min-height: 40rem; overflow: hidden;
+}
+.peak__ground {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 55%, var(--c-sheen), transparent 70%),
+    url("/img/ground-grain.png") repeat, var(--c-ground);
+  background-size: auto, 256px 256px, auto;
+}
+/* THE COMPOSED FINAL FRAME — critique pass, 2026-09-24. The car is the dominant by SIZE now, not only by light:
+   cropped to its silhouette (gen-peak-car-body), painted ~40vw wide, and like Forge it overshoots the bottom edge
+   at release — the rear of the car leaves the frame. Read top to bottom: "By Appointment" / the car / "Only".
+   Depth by occlusion (DM6):
+     line 1 — the nose lies OVER its lower band (the descender zone and the foot of the x-height);
+     line 2 — "Only" lies OVER the car's roof: the car passes UNDER it.
+   The release flanks the car at the height of "Only", on the dark flanks and ground — never on the silver.
+   One unit, --pk (type size, capped by height), keys the vertical geometry; the car's width keys the horizontal. */
+.peak__stage {
+  --pk: min(11vw, 17.5svh);
+  --pk-l1: calc(var(--header-h) + 4svh);                          /* line 1 top: clear of the nav (C9) */
+  --pk-car-w: clamp(20rem, 44vw, 52rem);                          /* frame width; the painted body is 0.9 of it ≈ 39.6vw */
+  --pk-nose: 0.041;                                                /* body top within the cropped frame, × width */
+  --pk-nose-at: 0.74;                                              /* nose depth into line 1, × --pk: the foot of the x-height */
+  --pk-car-top: calc(var(--pk-l1) + var(--pk) * var(--pk-nose-at) - var(--pk-car-w) * var(--pk-nose));
+  --pk-l2: calc(var(--pk-car-top) + var(--pk-car-w) * 0.62);      /* "Only" over the roof */
+  --pk-fl-w: calc(var(--pk-car-w) * 1.27);                         /* flank FRAME width: bodies at 0.8× the car */
+}
+.peak__title { position: absolute; inset: 0; font-weight: inherit; pointer-events: none; }
+.peak__line {
+  position: absolute; left: 0; right: 0; text-align: center;
+  font-size: var(--pk); line-height: var(--lh-peak); letter-spacing: var(--track-peak); white-space: nowrap; color: var(--c-ink);
+}
+.peak__line--1 { top: var(--pk-l1); z-index: 1; }
+.peak__line--2 { top: var(--pk-l2); z-index: 3; }
+/* Legibility over the car is fixed at the BACKGROUND layer (color I4), not on the glyphs: a soft local scrim
+   between the car and the word — the word's shadow on the body beneath it (U9). No hard edge (U17). */
+.peak__line--2::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: 50%; top: -0.2em; width: 3.2em; height: 1.4em; transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(var(--c-scrim), 0.86) 58%, rgba(var(--c-scrim), 0.5) 80%, rgba(var(--c-scrim), 0));
+}
+.peak__cars { position: absolute; inset: 0; z-index: 2; }
+.peak__car {
+  position: absolute; left: 50%; top: var(--pk-car-top);
+  width: var(--pk-car-w); height: auto; max-width: none;
+  transform: translateX(-50%);
+}
+/* the flanks stand further back: bodies at 0.8× the car, lower, cropped by the frame edge (Forge) — they frame
+   the lit car and never compete with it */
+.peak__flank {
+  position: absolute; width: var(--pk-fl-w); height: auto; max-width: none; filter: brightness(0.8);
+  top: calc(var(--pk-car-top) + var(--pk-car-w) * 0.55);
+}
+.peak__flank--a { left: calc(50% - var(--pk-car-w) / 2 - var(--s-8) - var(--pk-fl-w) * 0.804); }
+.peak__flank--b { left: calc(50% + var(--pk-car-w) / 2 + var(--s-8) - var(--pk-fl-w) * 0.173); top: calc(var(--pk-car-top) + var(--pk-car-w) * 0.65); }
+
+.peak__release {
+  position: absolute; z-index: 4; left: 0; right: 0;
+  top: calc(var(--pk-l2) + var(--pk) * 0.18);
+  display: grid; grid-template-columns: 1fr var(--pk-car-w) 1fr; column-gap: var(--s-7);
+  align-items: start; padding: 0 var(--gutter);
+  color: var(--c-ink);
+}
+.peak__release-a {
+  grid-column: 1; justify-self: end; text-align: right;
+  display: flex; flex-direction: column; align-items: flex-end; gap: var(--s-4);
+}
+.peak__release-b {
+  grid-column: 3; justify-self: start;
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-2);
+}
+.peak__release .label { color: var(--c-ink); }
+.peak__phone { min-height: var(--btn-h-sm); display: inline-flex; align-items: center; }
+/* the disclosure rides inside the release: visibly a stand-in (GI3), never on the car or on the action */
+.peak__release .standin { position: static; background: none; }
+
+/* Tablet PORTRAIT (critique): the landscape overshoot has no room for its flanking release here, so the frame
+   is re-solved — the whole car inside it, larger than the phone's, "Only" over its roof, the release and the
+   disclosure below the car on the ground. */
+@media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+  .peak__stage {
+    --pk: min(15vw, 12svh);
+    --pk-nose-at: 0.9;
+    --pk-car-w: min(42vw, 28svh);
+    --pk-l2: calc(var(--pk-car-top) + var(--pk-car-w) * 1.2);
+  }
+  .peak__flank { display: none; }
+  .peak__release {
+    top: auto; bottom: var(--s-6);
+    display: flex; flex-direction: column; align-items: center; gap: var(--s-4);
+  }
+  .peak__release-a { align-items: center; text-align: center; order: 2; }
+  .peak__release-b { flex-direction: row; align-items: center; gap: var(--s-6); order: 1; }
+  .peak__release .label:first-child { order: 0; }
+}
+
+/* ---------- ACT 7 · SOLD (salon wall) ---------- */
+.act-sold {
+  min-height: 100vh; padding: calc(var(--header-h) + var(--s-6)) var(--gutter) var(--s-8);
+  display: flex; flex-direction: column; justify-content: center; gap: var(--s-7);
+}
+.salon {
+  display: flex; justify-content: center; align-items: center;
+  gap: clamp(1.25rem, 2.4vw, 2.5rem);
+}
+.salon__item { flex: none; width: var(--size); }
+.salon__item img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.salon__item figcaption { display: flex; flex-direction: column; gap: var(--s-1); margin-top: var(--s-3); min-height: 3.6em; }
+.salon__item figcaption .label { letter-spacing: var(--track-nav); }
+/* salon hang: one dominant (the Sunbeam), two mediums, two smalls, hung off a shared centre line */
+.salon__item--lead { --size: min(28vw, 44vh); }
+.salon__item--mg, .salon__item--mustang { --size: min(16.5vw, 27vh); }
+.salon__item--bsa, .salon__item--defender { --size: min(11.5vw, 18vh); }
+.salon__item--bsa { order: -2; transform: translateY(-7vh); }
+.salon__item--mg { order: -1; transform: translateY(4vh); }
+.salon__item--lead { order: 0; }
+.salon__item--mustang { order: 1; transform: translateY(-4vh); }
+.salon__item--defender { order: 2; transform: translateY(6vh); }
+.cta-panel__copy { display: flex; flex-direction: column; align-items: center; gap: var(--s-6); text-align: center; }
+
+/* ---------- ACT 7 · INVENTORY — the chapter device, landscape inset ---------- */
+.act-inventory { background: var(--c-ground); }
+.chapter--inv { grid-template-columns: 9.4% 46% 6% 1fr; }
+.chapter--inv .chapter__inset img { aspect-ratio: 16 / 10; }
+.chapter--inv .chapter__text .display--xl { margin-bottom: var(--s-6); }
+.inv__list { display: flex; flex-direction: column; gap: 0; margin-bottom: var(--s-7); }
+.inv__list a {
+  display: inline-flex; min-height: var(--btn-h-sm); align-items: center;
+  font-size: var(--fs-body-s); font-weight: 500; font-variant-numeric: tabular-nums lining-nums; color: var(--c-ink);
+  transition: color var(--dur-1) var(--ease-out);
+}
+.inv__list a:hover { color: var(--c-ink-2); }
+.chapter--inv .btn { align-self: flex-start; }
+
+/* ---------- ACT 8 · CLOSING (Forge d11–d18) ---------- */
+.act-closing { position: relative; height: 100vh; height: 100svh; min-height: 46rem; overflow: hidden; background: var(--c-deep); }
+.closing__plate { position: absolute; inset: 0; z-index: var(--z-plate); }
+.closing__facade {
+  position: absolute; left: 50%; top: 22%; width: 118vw; transform: translateX(-50%);
+  opacity: 0.55; filter: saturate(0.6);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22%, #000 58%, transparent 86%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 22%, #000 58%, transparent 86%);
+}
+.closing__facade img { width: 100%; height: auto; }
+.closing__cars { position: absolute; left: 0; right: 0; bottom: -20vh; mix-blend-mode: lighten; }
+.closing__cars img { width: 100%; height: auto; }
+.closing__copy {
+  position: absolute; z-index: var(--z-copy); left: 0; right: 0; top: calc(var(--header-h) + var(--s-7));  /* clear of the full header (critique) */
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.closing__kicker { color: var(--c-ink-2); max-width: 34ch; margin-bottom: var(--s-5); }
+.closing__title { margin-bottom: var(--s-6); }
+.closing__phone { margin-top: var(--s-3); color: var(--c-ink); }
+.closing__phone a { display: inline-flex; min-height: var(--btn-h-sm); align-items: center; }
+
+/* ---------- FOOTER ---------- */
+.site-footer { background: var(--c-deep); padding: var(--s-9) var(--gutter) var(--s-6); border-top: 1px solid var(--c-hair); }
+.footer__grid {
+  display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: var(--s-7) var(--s-6);
+  padding-bottom: var(--s-9);
+}
+.footer__grid h2 { color: var(--c-ink-3); margin-bottom: var(--s-4); }
+.footer__grid .body { color: var(--c-ink); font-size: var(--fs-body-s); margin-bottom: var(--s-3); }
+.footer__grid a:hover { color: var(--c-ink-2); }
+.footer__logo { width: min(18rem, 100%); height: auto; color: var(--c-ink); margin-bottom: var(--s-5); }
+.footer__social { display: flex; gap: var(--s-5); }
+.footer__legal {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-4);
+  padding-top: var(--s-5); border-top: 1px solid var(--c-hair);
+}
+.footer__links { display: flex; gap: var(--s-6); }
+.footer__links a { display: inline-flex; min-height: var(--btn-h-sm); align-items: center; }
+.footer__legal p { display: flex; align-items: center; }
+
+/* =========================================================================
+   Mobile — recomposed, not stacked-by-accident (BRIEF §8)
+   ========================================================================= */
+.site-header .nav, .site-header .util__item, .site-header .util .btn {
+  transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out), visibility 0s linear 0s;
+}
+.site-header.is-collapsed .nav,
+.site-header.is-collapsed .util__item,
+.site-header.is-collapsed .util .btn {
+  opacity: 0; visibility: hidden; transform: translateY(calc(var(--s-2) * -1));
+  transition: opacity var(--dur-2) var(--ease-in), transform var(--dur-2) var(--ease-in), visibility 0s linear var(--dur-2);
+}
+.site-header.is-collapsed::before { transform: scaleY(0.55); }
+
+/* Tablet band, 768–1180 (critique): seven nav items no longer fit one row beside the utility bar — at 1024 they
+   wrapped and "My Collection" touched the shield. The nav moves into the drawer; the utility bar becomes two
+   rows: Menu · shield · We buy cars, then phone · By Appointment Only · My Collection. "By Appointment Only"
+   stays visible at every width (fixed IA). */
+@media (max-width: 1180px) {
+  .nav { display: none; }
+  .util { grid-template-columns: 1fr auto 1fr; grid-template-rows: auto auto; column-gap: var(--s-6); }
+  .util__left, .util__right { display: contents; }
+  .menu-toggle {
+    display: inline-flex; align-items: center; gap: var(--s-3); grid-column: 1; grid-row: 1; justify-self: start;
+    min-height: var(--btn-h-sm); font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--track-nav); text-transform: uppercase;
+  }
+  .menu-toggle__bars { width: var(--s-5); height: var(--s-2); border-block: 1px solid currentColor; }
+  .brand { grid-column: 2; grid-row: 1; }
+  .util .btn { grid-column: 3; grid-row: 1; justify-self: end; }
+  .util__left a.util__item { grid-column: 1; grid-row: 2; justify-self: end; }
+  .util__left span.util__item { grid-column: 2; grid-row: 2; justify-self: center; line-height: var(--btn-h-sm); white-space: nowrap; }
+  .util__right a.util__item { grid-column: 3; grid-row: 2; justify-self: start; }
+}
+@media (max-width: 767.98px) {
+  :root { --shield-h: 2.75rem; }
+  .site-header { padding-top: var(--s-3); }
+  /* phone: Menu · shield · Call, then "By Appointment Only" alone on the second row. The phone number is the
+     Call link; We buy cars and My Collection are in the drawer. */
+  .util .btn, .util__left a.util__item, .util__right a.util__item { display: none; }
+  .util__left span.util__item { grid-column: 1 / -1; line-height: var(--s-6); }
+  .util-call {
+    display: inline-flex; align-items: center; justify-content: flex-end; grid-column: 3; grid-row: 1; justify-self: end;
+    min-height: var(--btn-h-sm); min-width: var(--btn-h-sm);
+    font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase;
+  }
+
+  /* Act 1 */
+  /* Act 1 (phone) — a SEPARATE composition (C22, gates): a full-height 9:16 frame of this footage is at most 499
+     source px wide and the car is 576, so no crop could hold it. The copy stands on the ground; the film is an
+     authored 4:5 band (hero-720x900) with air either side of the car; the pause control sits on its dark road. */
+  .act-hero { height: auto; min-height: 0; display: flex; flex-direction: column; padding-top: var(--header-h); }
+  .hero__copy { position: relative; order: 1; top: auto; left: auto; right: auto; padding: var(--s-5) var(--gutter) var(--s-6); }
+  .hero__media { position: relative; order: 2; inset: auto; aspect-ratio: 4 / 5; }
+  .hero__poster img, .hero__video { object-position: 50% 50%; }
+  .scrim--hero { display: none; }
+  .hero__foot { left: var(--gutter); bottom: var(--s-5); flex-wrap: wrap; }
+  .scroll-cue { display: none; }
+
+  /* Act 2: in-flow, no pin — the authored left-door crop */
+  .door-pin { height: auto; min-height: 0; display: block; padding-top: calc(var(--header-h) + var(--s-5)); }
+  .door-stage--d { display: none; }
+  .door-stage--m { display: block; position: relative; left: auto; top: auto; transform: none; width: 100%; margin: 0; }
+  .door-pin::after { display: none; }
+  .door__kicker { position: static; margin: 0 var(--gutter) var(--s-4); }
+  .about { display: block; padding: var(--s-8) var(--gutter) var(--s-9); }
+  .about__kicker { padding: 0; margin-bottom: var(--s-4); }
+  .display--about { font-size: 2.5rem; }
+  .about__foot { flex-direction: column; align-items: flex-start; gap: var(--s-5); margin-top: var(--s-7); }
+
+  /* Act 3: three stacked blocks, full-width image, no inset/blur pair */
+  .chapter { height: auto; min-height: 0; display: flex; flex-direction: column; padding: var(--s-8) 0 var(--s-9); }
+  .chapter__field { display: none; }
+  .chapter__text { order: 1; padding: 0 var(--gutter); align-self: auto; }
+  .chapter__count { position: static; font-size: var(--fs-count); margin-bottom: var(--s-4); }
+  .chapter__inset { order: 2; width: 100%; margin-top: var(--s-6); }
+  .chapter__inset .caption { position: static; padding: var(--s-3) var(--gutter) 0; }
+  .chapter .rule { display: none; }
+  .br-d { display: none; }
+
+  /* Act 4: Geist body with the opening kept in didone at 44px */
+  .act-statement { min-height: 0; padding: var(--s-9) var(--gutter); place-items: start; }
+  .statement { text-align: left; max-width: none; font-family: var(--font-sans); font-weight: 400; font-stretch: 100%; font-variation-settings: normal; font-size: 1.375rem; line-height: 1.45; letter-spacing: 0; }
+  .statement__lead { display: block; font-family: var(--font-display); font-weight: var(--display-wght); font-stretch: var(--display-wdth); font-size: 2.75rem; line-height: 1.05; letter-spacing: -0.01em; margin-bottom: var(--s-3); }
+
+  /* Act 5: image first, then text */
+  .svc { height: auto; min-height: 0; display: flex; flex-direction: column; }
+  .svc__media { order: 1; aspect-ratio: 4 / 5; }
+  .svc__media::before { display: none; }
+  .svc__text { order: 2; padding: var(--s-7) var(--gutter) var(--s-9); }
+  .svc .rule { display: none; }
+
+  /* Act 6 (phone): "By / Appointment" on two tight lines, the car rises from the first scroll, "Only" over its
+     roof, and the release — with the disclosure inside it — below the car. Flanks dropped (no room). */
+  .peak__silence { height: 40vh; }
+  .peak__stage { min-height: 0; height: 100svh; }
+  .peak__flank { display: none; }
+  .peak__stage {
+    --pk: 17vw;
+    --pk-l1: calc(var(--header-h) + var(--s-4));
+    --pk-car-w: min(60vw, 21svh);
+    --pk-car-top: calc(var(--pk-l1) + var(--pk) * 1.5 - var(--pk-car-w) * var(--pk-nose));
+    --pk-l2: calc(var(--pk-car-top) + var(--pk-car-w) * 1.25);
+  }
+  .peak__line { line-height: 0.8; white-space: normal; }
+  .peak__line--1 { padding: 0 var(--gutter); }
+  .peak__release {
+    top: auto; bottom: var(--s-5);
+    display: flex; flex-direction: column; align-items: center; gap: var(--s-2);
+  }
+  .peak__release-a { align-items: center; text-align: center; order: 2; gap: var(--s-3); }
+  .peak__release-b { align-items: center; order: 1; }
+
+  /* Act 7 · Sold: dominant full width + 2×2 */
+  .act-sold { padding: var(--s-9) var(--gutter); min-height: 0; }
+  .salon { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--s-4); row-gap: var(--s-6); align-items: start; }
+  .salon__item { width: auto; transform: none !important; order: 0 !important; }
+  .salon__item--lead { grid-column: 1 / -1; }
+  .salon__item figcaption .label { letter-spacing: 0.08em; }
+  .cta-panel__copy { align-items: flex-start; text-align: left; }
+
+  /* Act 7 · Inventory: the chapter's phone form — title and list, then the full-width photograph */
+  .chapter--inv .chapter__inset img { aspect-ratio: 4 / 5; }
+
+  /* Act 8: 4:5 centre-car composition */
+  .act-closing { height: auto; min-height: 0; display: flex; flex-direction: column; }
+  .closing__plate { position: relative; order: 2; aspect-ratio: 4 / 5; }
+  .closing__facade { top: 2%; width: 260vw; left: 50%; }
+  .closing__cars { top: 0; bottom: 0; }
+  .closing__cars img { height: 100%; object-fit: cover; }
+  .closing__copy { position: static; order: 1; padding: var(--s-9) var(--gutter) var(--s-6); align-items: flex-start; text-align: left; }
+  .closing__copy .btn { min-height: var(--btn-h); }
+  .standin--closing { position: static; order: 3; margin: var(--s-3) var(--gutter) var(--s-6); align-self: flex-start; }
+
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+  .footer__brand { grid-column: 1 / -1; }
+  .footer__legal { flex-direction: column; }
+}
+
+/* =========================================================================
+   Reduced motion: the designed static path (DM4, MJ9)
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+  /* the door is open: panels are lifted out, the interior shows */
+  .door__panel { visibility: hidden; }
+}
