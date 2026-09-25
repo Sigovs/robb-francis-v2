@@ -238,7 +238,7 @@ a.util__item:hover { color: var(--c-ink); }
   /* centred, the title shares the car's height, so it must end in the air left of the car: the car's left edge
      sits at ~34–36vw in landscape cover; "COLLECTOR," is 7.85 × font-size wide in Archivo wdth 125 (measured) */
   .act-hero .display--hero { font-size: clamp(2.25rem, calc((29.5vw - 1.5rem) / 7.85), 5rem); }
-  .hero__foot { left: 3.5vw; }   /* the film control keeps the copy's left edge */
+  .act-hero .hero__foot { left: 3.5vw; }   /* the film control keeps the copy's left edge */
 }
 /* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
    so the car lands mid-screen. The car keeps the upper field; the copy moves beneath it, across the full measure,
