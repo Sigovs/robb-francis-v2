@@ -47,6 +47,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-family: var(--font-display);
   font-weight: var(--display-wght);
   font-stretch: var(--display-wdth);
+  text-transform: var(--display-case);
   letter-spacing: var(--track-display);
   line-height: var(--lh-display);
   font-optical-sizing: auto;
@@ -230,7 +231,9 @@ a.util__item:hover { color: var(--c-ink); }
    The film is height-bound in cover here, so the car's left edge sits at ~50vw − 0.24 × (film width); 34vw keeps
    the copy's box clear of it at 1280–1920. */
 @media (min-aspect-ratio: 1/1) {
-  .hero__copy { max-width: calc(34vw - var(--text-inset)); }
+  /* V2 wide caps: the display lines sit ABOVE the car (over the trees), so only the lead is held to the air left
+     of the car; the title runs as wide as it needs. */
+  .hero__copy { max-width: none; }
 }
 /* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
    so the car lands mid-screen. The car keeps the upper field; the copy moves beneath it, across the full measure,
@@ -252,7 +255,7 @@ a.util__item:hover { color: var(--c-ink); }
 }
 .hero__kicker { color: var(--c-ink); margin-bottom: var(--s-5); }
 .hero__title { display: flex; flex-direction: column; gap: var(--s-5); font-weight: inherit; }
-.hero__title .lead { max-width: 30ch; color: var(--c-ink); }
+.hero__title .lead { max-width: 23ch; color: var(--c-ink); } /* two lines: "and Current State / of the Art Sports Cars" keeps the lead in the air left of the car */
 .hero__foot {
   position: absolute; z-index: var(--z-copy);
   left: var(--text-inset); right: var(--gutter); bottom: var(--s-6);
