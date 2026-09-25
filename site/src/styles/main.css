@@ -233,7 +233,12 @@ a.util__item:hover { color: var(--c-ink); }
 @media (min-aspect-ratio: 1/1) {
   /* V2 wide caps: the display lines sit ABOVE the car (over the trees), so only the lead is held to the air left
      of the car; the title runs as wide as it needs. */
-  .hero__copy { max-width: none; }
+  /* V2 (Alex): centred on the height of the frame below the header */
+  .hero__copy { max-width: none; left: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2); transform: translateY(-50%); }
+  /* centred, the title shares the car's height, so it must end in the air left of the car: the car's left edge
+     sits at ~34–36vw in landscape cover; "COLLECTOR," is 7.85 × font-size wide in Archivo wdth 125 (measured) */
+  .act-hero .display--hero { font-size: clamp(2.25rem, calc((29.5vw - 1.5rem) / 7.85), 5rem); }
+  .hero__foot { left: 3.5vw; }   /* the film control keeps the copy's left edge */
 }
 /* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
    so the car lands mid-screen. The car keeps the upper field; the copy moves beneath it, across the full measure,
