@@ -169,8 +169,7 @@ a.util__item { display: inline-block; line-height: var(--btn-h-sm); transition: 
 a.util__item:hover { color: var(--c-ink); }
 .util .btn--sm { letter-spacing: var(--track-nav); }
 .brand { display: block; justify-self: center; }
-.brand picture { display: block; }
-.brand img { height: var(--shield-h); width: auto; display: block; } /* full lockup (client master vector); phones get the shield via <picture> */
+.brand img { height: var(--shield-h); width: auto; display: block; } /* full lockup (client master vector) at every width (Alex, 2026-09-25) */
 .nav { margin-top: var(--s-1); }
 .nav ul { display: flex; justify-content: center; gap: clamp(1.25rem, 2.4vw, 2.5rem); }
 .nav a {
@@ -602,7 +601,7 @@ a.util__item:hover { color: var(--c-ink); }
   .util__right a.util__item { grid-column: 3; grid-row: 2; justify-self: start; }
 }
 @media (max-width: 767.98px) {
-  :root { --shield-h: 2.75rem; }
+  :root { --shield-h: 2.25rem; } /* 36px lockup ≈ 143px wide: fits between Menu and Call down to 360px */
   .site-header { padding-top: var(--s-3); }
   /* phone: Menu · shield · Call, then "By Appointment Only" alone on the second row. The phone number is the
      Call link; We buy cars and My Collection are in the drawer. */
