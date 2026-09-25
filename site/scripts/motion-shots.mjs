@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
 
-const URL = process.env.URL || 'http://127.0.0.1:5173/';
+const URL = process.env.URL || 'http://127.0.0.1:5174/';
 const OUT = '_shots/motion';
 await fs.mkdir(OUT, { recursive: true });
 const mode = process.argv[2] || 'all';

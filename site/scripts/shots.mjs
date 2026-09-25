@@ -1,7 +1,7 @@
 // Screenshot every act at desktop 1440×900 and mobile 390×844, scrolling THROUGH Lenis.
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
-const URL_ = process.env.URL || 'http://127.0.0.1:5173/';
+const URL_ = process.env.URL || 'http://127.0.0.1:5174/';
 const OUT = '_shots';
 await fs.mkdir(OUT, { recursive: true });
 const only = process.argv[2]; // 'd' | 'm'

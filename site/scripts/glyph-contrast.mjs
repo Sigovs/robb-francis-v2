@@ -8,7 +8,7 @@
 import { chromium } from 'playwright';
 import sharp from 'sharp';
 
-const URL = process.env.URL || 'http://127.0.0.1:5173/';
+const URL = process.env.URL || 'http://127.0.0.1:5174/';
 const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
 const L = (r, g, b) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);

@@ -1,6 +1,6 @@
 // Floors + paths: type floors (I7 14px, I10 display ≥ 40px), Lenis contract (DNA90), reduced-motion and no-JS paths.
 import { chromium } from 'playwright';
-const URL_ = process.env.URL || 'http://127.0.0.1:5173/';
+const URL_ = process.env.URL || 'http://127.0.0.1:5174/';
 const b = await chromium.launch({ channel: 'chrome' });
 const res = {};
 for (const [tag, w, h] of [['d', 1440, 900], ['m', 390, 844]]) {

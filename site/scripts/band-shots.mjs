@@ -7,7 +7,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 
-const URL = process.env.URL || 'http://127.0.0.1:5173/';
+const URL = process.env.URL || 'http://127.0.0.1:5174/';
 const OUT = '_shots/bands';
 await fs.mkdir(OUT, { recursive: true });
 const only = (process.argv.find((a) => a.startsWith('--only=')) || '').slice(7).split(',').filter(Boolean);

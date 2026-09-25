@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
-const URL_ = process.env.URL || 'http://127.0.0.1:5173/';
+const URL_ = process.env.URL || 'http://127.0.0.1:5174/';
 const vps = [['d', 1440, 900], ['m', 390, 844]];
 const stops = ['.act-hero', '.act-door', '.about', '[data-chapter="1"]', '[data-chapter="2"]', '[data-chapter="3"]', '.act-statement',
   '[data-svc="1"]', '[data-svc="2"]', '[data-svc="3"]', '[data-svc="4"]', '.peak__stage', '.act-sold', '.act-inventory', '.act-closing', '.site-footer'];

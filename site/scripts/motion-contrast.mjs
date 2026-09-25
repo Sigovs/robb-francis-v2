@@ -30,7 +30,7 @@ const b = await chromium.launch({ channel: 'chrome' });
 const out = [];
 for (const vpName of ['desktop', 'mobile']) {
   const p = await b.newPage({ viewport: vpName === 'desktop' ? { width: 1440, height: 900 } : { width: 390, height: 844 } });
-  await p.goto('http://127.0.0.1:5173/', { waitUntil: 'load' }); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
+  await p.goto('http://127.0.0.1:5174/', { waitUntil: 'load' }); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
   for (const [v, pin, pos, sel] of CHECKS.filter((c) => c[0] === vpName)) {
     const y = await p.evaluate(([pin, pos]) => {
       if (pin) { const t = __ST.getAll().find((t) => t.pin && t.trigger.matches(pin)); return t.start + pos * (t.end - t.start); }
