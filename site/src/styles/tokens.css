@@ -18,15 +18,15 @@
 /* @font-guard-end */
 
 :root {
-  /* ---------- Type: two voices (V2, Alex asked for a new pair, 2026-09-25) ----------
-     Display = wide grotesque in capitals: Archivo at wdth 125 / wght 300. It rhymes with the client's wordmark
-     (a wide geometric grotesque), so logo and headline read as one voice. Chosen in the render against Instrument
-     Serif, Cormorant Garamond, Newsreader and the V1 didone (_shots/fonts-compare.jpg).                */
-  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --display-wght: 300;
-  --display-wdth: 125%;
-  --display-case: uppercase;
-  --font-sans: "Inter Tight", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* ---------- Type: two voices (V2 serif pair, Alex 2026-09-25) ----------
+     Display = Libre Caslon Display (a display cut: moderate contrast, drawn for large sizes; never below 36px).
+     Body/labels = Hanken Grotesk. Chosen in the render against Cormorant Garamond, Fraunces and Gloock
+     (_shots/fonts-serif.jpg); the wide-caps Archivo pair before it is in _shots/fonts-compare.jpg.       */
+  --font-display: "Libre Caslon Display", "Libre Caslon Text", Georgia, serif;
+  --display-wght: 400;
+  --display-wdth: 100%;
+  --display-case: none;
+  --font-sans: "Hanken Grotesk", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Display scale: four ranks, each ≥ 1.6× the next (DNA7, typography I1). Never below 40px (I10).
        peak   the one phrase that is the page's climax            ~158px @1440
@@ -34,10 +34,10 @@
        d2     display prose: the About paragraph and the brands sentence (one rank, was two at 40–50 vs 40–48)
        count  the chapter numeral; a numeral, not a rank of text  */
   --fs-peak: clamp(5rem, 11vw, 12.5rem);
-  --fs-d1: clamp(2.25rem, 5vw, 5rem);   /* wide caps: 72px @1440 */
+  --fs-d1: clamp(2.75rem, 9vw, 5.5rem);   /* serif: 44px phone, ~69px tablet portrait; landscape hero sizes itself (main.css) */
   --fs-d2: clamp(2.5rem, 3.2vw, 3rem);
   --fs-count: 2.5rem;
-  --fs-drawer: 1.75rem;      /* mobile drawer items, wide caps (a grotesque holds at this size; the 40px floor was for the didone's hairlines) */
+  --fs-drawer: 2.25rem;      /* mobile drawer items, display face (Caslon Display holds at 36px) */
 
   /* Sans roles — functional floor 14px (typography I7). */
   --fs-lead: clamp(1.125rem, 0.6vw + 0.95rem, 1.375rem);  /* the hero sub-line: 18–22px */
@@ -49,7 +49,7 @@
   --lh-prose: 1.14;          /* display prose (d2) */
   --lh-lead: 1.4;
   --lh-body: 1.5;
-  --track-display: -0.02em;  /* ≈ −2px at 100px (Forge) */
+  --track-display: -0.01em;  /* ≈ −2px at 100px (Forge) */
   --track-peak: -0.025em;
   --track-prose: -0.008em;
   --track-label: 0.16em;     /* 14px caps: ≥ 0.08em (I4); was 0.18em */
