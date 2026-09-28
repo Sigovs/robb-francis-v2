@@ -29,7 +29,8 @@ const htmlPath = path.join(out, 'index.html');
 let html = fs.readFileSync(htmlPath, 'utf8')
   .replace(/<script type="module" crossorigin src="([^"]+)"><\/script>/, '<script defer src="$1"></script>')
   .replace(/ crossorigin(?=[ >])/g, '')
-  .replace(/"\/video\//g, '"./video/');
+  .replace(/"\/video\//g, '"./video/')
+  .replace(/"\/frames\//g, '"./frames/');
 fs.writeFileSync(htmlPath, html);
 
 // copy every local file the page and its CSS reference
@@ -50,6 +51,11 @@ for (const r of refs) {
   if (!fs.existsSync(src)) { console.warn('missing', r); continue; }
   fs.mkdirSync(path.dirname(dst), { recursive: true });
   fs.copyFileSync(src, dst); bytes += fs.statSync(src).size;
+}
+// frame sequences are requested by script (data-frames): copy the folders whole
+for (const m of html.matchAll(/data-frames="\.\/([^"]+)"/g)) {
+  fs.cpSync(path.join(root, 'public', m[1]), path.join(out, m[1]), { recursive: true });
+  bytes += fs.readdirSync(path.join(out, m[1])).reduce((a, f) => a + fs.statSync(path.join(out, m[1], f)).size, 0);
 }
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
 console.log(`preview → ${out} · ${refs.size} files · ${(bytes / 1e6).toFixed(1)} MB copied`);
