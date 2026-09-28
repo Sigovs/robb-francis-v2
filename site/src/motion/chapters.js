@@ -10,7 +10,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function chaptersSection(section) {
+export function chaptersSection(section, { mobile = false } = {}) {
   const imgs = [...section.querySelectorAll('.ch__img')];
   const fields = [...section.querySelectorAll('.ch__field')];
   const copies = [...section.querySelectorAll('.ch__copy')];
@@ -27,7 +27,7 @@ export function chaptersSection(section) {
   for (let k = 1; k < imgs.length; k++) {
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
-      scrollTrigger: { trigger: copies[k], start: 'top 90%', end: 'top 30%', scrub: 0.8 },
+      scrollTrigger: { trigger: copies[k], start: 'top 75%', end: 'top 5%', scrub: 0.8 },   // as the next copy rises into place
     });
     tl.to(imgs[k], { clipPath: 'inset(0% 0% 0% 0%)', duration: 1 }, 0)
       .to(imgs[k], { scale: 1, duration: 1 }, 0)
@@ -36,13 +36,20 @@ export function chaptersSection(section) {
     triggers.push(tl);
   }
 
-  // the copy of each chapter settles in as it arrives and lets go as it leaves (small, so it still reads as scrolling)
-  copies.forEach((c) => {
-    const tl = gsap.timeline({ scrollTrigger: { trigger: c, start: 'top 85%', end: 'bottom 15%', scrub: 0.6 } });
-    tl.fromTo(c.children, { autoAlpha: 0.15, y: 24, filter: 'blur(6px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.3, stagger: 0.03, ease: 'none' }, 0)
-      .to({}, { duration: 0.4 })
-      .to(c.children, { autoAlpha: 0.15, y: -24, filter: 'blur(6px)', duration: 0.3, stagger: 0.03, ease: 'none' });
-    triggers.push(tl);
+  // each copy group comes out of a blur as it rises to the middle, holds sharp, and lets go as it leaves
+  copies.forEach((c, k) => {
+    const g = c.querySelector('.ch__inner');
+    if (!g) return;
+    if (k > 0) {
+      const tin = gsap.timeline({ scrollTrigger: { trigger: c, start: mobile ? 'top 62%' : 'top 100%', end: mobile ? 'top 8%' : 'top 22%', scrub: 0.6 } });   // sharp by the time it lands (phone: the copy sits low, so it arrives later)
+      tin.fromTo(g.children, { autoAlpha: 0, y: 30, filter: 'blur(8px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', stagger: 0.08, ease: 'none' });
+      triggers.push(tin);
+    }
+    if (k < copies.length - 1) {
+      const tout = gsap.timeline({ scrollTrigger: { trigger: c, start: mobile ? 'bottom 62%' : 'bottom 84%', end: mobile ? 'bottom 22%' : 'bottom 40%', scrub: 0.6 } });   // only once it is pushed out; overlaps the next arrival
+      tout.to(g.children, { autoAlpha: 0, y: -30, filter: 'blur(8px)', stagger: 0.06, ease: 'none' });
+      triggers.push(tout);
+    }
   });
 
   // the frame drifts across the section; the rule tracks it
@@ -54,6 +61,6 @@ export function chaptersSection(section) {
   return () => {
     triggers.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); });
     section.classList.remove('is-seq');
-    gsap.set([...imgs, ...fields, frame, rule, ...copies.flatMap((c) => [...c.children])].filter(Boolean), { clearProps: 'all' });
+    gsap.set([...imgs, ...fields, frame, rule, ...copies.flatMap((c) => [...(c.querySelector('.ch__inner')?.children || [])])].filter(Boolean), { clearProps: 'all' });
   };
 }

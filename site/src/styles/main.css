@@ -878,27 +878,35 @@ a.util__item:hover { color: var(--c-ink); }
    The picture side sticks for the section; the text column scrolls past it in normal flow (one screen per chapter).
    Each chapter's picture is revealed inside the same frame as its text arrives (motion/chapters.js). Without motion
    the first picture holds and the texts simply scroll by. */
-.act-chapters { position: relative; background: var(--c-ground); }
+.act-chapters { --ins: min(40vw, 70svh); --ins-top: calc(50vh - var(--ins) * 0.46); position: relative; background: var(--c-ground); }
 .ch__media { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .ch__fields { position: absolute; inset: -4%; }
 .ch__field { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .ch__fields::after { content: ""; position: absolute; inset: 0; background: rgba(var(--c-scrim), 0.35); }
-.ch__frame { --ins: min(40vw, 70svh); position: absolute; margin: 0; left: 13vw; top: calc(50% - var(--ins) * 0.46); width: var(--ins); aspect-ratio: 1; overflow: hidden; }
+.ch__frame { position: absolute; margin: 0; left: 13vw; top: var(--ins-top); width: var(--ins); aspect-ratio: 1; overflow: hidden; }
 .ch__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .ch__field:not([data-k="0"]), .ch__img:not([data-k="0"]) { opacity: 0; }   /* static: the first picture holds */
 .act-chapters.is-seq .ch__field:not([data-k="0"]), .act-chapters.is-seq .ch__img:not([data-k="0"]) { opacity: 1; }
 .ch__rule { position: absolute; left: 3.5vw; right: 3.5vw; bottom: 3vh; height: 1px; background: rgba(236, 238, 241, 0.16); }
 .ch__rule span { display: block; height: 100%; width: 100%; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(0); }
 .ch__texts { position: relative; z-index: 2; margin-top: -100vh; margin-top: -100svh; }
-.ch__copy { height: 100vh; height: 100svh; min-height: 36rem; box-sizing: border-box; padding: calc(var(--header-h) + 6vh) 5vw 12vh 66vw; display: flex; flex-direction: column; }
-.ch__count { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0; color: var(--c-ink-2); margin-bottom: auto; }
+/* each chapter: a tall block whose copy group rises to mid-screen, HOLDS there for about a screen, then leaves
+   as the next one rises (Alex: "the text should come up to the middle, then 03 changes") */
+.ch__copy { height: 190vh; height: 190svh; padding: 0 5vw 0 66vw; }
+/* at rest the copy group is the frame's height and sits exactly opposite it: count at the frame's top edge, the
+   action at its bottom edge (Alex's reference) */
+.ch__inner { position: sticky; top: var(--ins-top); margin-top: var(--ins-top); height: var(--ins); display: flex; flex-direction: column; }
+.ch__count { font-family: var(--font-display); font-size: 1.5rem; line-height: 1; letter-spacing: 0; color: var(--c-ink-2); margin-bottom: auto; }
 .ch__count .ch__n { color: var(--c-ink); }
 .ch__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.25rem, 3.4vw, 3.5rem); line-height: 1.04; letter-spacing: -0.01em; color: var(--c-ink); margin: 0 0 var(--s-5); }   /* the site's section-title rank */
 .ch__text { font-size: var(--fs-body); line-height: 1.6; color: var(--c-ink-2); max-width: 34ch; }
-.ch__copy .text-link { align-self: flex-start; margin-top: var(--s-6); }
+.ch__copy .text-link { align-self: flex-start; margin-top: auto; }
 @media (max-width: 767.98px) {
   .ch__frame { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); max-height: 46svh; }
-  .ch__copy { padding: 0 var(--gutter) var(--s-7); justify-content: flex-end; }
+  .ch__copy { padding: 0 var(--gutter); height: 150svh; }
+  .ch__inner { top: 58svh; margin-top: 58svh; height: auto; }   /* phone: the copy holds under the frame */
+  .ch__count { margin-bottom: var(--s-4); }
+  .ch__copy .text-link { margin-top: var(--s-4); }
   .ch__count { font-size: 1.25rem; margin-bottom: var(--s-4); }
   .ch__title { font-size: 2.25rem; margin-bottom: var(--s-3); }
   .ch__copy .text-link { margin-top: var(--s-4); }
