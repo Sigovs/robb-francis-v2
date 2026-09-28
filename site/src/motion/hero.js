@@ -7,7 +7,7 @@
 // Progressive enhancement (G7): messages 2+ ship as blocks under the hero (static / reduced-motion state). Only
 // here, with motion allowed, are they moved over the film. Every stoppable frame is composed (MJ4): the outgoing
 // message is gone before the next one starts, and the gap between is the film alone. Scrub is linear inside,
-// smoothed by scrub: 0.8 against Lenis (G4).
+// played in time, not scrubbed: scroll picks the message, the change completes itself (see below).
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -45,24 +45,74 @@ export function heroSequence(section, { mobile = false } = {}) {
   gsap.set(outFirst, { filter: SHARP });
 
   const n = more.length;                         // transitions
-  const tl = gsap.timeline({
-    defaults: { ease: 'none' },
-    scrollTrigger: {
-      trigger: section, start: 'top top', end: `+=${100 * n + 30}%`,
-      pin: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: place,
-    },
-  });
-  // one unit per transition: hold · out (0.12–0.37) · film alone · in (0.48–0.78) · hold
+  // The messages are NOT scrubbed (Alex, 2026-09-28: "I make a scroll movement and the text completes by itself").
+  // A paused, time-based timeline holds one label per message; scroll only decides WHICH message, and the
+  // playhead then travels there on its own (tweenTo), so one flick of the wheel plays a whole change, both ways.
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.out' } });
+  tl.addLabel('m0', 0);
   for (let k = 0; k < n; k++) {
     const t = k;
     const leaving = k === 0 ? outFirst : sets[k - 1];
-    tl.to(leaving, { autoAlpha: 0, x: EXIT, filter: BLUR, duration: 0.3, stagger: k === 0 ? 0 : 0.025 }, t + 0.1);
-    tl.to(sets[k], { autoAlpha: 1, x: 0, filter: SHARP, duration: 0.26, stagger: 0.035 }, t + 0.46);
+    tl.to(leaving, { autoAlpha: 0, x: EXIT, filter: BLUR, duration: 0.3, stagger: k === 0 ? 0 : 0.025, ease: 'power2.in' }, t + 0.02);
+    tl.to(sets[k], { autoAlpha: 1, x: 0, filter: SHARP, duration: 0.42, stagger: 0.045 }, t + 0.36);
+    tl.addLabel(`m${k + 1}`, t + 1);
   }
-  tl.to({}, { duration: 0.3 }, n);                // the last message holds, then the page releases (4th scroll)
+
+  let current = 0, travel, busy = false;
+  const STEP = 1.1;                                   // seconds per message change
+  const playTo = (i, dur) => {
+    current = i;
+    travel?.kill();
+    travel = tl.tweenTo(`m${i}`, { duration: dur, ease: 'power1.inOut' });
+  };
+  const st = ScrollTrigger.create({
+    trigger: section, start: 'top top', end: `+=${100 * n + 30}%`,
+    pin: true, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: place,
+    // fallback for keyboard, scrollbar, touch (native on phones): nearest message by position, still played in time
+    onUpdate(self) {
+      if (busy) return;
+      const i = gsap.utils.clamp(0, n, Math.round(self.progress * (n + 0.3)));
+      if (i !== current) playTo(i, STEP);
+    },
+  });
+  const pos = (i) => st.start + (i / (n + 0.3)) * (st.end - st.start);
+
+  // Wheel / trackpad: ONE gesture = ONE message (Alex: "I make a scroll movement and the text completes by
+  // itself"). Inside the pinned run a gesture is caught, the message changes in full, and the page glides to that
+  // message's position with it; the rest of the same gesture (trackpad inertia) is swallowed so it cannot skip a
+  // message. Past the last message the gesture is let through and the page releases downward.
+  const lenis = window.__lenis;
+  let lastInput = 0, lastDir = 0, owned = false, release;
+  const onGesture = (data) => {
+    const e = data.event;
+    if (!e || !e.type.includes('wheel')) return true;             // touch stays native (fallback above)
+    const dir = Math.sign(data.deltaY);
+    if (!dir) return true;
+    const now = performance.now();
+    const sameGesture = dir === lastDir && now - lastInput < 220;
+    lastInput = now; lastDir = dir;
+    // the rest of a gesture we already used (or anything during a change) is swallowed, wherever it lands
+    if (busy || (sameGesture && owned)) { e.preventDefault(); return false; }
+    const y = lenis.scroll;
+    const inRun = dir > 0 ? (y >= st.start - 2 && y <= pos(n) + 2 && current < n)
+                          : (y >= st.start + 2 && y <= pos(n) + 2 && current > 0);
+    owned = inRun;
+    if (!inRun) return true;                                      // outside the run: ordinary scrolling
+    e.preventDefault();
+    busy = true;
+    const next = current + dir;
+    playTo(next, STEP);
+    const done = () => { busy = false; clearTimeout(release); };
+    clearTimeout(release); release = setTimeout(done, STEP * 1000 + 120);   // never stay locked
+    lenis.scrollTo(pos(next), { duration: STEP, lock: true, easing: (t) => 1 - Math.pow(1 - t, 3), onComplete: done });
+    return false;
+  };
+  if (lenis) lenis.options.virtualScroll = onGesture;
 
   return () => {
-    tl.scrollTrigger?.kill(); tl.kill();
+    clearTimeout(release);
+    if (lenis && lenis.options.virtualScroll === onGesture) lenis.options.virtualScroll = undefined;
+    st.kill(); travel?.kill(); tl.kill();
     gsap.set([outFirst, ...sets.flat()], { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-seq');
     more.forEach((c) => { c.style.removeProperty('--seq-top'); block.appendChild(c); });
