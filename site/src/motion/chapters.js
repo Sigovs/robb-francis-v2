@@ -32,7 +32,7 @@ export function chaptersSection(section, { mobile = false } = {}) {
   for (let k = 1; k <= n; k++) {
     const t = k - 1, prev = chs[k - 1], ch = chs[k];
     tl.to(parts(prev), { autoAlpha: 0, y: -30, filter: 'blur(8px)', duration: 0.25, stagger: 0.03 }, t + 0.08)
-      .to(prev.querySelector('.ch__inset'), { scale: 0.9, autoAlpha: 0.35, duration: 0.6 }, t + 0.2)
+      .to(prev.querySelector('.ch__inset'), { scale: 0.95, autoAlpha: 0, duration: 0.4 }, t + 0.18)   // gone before the next one covers it: no strip peeking out
       .to(ch.querySelector('.ch__field'), { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.6 }, t + 0.15)
       .to(ch.querySelector('.ch__inset'), { y: 0, duration: 0.6, ease: 'power1.out' }, t + 0.2)
       .to(parts(ch), { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.28, stagger: 0.04 }, t + 0.52);

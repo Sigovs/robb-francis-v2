@@ -881,7 +881,7 @@ a.util__item:hover { color: var(--c-ink); }
 .ch__field { position: absolute; inset: -4%; }
 .ch__field img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: auto; }
 .ch__field::after { content: ""; position: absolute; inset: 0; background: rgba(var(--c-scrim), 0.35); }
-.ch__inset { position: absolute; margin: 0; left: 13vw; top: 50%; width: min(40vw, 70svh); aspect-ratio: 1; transform: translateY(-46%); overflow: hidden; }
+.ch__inset { --ins: min(40vw, 70svh); position: absolute; margin: 0; left: 13vw; top: calc(50% - var(--ins) * 0.46); width: var(--ins); aspect-ratio: 1; overflow: hidden; }   /* placed with top, no transform: the rise owns transform (GSAP also resets `translate`) */
 .ch__inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ch__copy { position: absolute; left: 66vw; right: 5vw; top: calc(var(--header-h) + 6vh); bottom: 12vh; display: flex; flex-direction: column; }
 .ch__count { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0; margin-bottom: auto; }
@@ -896,7 +896,7 @@ a.util__item:hover { color: var(--c-ink); }
 .act-chapters.is-seq .ch__rule { display: block; position: absolute; left: 3.5vw; right: 3.5vw; bottom: 3vh; height: 1px; background: rgba(236, 238, 241, 0.16); z-index: 5; }
 .ch__rule span { display: block; height: 100%; width: 100%; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(0); }
 @media (max-width: 767.98px) {
-  .ch__inset { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); transform: none; aspect-ratio: 1; max-height: 46svh; }
+  .ch__inset { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); aspect-ratio: 1; max-height: 46svh; }
   .ch__copy { left: var(--gutter); right: var(--gutter); top: auto; bottom: var(--s-7); }
   .ch__count { font-size: 1.25rem; margin-bottom: var(--s-4); }
   .ch__title { font-size: 2.25rem; margin-bottom: var(--s-3); }
