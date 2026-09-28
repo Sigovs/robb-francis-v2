@@ -826,7 +826,7 @@ a.util__item:hover { color: var(--c-ink); }
 .text-link span { transition: transform var(--dur-2) var(--ease-out); }
 .text-link:hover span { transform: translateX(3px); }
 .turn__copy { top: calc(var(--header-h) + 6vh); transform: none; }
-.turn__title { font-size: clamp(2.75rem, 5.4vw, 6rem); line-height: 0.98; margin: var(--s-4) 0 0; }
+.turn__title { font-size: clamp(2.25rem, 3.4vw, 3.5rem); line-height: 1.04; letter-spacing: -0.01em; margin: var(--s-4) 0 var(--s-2); }   /* same rank as the About title (Alex) */
 .turn__title .hl { display: block; }
 @media (max-width: 767.98px) {
   .scrub__copy { left: var(--gutter); right: var(--gutter); max-width: none; top: auto; bottom: var(--s-7); transform: none; }
@@ -846,4 +846,30 @@ a.util__item:hover { color: var(--c-ink); }
 .act-turn { z-index: 3; }
 @media (max-width: 767.98px) {
   .about__inset { right: var(--gutter); top: calc(var(--header-h) + var(--s-6)); bottom: auto; width: 34vw; }
+}
+
+/* ---------- The spec card at the end of the walk-around: a record, set as a plate (typography D4) ---------- */
+.spec-card {
+  position: absolute; z-index: var(--z-copy); right: 3.5vw; top: 50%; transform: translateY(-38%);
+  width: min(23rem, 26vw); padding: var(--s-6);
+  background: rgba(var(--c-scrim), 0.62); border: 1px solid rgba(236, 238, 241, 0.14);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.spec-card__kicker { color: var(--c-ink-2); }
+.spec-card__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(1.75rem, 2.2vw, 2.25rem); line-height: 1.05; letter-spacing: -0.01em; margin: var(--s-3) 0 var(--s-5); color: var(--c-ink); }
+.spec-card__plate { display: grid; grid-template-columns: 6.5rem 1fr; margin: 0; }
+.spec-card__plate dt, .spec-card__plate dd { margin: 0; padding: var(--s-3) 0; border-top: 1px solid rgba(236, 238, 241, 0.12); }
+.spec-card__plate dt { font-size: var(--fs-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink-3); }
+.spec-card__plate dd { font-size: 1rem; color: var(--c-ink); }
+.spec-card .text-link { margin-top: var(--s-5); }
+/* static / reduced motion: the card sits in the flow under the title */
+.act-turn:not(.is-live) .spec-card { right: 5vw; }
+@media (max-width: 767.98px) {
+  .spec-card { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-4)); bottom: auto; transform: none; padding: var(--s-5); }   /* phone: takes the title's place, the car stays clear below */
+  .spec-card { padding: var(--s-4) var(--s-5); }
+  .spec-card__title { font-size: 1.5rem; margin: var(--s-2) 0 var(--s-3); }
+  .spec-card__plate { grid-template-columns: 5rem 1fr; }
+  .spec-card__plate dt, .spec-card__plate dd { padding: 0.375rem 0; }
+  .spec-card__plate dd { font-size: 0.9375rem; }
+  .spec-card .text-link { margin-top: var(--s-2); }
 }

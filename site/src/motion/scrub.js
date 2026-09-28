@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const pad = (i) => String(i + 1).padStart(3, '0');
 
-function frameCanvas(canvas, { contain = false, containScale = 1, onPaint } = {}) {
+function frameCanvas(canvas, { contain = false, containScale = 1, lower = 0.1, onPaint } = {}) {
   const base = canvas.dataset.frames;
   const count = +canvas.dataset.count;
   const ctx = canvas.getContext('2d');
@@ -38,7 +38,7 @@ function frameCanvas(canvas, { contain = false, containScale = 1, onPaint } = {}
     // the studio wall above it becomes the reading field for the title (desktop), the band fits a phone
     const ground = getComputedStyle(document.documentElement).getPropertyValue('--c-ground').trim() || '#12161d';
     const k = containScale;
-    const s = Math.min((cw / iw) * k, (ch / ih) * 1.1), w = iw * s, h = ih * s, x = (cw - w) / 2, y = (ch - h) / 2 + ch * 0.1;
+    const s = Math.min((cw / iw) * k, (ch / ih) * 1.1), w = iw * s, h = ih * s, x = (cw - w) / 2, y = (ch - h) / 2 + ch * lower;
     ctx.fillStyle = ground; ctx.fillRect(0, 0, cw, ch);
     box = { x, y, w, h };
     ctx.drawImage(img, x, y, w, h);
@@ -91,7 +91,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   const canvas = section.querySelector('.scrub__canvas');
   if (!canvas) return;
   const turn = section.classList.contains('act-turn');
-  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.9 });
+  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.9, lower: mobile ? 0.18 : 0.1 });
   const ro = new ResizeObserver(() => fc.size());
   ro.observe(canvas);
   const near = ScrollTrigger.create({ trigger: section, start: 'top bottom+=200%', onEnter: fc.load, onEnterBack: fc.load });
@@ -113,12 +113,30 @@ export function scrubSection(section, { mobile = false } = {}) {
   const f = run / total;                                       // share of the timeline that plays the film
   const fd = (run + dark) / total;                             // …and the end of the dark
 
+  // the spec card: arrives from the right on the last step of the turn (front view), leaves if you scroll back.
+  // Played in time, not scrubbed, so it never hangs half-way.
+  const card = section.querySelector('[data-card]');
+  const copyBlock = section.querySelector('.turn__copy');
+  let cardOn = false;
+  if (card) gsap.set(card, { autoAlpha: 0, x: 40, filter: 'blur(10px)' });
+  const toggleCard = (p) => {
+    if (!card) return;
+    const on = p >= 0.8;
+    if (on === cardOn) return;
+    cardOn = on;
+    gsap.killTweensOf(card);
+    if (mobile && copyBlock) { gsap.killTweensOf(copyBlock); gsap.to(copyBlock, { autoAlpha: on ? 0 : 1, y: on ? -16 : 0, duration: on ? 0.4 : 0.6, ease: on ? 'power2.in' : 'power2.out' }); }
+    gsap.to(card, on
+      ? { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }
+      : { autoAlpha: 0, x: 40, filter: 'blur(10px)', duration: 0.45, ease: 'power2.in' });
+  };
+
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {
       trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1,
       invalidateOnRefresh: true,
-      onUpdate: (self) => fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))),
+      onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleCard(self.progress); },
     },
   });
   tl.to({}, { duration: 1 }, 0);
@@ -141,6 +159,7 @@ export function scrubSection(section, { mobile = false } = {}) {
 
   return () => {
     tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect();
+    if (card) gsap.set([card, copyBlock].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     if (next) next.style.marginTop = '';
     gsap.set([...ins, soft, inset, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-live');

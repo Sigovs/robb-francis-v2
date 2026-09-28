@@ -16,7 +16,7 @@ const drawerMode = window.matchMedia('(max-width: 1180px)'); // the nav lives in
 let lenis = null;
 function startLenis() {
   if (lenis || reduceMotion.matches) return;
-  lenis = new Lenis({ autoRaf: false, anchors: true, lerp: 0.1, wheelMultiplier: 1 });
+  lenis = new Lenis({ autoRaf: false, anchors: true, lerp: 0.055, wheelMultiplier: 0.9 });   // a slower, heavier glide (Alex, 2026-09-28)
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(lenisRaf);
   gsap.ticker.lagSmoothing(0);
