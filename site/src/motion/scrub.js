@@ -11,12 +11,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 const pad = (i) => String(i + 1).padStart(3, '0');
 
-function frameCanvas(canvas, { contain = false } = {}) {
+function frameCanvas(canvas, { contain = false, containScale = 1, onPaint } = {}) {
   const base = canvas.dataset.frames;
   const count = +canvas.dataset.count;
   const ctx = canvas.getContext('2d');
   const imgs = new Array(count);
   let drawn = -1, want = 0, started = false;
+  let box = null;                                   // last paint rect on the canvas (device px)
 
   const size = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -29,20 +30,27 @@ function frameCanvas(canvas, { contain = false } = {}) {
     const cw = canvas.width, ch = canvas.height, iw = img.naturalWidth, ih = img.naturalHeight;
     if (!contain) {
       const s = Math.max(cw / iw, ch / ih), w = iw * s, h = ih * s;
-      ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+      box = { x: (cw - w) / 2, y: (ch - h) / 2, w, h };
+      ctx.drawImage(img, box.x, box.y, w, h);
       return;
     }
-    // contain: a band a little wider than the screen, its top and bottom edges dissolved into the page ground
+    // contain: the whole car, a little inside the frame and low, every edge dissolved into the page ground —
+    // the studio wall above it becomes the reading field for the title (desktop), the band fits a phone
     const ground = getComputedStyle(document.documentElement).getPropertyValue('--c-ground').trim() || '#12161d';
-    const s = Math.min((cw / iw) * 1.45, ch / ih), w = iw * s, h = ih * s, x = (cw - w) / 2, y = (ch - h) / 2 + ch * 0.08;
+    const k = containScale;
+    const s = Math.min((cw / iw) * k, (ch / ih) * 1.1), w = iw * s, h = ih * s, x = (cw - w) / 2, y = (ch - h) / 2 + ch * 0.1;
     ctx.fillStyle = ground; ctx.fillRect(0, 0, cw, ch);
+    box = { x, y, w, h };
     ctx.drawImage(img, x, y, w, h);
-    const edge = h * 0.3;
-    for (const [y0, y1] of [[y, y + edge], [y + h, y + h - edge]]) {
-      const g = ctx.createLinearGradient(0, y0, 0, y1);
+    const fade = (x0, y0, x1, y1, rx, ry, rw, rh) => {
+      const g = ctx.createLinearGradient(x0, y0, x1, y1);
       g.addColorStop(0, ground); g.addColorStop(1, ground + '00');
-      ctx.fillStyle = g; ctx.fillRect(0, Math.min(y0, y1), cw, edge);
-    }
+      ctx.fillStyle = g; ctx.fillRect(rx, ry, rw, rh);
+    };
+    const eh = h * 0.28, ew = w * 0.14;
+    fade(0, y, 0, y + eh, 0, y, cw, eh);                     // top
+    fade(0, y + h, 0, y + h - eh, 0, y + h - eh, cw, eh);    // bottom
+    if (x > 0) { fade(x, 0, x + ew, 0, x, y, ew, h); fade(x + w, 0, x + w - ew, 0, x + w - ew, y, ew, h); }   // sides
   };
   const nearestLoaded = (i) => {
     for (let d = 0; d < count; d++) {
@@ -56,6 +64,7 @@ function frameCanvas(canvas, { contain = false } = {}) {
     const k = nearestLoaded(i);
     if (k < 0 || k === drawn || !canvas.width) return;
     paint(imgs[k]); drawn = k;
+    onPaint?.();
     canvas.closest('.act-scrub')?.classList.add('is-live');
   }
   const load = () => {
@@ -73,45 +82,90 @@ function frameCanvas(canvas, { contain = false } = {}) {
     };
     for (let c = 0; c < 6; c++) pump();                      // six in flight
   };
-  return { count, draw, size, load };
+  // image point (0–1) → CSS px within the canvas, through the same fit as the paint
+  const map = (xf, yf) => { if (!box) return null; const d = canvas.width / canvas.clientWidth || 1; return { x: (box.x + xf * box.w) / d, y: (box.y + yf * box.h) / d }; };
+  return { count, draw, size, load, map, get frame() { return drawn; } };
 }
 
 export function scrubSection(section, { mobile = false } = {}) {
   const canvas = section.querySelector('.scrub__canvas');
   if (!canvas) return;
-  const fc = frameCanvas(canvas, { contain: mobile && section.classList.contains('act-turn') });
+  const turn = section.classList.contains('act-turn');
+  let afterPaint = null;
+  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.9, onPaint: () => afterPaint?.() });
   const ro = new ResizeObserver(() => fc.size());
   ro.observe(canvas);
   const near = ScrollTrigger.create({ trigger: section, start: 'top bottom+=200%', onEnter: fc.load, onEnterBack: fc.load });
   if (ScrollTrigger.isInViewport(section, -1)) fc.load();
 
-  // words of the About paragraph light up with the scroll
-  const para = section.querySelector('[data-words]');
-  let original;
-  if (para) {
-    original = para.innerHTML;
-    para.innerHTML = para.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(' ');
-  }
-  const words = para ? [...para.querySelectorAll('.w')] : [];
-  const ins = [...section.querySelectorAll('[data-scrub-in]')];
+  // soft arrival (Alex, 2026-09-28: "softer"): the copy block rises out of a blur once, early in the run
+  const soft = section.querySelector('[data-soft-in]');
+  const ins = soft ? [...soft.children] : [...section.querySelectorAll('[data-scrub-in]')];
 
-  const run = section.classList.contains('act-turn') ? (mobile ? 140 : 190) : (mobile ? 160 : 230);   // % of a screen
+  const isTurn = section.classList.contains('act-turn');
+  const run = isTurn ? (mobile ? 140 : 190) : (mobile ? 160 : 230);   // film run, % of a screen
+  // About hands over by being covered (Alex: "on the last scroll the film darkens and goes into the background"):
+  // it stays pinned one more screen while the next section slides up over it (Forge's stacking).
+  const next = !isTurn ? section.parentElement.querySelector('.act-turn') : null;
+  const overlap = next ? 100 : 0;
+  if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';
+  const f = run / (run + overlap);                             // share of the timeline that plays the film
+
+  // callouts: each shows while the turn is on its frame, placed on the image through the canvas fit, and its
+  // arrival and departure play in time (they are not scrubbed: a label never hangs half-drawn)
+  const callouts = [...section.querySelectorAll('.callout')].map((el) => ({ el, f: +el.dataset.f, span: +el.dataset.span, x: +el.dataset.x, y: +el.dataset.y, on: false }));
+  const placeCallouts = () => callouts.forEach((c) => { const p = fc.map(c.x, c.y); if (p) gsap.set(c.el, { x: p.x, y: p.y }); });
+  let lastFrame = 0;
+  afterPaint = () => updateCallouts(lastFrame);
+  const caption = mobile ? section.querySelector('.turn__caption') : null;
+  const updateCallouts = (frame) => {
+    lastFrame = frame;
+    placeCallouts();
+    callouts.forEach((c) => {
+      const on = fc.frame >= 0 && Math.abs(frame - c.f) <= c.span;   // never before a frame is painted
+      if (on === c.on) return;
+      c.on = on;
+      gsap.killTweensOf(c.el);
+      if (on) gsap.fromTo(c.el, { autoAlpha: 0, '--line': 0, filter: 'blur(6px)' }, { autoAlpha: 1, '--line': 1, filter: 'blur(0px)', duration: 0.6, ease: 'power2.out' });
+      else gsap.to(c.el, { autoAlpha: 0, filter: 'blur(6px)', duration: 0.35, ease: 'power2.in' });
+      if (caption && on) { gsap.killTweensOf(caption); caption.textContent = c.el.textContent.trim(); gsap.fromTo(caption, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }); }
+    });
+    if (caption && !callouts.some((c) => c.on)) gsap.to(caption, { opacity: 0, duration: 0.3 });
+  };
+  const ro2 = callouts.length ? new ResizeObserver(placeCallouts) : null;
+  ro2?.observe(canvas);
+
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {
-      trigger: section, start: 'top top', end: `+=${run}%`, pin: true, scrub: 0.6, anticipatePin: 1,
+      trigger: section, start: 'top top', end: `+=${run + overlap}%`, pin: true, scrub: 1, anticipatePin: 1,
       invalidateOnRefresh: true,
-      onUpdate: (self) => fc.draw(Math.round(self.progress * (fc.count - 1))),
+      onUpdate: (self) => { const i = Math.round(Math.min(1, self.progress / f) * (fc.count - 1)); fc.draw(i); if (callouts.length) updateCallouts(i); },
     },
   });
-  tl.to({}, { duration: 1 }, 0);                              // the film spans the whole run
-  if (ins.length) tl.fromTo(ins, { autoAlpha: 0, y: 16, filter: 'blur(8px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.12, stagger: 0.04 }, 0.02);
-  if (words.length) tl.fromTo(words, { opacity: 0.16 }, { opacity: 1, duration: 0.05, stagger: 0.5 / words.length }, 0.08);
+  tl.to({}, { duration: 1 }, 0);
+  if (ins.length) tl.fromTo(ins, { autoAlpha: 0, y: 24, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.16 * f, stagger: 0.045 * f, ease: 'power2.out' }, 0.03 * f);
+
+  const stage = section.querySelector('.scrub__stage');
+  const inset = section.querySelector('[data-rise]');
+  const dim = section.querySelector('.scrub__dim');
+  if (soft) tl.fromTo(soft, { y: () => innerHeight * 0.06 }, { y: () => -innerHeight * 0.06, duration: f }, 0);   // the copy drifts up
+  if (inset) {
+    tl.fromTo(inset, { y: () => innerHeight * 0.75 }, { y: 0, duration: 0.62 * f, ease: 'power2.out' }, 0.1 * f)   // rises from below
+      .fromTo(inset.querySelector('img'), { scale: 1.12 }, { scale: 1, duration: 0.62 * f }, 0.1 * f)
+      .to(inset, { y: () => -innerHeight * 0.05, duration: 0.28 * f }, 0.72 * f);
+  }
+  if (overlap) {                                               // covered: the film darkens and settles back
+    tl.to(dim, { opacity: 0.72, duration: 1 - f }, f)
+      .to(stage, { scale: 0.94, duration: 1 - f }, f)
+      .to([soft, inset].filter(Boolean), { autoAlpha: 0, filter: 'blur(8px)', duration: 0.45 * (1 - f) }, f);
+  }
 
   return () => {
-    tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect();
-    gsap.set(ins, { clearProps: 'opacity,visibility,transform,filter' });
-    if (para) para.innerHTML = original;
+    tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect(); ro2?.disconnect();
+    callouts.forEach((c) => gsap.set(c.el, { clearProps: 'all' }));
+    if (next) next.style.marginTop = '';
+    gsap.set([...ins, soft, inset, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-live');
   };
 }
