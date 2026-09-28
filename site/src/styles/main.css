@@ -847,37 +847,3 @@ a.util__item:hover { color: var(--c-ink); }
 @media (max-width: 767.98px) {
   .about__inset { right: var(--gutter); top: calc(var(--header-h) + var(--s-6)); bottom: auto; width: 34vw; }
 }
-
-/* ---------- Callouts on the 356 walk-around: a point, a hairline, a label (tracked caps, 14px) ---------- */
-.callouts { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.callout { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; visibility: hidden; }
-.callout::before {                                  /* the point: filled, ringed, breathing — it must read on a white car */
-  content: ""; position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%;
-  background: var(--c-ink); box-shadow: 0 0 0 3px rgba(var(--c-scrim), 0.85), 0 0 0 9px rgba(236, 238, 241, 0.22);
-  animation: callout-pulse 2.4s var(--ease-out) infinite;
-}
-@keyframes callout-pulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(var(--c-scrim), 0.85), 0 0 0 6px rgba(236, 238, 241, 0.28); } 50% { box-shadow: 0 0 0 3px rgba(var(--c-scrim), 0.85), 0 0 0 14px rgba(236, 238, 241, 0); } }
-@media (prefers-reduced-motion: reduce) { .callout::before { animation: none; } }
-.callout::after {                                   /* the leader */
-  content: ""; position: absolute; left: 8px; top: 0; width: var(--callout-len, 72px); height: 2px; background: var(--c-ink);
-  transform-origin: 0 0; transform: rotate(var(--callout-rot, -35deg)) scaleX(var(--line, 1));
-}
-.callout__label {
-  position: absolute; white-space: nowrap; display: inline-flex; align-items: center; gap: var(--s-3);
-  padding: 0.5rem 0.875rem; background: rgba(var(--c-scrim), 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(236, 238, 241, 0.18);
-  font-size: 0.9375rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-ink);
-}
-.callout__n { font-family: var(--font-display); font-size: 1.25rem; letter-spacing: 0; color: var(--c-ink-2); text-transform: none; }
-.callout[data-dir="ur"] .callout__label { left: 62px; top: -76px; }
-.callout[data-dir="ul"] { --callout-rot: -145deg; }
-.callout[data-dir="ul"] .callout__label { right: 62px; top: -76px; }
-.callout[data-dir="dr"] { --callout-rot: 35deg; }
-.callout[data-dir="dr"] .callout__label { left: 62px; top: 36px; }
-/* phone: the car is small, so the point stays on the car and the name sits as one caption under it */
-.turn__caption { display: none; }
-@media (max-width: 767.98px) {
-  .callout::after, .callout__label { display: none; }
-  .turn__caption { font-size: 0.9375rem; }
-  .turn__caption { display: block; position: absolute; z-index: var(--z-copy); left: var(--gutter); right: var(--gutter); bottom: 22svh; text-align: center; color: var(--c-ink); opacity: 0; }
-}
