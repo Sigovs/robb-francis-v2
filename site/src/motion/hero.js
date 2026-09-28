@@ -33,7 +33,7 @@ export function heroSequence(section, { mobile = false } = {}) {
   // message 1 leaves as one wrapper (the load entrance owns its lines, G6); later messages move by parts
   const partsOf = (copy) => {
     const inn = copy.querySelector('[data-seq-in]');
-    return [inn.querySelector('.hero__kicker'), ...inn.querySelectorAll('.hl'), ...inn.querySelectorAll('.lead__l')];
+    return [inn.querySelector('.hero__kicker'), ...inn.querySelectorAll('.hl'), ...inn.querySelectorAll('.lead__l'), inn.querySelector('.hero__cta')].filter(Boolean);
   };
   const outFirst = first.querySelector('[data-seq-out]');
   const sets = more.map(partsOf);

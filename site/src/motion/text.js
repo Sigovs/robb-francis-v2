@@ -13,7 +13,7 @@ gsap.registerPlugin(SplitText);
 export function heroEntrance(section) {
   const title = section.querySelector('.hero__copy--1 .display--hero');
   const kicker = section.querySelector('.hero__copy--1 .hero__kicker');
-  const lead = section.querySelector('.hero__copy--1 .hero__title .lead');
+  const lead = [section.querySelector('.hero__copy--1 .hero__title .lead'), section.querySelector('.hero__copy--1 .hero__cta')].filter(Boolean);
   const media = [section.querySelector('.hero__media'), section.querySelector('.scrim--hero')].filter(Boolean);
   const header = document.querySelector('.site-header');
   const foot = [...section.querySelectorAll('.hero__foot > *')];
@@ -34,7 +34,7 @@ export function heroEntrance(section) {
         if (tl.progress() < 1) return tl.from(self.lines, { yPercent: 104, duration: DUR[3] * 1.4, stagger: STAGGER.lines * 1.5 }, 0.7);
       },
     });
-    tl.from(lead, { autoAlpha: 0, y: 10, duration: DUR[3] }, 1.05)
+    tl.from(lead, { autoAlpha: 0, y: 10, duration: DUR[3], stagger: 0.12 }, 1.05)
       .from(foot, { autoAlpha: 0, y: 12, duration: DUR[3], stagger: 0.08, clearProps: 'opacity,visibility,transform' }, 1.2);
     document.documentElement.classList.remove('intro-wait');   // from() states are set: release the hold
   };

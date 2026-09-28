@@ -235,12 +235,8 @@ a.util__item:hover { color: var(--c-ink); }
      of the car; the title runs as wide as it needs. */
   /* V2 (Alex): centred on the height of the frame below the header */
   .hero__copy { max-width: none; left: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2); transform: translateY(-50%); }
-  /* centred, the title shares the car's height, so it must end in the air left of the car: the car's left edge
-     sits at ~34–36vw in landscape cover; "Both Coasts", the longest title line across the three messages, is 5.26 × font-size wide in Gloock (measured) */
-  .act-hero .display--hero { font-size: clamp(2.5rem, calc((29.5vw - 1.5rem) / 5.3), 6.5rem); }
-  .act-hero .hero__foot { left: 3.5vw; }
-  .act-hero .hero__title .lead { max-width: calc(30.5vw - 1rem); }   /* the lead shares the car's height: hold it to the air left of it */
-  .act-hero .hero__title .lead__l { white-space: normal; text-wrap: balance; }   /* the film control keeps the copy's left edge */
+  .act-hero .display--hero { font-size: clamp(3rem, 7vw, 8rem); }   /* Alex's mock (2026-09-28): the title is big and may cross the car */
+  .act-hero .hero__foot { left: 3.5vw; }   /* the film control keeps the copy's left edge */
 }
 /* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
    so the car lands mid-screen. The car keeps the upper field; the copy moves beneath it, across the full measure,
@@ -263,7 +259,7 @@ a.util__item:hover { color: var(--c-ink); }
 .hero__kicker { color: var(--c-ink); margin-bottom: var(--s-5); }
 .hero__title { display: flex; flex-direction: column; gap: var(--s-5); font-weight: inherit; }
 .hero__title .lead { max-width: none; color: var(--c-ink); }
-.hero__title .lead__l { display: block; white-space: nowrap; } /* two chosen lines: "Collector, Classic" / "and Current State of the Art Sports Cars" */
+.hero__title .lead__l { display: block; white-space: nowrap; } /* each lead line is a chosen line */
 .hero__foot {
   position: absolute; z-index: var(--z-copy);
   left: var(--text-inset); right: var(--gutter); bottom: var(--s-6);
@@ -745,7 +741,6 @@ a.util__item:hover { color: var(--c-ink); }
 .act-hero2 .hero__copy { min-height: 70svh; display: flex; flex-direction: column; justify-content: center; }
 .act-hero2[hidden] { display: none; }
 .act-hero2 .hero__copy { position: relative; top: auto; left: auto; right: auto; transform: none; padding: var(--s-9) 3.5vw; }
-.act-hero.is-seq .hero__copy--2, .act-hero.is-seq .hero__copy--3 { pointer-events: none; }
 .act-next { min-height: 100svh; background: var(--c-ground); }   /* placeholder: the next section lands here */
 @media (max-width: 767.98px) {
   .act-hero.is-seq .hero__copy--2, .act-hero.is-seq .hero__copy--3 { position: absolute; left: 0; right: 0; top: var(--seq-top, 0); }
@@ -770,3 +765,28 @@ a.util__item:hover { color: var(--c-ink); }
 /* the same falloff, mirrored, on top of the film (Alex, 2026-09-28) */
 .hero__media::before { inset: 0 0 auto 0; height: 34%; transform: scaleY(-1); }
 @media (max-width: 767.98px) { .hero__media::after { height: 38%; } .hero__media::before { height: 30%; } }
+
+/* ---------- V2 header per Alex's mock (2026-09-28): one row, the logo centred between two halves of the nav.
+   Desktop only (≥ 1181px); tablet and phone keep the Menu · logo · Call header with everything in the drawer. */
+.split-nav { display: none; }
+.split-nav ul { display: flex; gap: clamp(2rem, 4vw, 4.25rem); }
+.split-nav a {
+  display: inline-flex; align-items: center; min-height: var(--btn-h-sm);
+  font-size: var(--fs-label); font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-ink);
+  transition: color var(--dur-1) var(--ease-out);
+}
+.split-nav a:hover { color: var(--c-ink-2); }
+@media (min-width: 1181px) {
+  :root { --header-h: 5.5rem; }
+  .split-nav { display: block; }
+  .split-nav--l { grid-column: 1; grid-row: 1; justify-self: end; margin-right: clamp(3rem, 7vw, 7.5rem); }
+  .split-nav--r { grid-column: 3; grid-row: 1; justify-self: start; margin-left: clamp(3rem, 7vw, 7.5rem); }
+  .brand { grid-column: 2; grid-row: 1; }
+  .util__left, .util__right, .site-header .nav { display: none; }
+}
+
+/* the hero's call to action sits under the lead, one per message (Alex's mock) */
+.hero__cta { margin-top: var(--s-6); align-self: flex-start; }
+.btn--lg { min-height: 3.25rem; padding: 0 var(--s-6); font-size: var(--fs-label); letter-spacing: 0.06em; }
+.hero__title .lead__l { white-space: nowrap; }
+@media (max-width: 480px) { .hero__title .lead__l { white-space: normal; } }
