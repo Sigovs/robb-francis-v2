@@ -108,8 +108,11 @@ export function scrubSection(section, { mobile = false } = {}) {
   // it stays pinned one more screen while the next section slides up over it (Forge's stacking).
   const next = !isTurn ? section.parentElement.querySelector('.act-turn') : null;
   const overlap = next ? 100 : 0;
-  if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';
-  const f = run / (run + overlap);                             // share of the timeline that plays the film
+  const dark = next ? 70 : 0;                                  // the film goes into the dark of the ground, THEN the next scene arrives
+  if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';   // the next scene enters during the last screen of this pin
+  const total = run + dark + overlap;
+  const f = run / total;                                       // share of the timeline that plays the film
+  const fd = (run + dark) / total;                             // …and the end of the dark
 
   // callouts: each shows while the turn is on its frame, placed on the image through the canvas fit, and its
   // arrival and departure play in time (they are not scrubbed: a label never hangs half-drawn)
@@ -128,7 +131,7 @@ export function scrubSection(section, { mobile = false } = {}) {
       gsap.killTweensOf(c.el);
       if (on) gsap.fromTo(c.el, { autoAlpha: 0, '--line': 0, filter: 'blur(6px)' }, { autoAlpha: 1, '--line': 1, filter: 'blur(0px)', duration: 0.6, ease: 'power2.out' });
       else gsap.to(c.el, { autoAlpha: 0, filter: 'blur(6px)', duration: 0.35, ease: 'power2.in' });
-      if (caption && on) { gsap.killTweensOf(caption); caption.textContent = c.el.textContent.trim(); gsap.fromTo(caption, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }); }
+      if (caption && on) { gsap.killTweensOf(caption); caption.textContent = c.el.querySelector('.callout__label').lastChild.textContent.trim(); gsap.fromTo(caption, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }); }
     });
     if (caption && !callouts.some((c) => c.on)) gsap.to(caption, { opacity: 0, duration: 0.3 });
   };
@@ -138,7 +141,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {
-      trigger: section, start: 'top top', end: `+=${run + overlap}%`, pin: true, scrub: 1, anticipatePin: 1,
+      trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1,
       invalidateOnRefresh: true,
       onUpdate: (self) => { const i = Math.round(Math.min(1, self.progress / f) * (fc.count - 1)); fc.draw(i); if (callouts.length) updateCallouts(i); },
     },
@@ -155,10 +158,11 @@ export function scrubSection(section, { mobile = false } = {}) {
       .fromTo(inset.querySelector('img'), { scale: 1.12 }, { scale: 1, duration: 0.62 * f }, 0.1 * f)
       .to(inset, { y: () => -innerHeight * 0.05, duration: 0.28 * f }, 0.72 * f);
   }
-  if (overlap) {                                               // covered: the film darkens and settles back
-    tl.to(dim, { opacity: 0.72, duration: 1 - f }, f)
-      .to(stage, { scale: 0.94, duration: 1 - f }, f)
-      .to([soft, inset].filter(Boolean), { autoAlpha: 0, filter: 'blur(8px)', duration: 0.45 * (1 - f) }, f);
+  if (overlap) {                                               // into the dark: the film fades to the page ground and settles back
+    tl.to(dim, { opacity: 0.94, duration: fd - f, ease: 'power1.in' }, f)
+      .to(stage, { scale: 0.93, filter: 'blur(4px)', duration: fd - f, ease: 'power1.inOut' }, f)
+      .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - f), ease: 'power1.in' }, f)
+      .to(dim, { opacity: 1, duration: 1 - fd }, fd);
   }
 
   return () => {
