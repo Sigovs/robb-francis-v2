@@ -113,22 +113,29 @@ export function scrubSection(section, { mobile = false } = {}) {
   const f = run / total;                                       // share of the timeline that plays the film
   const fd = (run + dark) / total;                             // …and the end of the dark
 
-  // the spec card: arrives from the right on the last step of the turn (front view), leaves if you scroll back.
-  // Played in time, not scrubbed, so it never hangs half-way.
+  // the spec card: once the turn reaches its last frames it flies in from the right BY ITSELF and completes, rows
+  // cascading after it (Alex: "not scrubbed, it should arrive on its own"). It leaves only after a clear scroll back
+  // (hysteresis 0.8 → 0.62), so it never flickers at the threshold.
   const card = section.querySelector('[data-card]');
   const copyBlock = section.querySelector('.turn__copy');
+  const rows = card ? [card.querySelector('.spec-card__kicker'), card.querySelector('.spec-card__title'), ...card.querySelectorAll('dt, dd'), card.querySelector('.text-link')].filter(Boolean) : [];
   let cardOn = false;
-  if (card) gsap.set(card, { autoAlpha: 0, x: 40, filter: 'blur(10px)' });
+  const FROM = () => (mobile ? 60 : Math.min(innerWidth * 0.1, 140));
+  if (card) { gsap.set(card, { autoAlpha: 0, x: FROM, filter: 'blur(12px)' }); gsap.set(rows, { autoAlpha: 0, y: 10 }); }
   const toggleCard = (p) => {
     if (!card) return;
-    const on = p >= 0.8;
+    const on = cardOn ? p > 0.62 : p >= 0.8;
     if (on === cardOn) return;
     cardOn = on;
-    gsap.killTweensOf(card);
-    if (mobile && copyBlock) { gsap.killTweensOf(copyBlock); gsap.to(copyBlock, { autoAlpha: on ? 0 : 1, y: on ? -16 : 0, duration: on ? 0.4 : 0.6, ease: on ? 'power2.in' : 'power2.out' }); }
-    gsap.to(card, on
-      ? { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }
-      : { autoAlpha: 0, x: 40, filter: 'blur(10px)', duration: 0.45, ease: 'power2.in' });
+    gsap.killTweensOf([card, ...rows]);
+    if (mobile && copyBlock) { gsap.killTweensOf(copyBlock); gsap.to(copyBlock, { autoAlpha: on ? 0 : 1, y: on ? -16 : 0, duration: on ? 0.45 : 0.6, ease: on ? 'power2.in' : 'power2.out' }); }
+    if (on) {
+      gsap.to(card, { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 1.1, ease: 'expo.out' });
+      gsap.to(rows, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.045, delay: 0.25, ease: 'power2.out' });
+    } else {
+      gsap.to(rows, { autoAlpha: 0, y: 6, duration: 0.25, stagger: { each: 0.02, from: 'end' }, ease: 'power1.in' });
+      gsap.to(card, { autoAlpha: 0, x: FROM, filter: 'blur(12px)', duration: 0.55, delay: 0.1, ease: 'power2.in' });
+    }
   };
 
   const tl = gsap.timeline({
@@ -159,7 +166,7 @@ export function scrubSection(section, { mobile = false } = {}) {
 
   return () => {
     tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect();
-    if (card) gsap.set([card, copyBlock].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
+    if (card) gsap.set([card, copyBlock, ...rows].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     if (next) next.style.marginTop = '';
     gsap.set([...ins, soft, inset, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-live');
