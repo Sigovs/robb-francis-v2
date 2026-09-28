@@ -902,3 +902,9 @@ a.util__item:hover { color: var(--c-ink); }
   .ch__title { font-size: 2.25rem; margin-bottom: var(--s-3); }
   .ch__copy .text-link { margin-top: var(--s-4); }
 }
+
+/* Line breaks are chosen, never accidental (typography I6): short multi-line blocks balance, paragraphs avoid a
+   stranded last word. */
+h1, h2, h3, .ch__title, .about__title, .turn__title, .spec-card__title { text-wrap: balance; }
+p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
+@media (max-width: 374.98px) { .about__title { font-size: 1.875rem; } }
