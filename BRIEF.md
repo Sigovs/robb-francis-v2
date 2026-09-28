@@ -409,3 +409,5 @@ overrides contrast, the type floor, or provenance._
 - The RF red shield crest hangs on the lounge wall.
 - A Rally4Kids / United Boys & Girls Clubs of Santa Barbara County poster hangs in the lounge. It is visible, but it's not used as a claim (the Google summary is a secondary source).
 - **A "MILPAS MOTORS" sign hangs inside the garage** (visible through the glass in 180331 and 180522). See Q1.
+
+| "Full Service Boutique" (replaces the site's "Dealership") | Alex, direct instruction | 2026-09-28 |
