@@ -156,6 +156,8 @@ export function scrubSection(section, { mobile = false } = {}) {
       // the walk-around appears in place when the About film has gone dark (it travelled up hidden behind it)
       onEnter: () => appear && gsap.to(section, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }),
       onLeaveBack: () => appear && gsap.to(section, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
+      // never scroll away visible: when the pin lets go, the veil is complete whatever the scrub lag (Alex)
+      onLeave: () => { const v = section.querySelector('.scrub__veil'); if (v && isTurn) { gsap.killTweensOf(v); gsap.set(v, { opacity: 1 }); } },
       onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleCard(self.progress); },
     },
   });
@@ -172,7 +174,7 @@ export function scrubSection(section, { mobile = false } = {}) {
       .to(inset, { y: () => -innerHeight * 0.05, duration: 0.28 * f }, 0.72 * f);
   }
   const veil = section.querySelector('.scrub__veil');
-  if (exit && veil) tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 1 - fe, ease: 'power1.in' }, fe);   // gone before it moves
+  if (exit && veil) tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.6 * (1 - fe), ease: 'power1.in' }, fe);   // fully gone well before the pin lets go
   if (next) {                                                  // into the dark: the film only darkens to the page ground (no scale, Alex)
     tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh)
       .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh)
