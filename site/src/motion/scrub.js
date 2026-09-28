@@ -111,13 +111,15 @@ export function scrubSection(section, { mobile = false } = {}) {
   const overlap = 0;                                           // no slide-over: the next scene appears in place (Alex)
   const dark = next ? 70 : 0;
   const exit = isTurn ? 60 : 0;                                // the walk-around fades out in place at the end
+  const hold = isTurn ? 50 : 40;                               // a small pause on the last frame before it goes (Alex)
   // the next scene sits right behind this pin (-1 screen): it reaches the top exactly as the dark completes, hidden
   // until then, and appears in place (fades up) instead of sliding in from below (Alex, 2026-09-28)
   if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';
-  const total = run + dark + overlap + exit;
+  const total = run + hold + dark + overlap + exit;
   const f = run / total;                                       // share of the timeline that plays the film
-  const fd = (run + dark) / total;                             // …and the end of the dark
-  const fe = (run + dark + overlap) / total;                   // start of the in-place exit
+  const fh = (run + hold) / total;                             // end of the pause on the last frame
+  const fd = (run + hold + dark) / total;                      // …and the end of the dark
+  const fe = (run + hold + dark + overlap) / total;            // start of the in-place exit
 
   // the spec card: once the turn reaches its last frames it flies in from the right BY ITSELF and completes, rows
   // cascading after it (Alex: "not scrubbed, it should arrive on its own"). It leaves only after a clear scroll back
@@ -126,11 +128,12 @@ export function scrubSection(section, { mobile = false } = {}) {
   const copyBlock = section.querySelector('.turn__copy');
   const rows = card ? [card.querySelector('.spec-card__kicker'), card.querySelector('.spec-card__title'), ...card.querySelectorAll('dt, dd'), card.querySelector('.text-link')].filter(Boolean) : [];
   let cardOn = false;
+  let cardAt = 0.8, cardOff = 0.62;                                          // set once the run's shares are known
   const FROM = () => (mobile ? 60 : Math.min(innerWidth * 0.1, 140));
   if (card) { gsap.set(card, { autoAlpha: 0, x: FROM, filter: 'blur(12px)' }); gsap.set(rows, { autoAlpha: 0, y: 10 }); }
   const toggleCard = (p) => {
     if (!card) return;
-    const on = cardOn ? p > 0.62 : p >= 0.8;
+    const on = cardOn ? p > cardOff : p >= cardAt;
     if (on === cardOn) return;
     cardOn = on;
     gsap.killTweensOf([card, ...rows]);
@@ -144,6 +147,7 @@ export function scrubSection(section, { mobile = false } = {}) {
     }
   };
 
+  cardAt = f * 0.9; cardOff = f * 0.72;                        // the card lands on the last frames of the turn
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {
@@ -170,8 +174,8 @@ export function scrubSection(section, { mobile = false } = {}) {
   const veil = section.querySelector('.scrub__veil');
   if (exit && veil) tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 1 - fe, ease: 'power1.in' }, fe);   // gone before it moves
   if (next) {                                                  // into the dark: the film only darkens to the page ground (no scale, Alex)
-    tl.to(dim, { opacity: 0.94, duration: fd - f, ease: 'power1.in' }, f)
-      .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - f), ease: 'power1.in' }, f)
+    tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh)
+      .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh)
       .to(dim, { opacity: 1, duration: 1 - fd }, fd);
   }
 
