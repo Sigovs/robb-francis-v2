@@ -165,19 +165,13 @@ export function scrubSection(section, { mobile = false } = {}) {
   if (ins.length) tl.fromTo(ins, { autoAlpha: 0, y: 24, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.16 * f, stagger: 0.045 * f, ease: 'power2.out' }, 0.03 * f);
 
   const stage = section.querySelector('.scrub__stage');
-  const inset = section.querySelector('[data-rise]');
   const dim = section.querySelector('.scrub__dim');
   if (soft) tl.fromTo(soft, { y: () => innerHeight * 0.06 }, { y: () => -innerHeight * 0.06, duration: f }, 0);   // the copy drifts up
-  if (inset) {
-    tl.fromTo(inset, { y: () => innerHeight * 0.75 }, { y: 0, duration: 0.62 * f, ease: 'power2.out' }, 0.1 * f)   // rises from below
-      .fromTo(inset.querySelector('img'), { scale: 1.12 }, { scale: 1, duration: 0.62 * f }, 0.1 * f)
-      .to(inset, { y: () => -innerHeight * 0.05, duration: 0.28 * f }, 0.72 * f);
-  }
   const veil = section.querySelector('.scrub__veil');
   if (exit && veil) tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.6 * (1 - fe), ease: 'power1.in' }, fe);   // fully gone well before the pin lets go
   if (next) {                                                  // into the dark: the film only darkens to the page ground (no scale, Alex)
     tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh)
-      .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh)
+      .to([soft].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh)
       .to(dim, { opacity: 1, duration: 1 - fd }, fd);
   }
 
@@ -187,7 +181,7 @@ export function scrubSection(section, { mobile = false } = {}) {
     if (veil) gsap.set(veil, { clearProps: 'opacity' });
     if (card) gsap.set([card, copyBlock, ...rows].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     if (next) next.style.marginTop = '';
-    gsap.set([...ins, soft, inset, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
+    gsap.set([...ins, soft, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-live');
   };
 }
