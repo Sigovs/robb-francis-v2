@@ -900,7 +900,7 @@ a.util__item:hover { color: var(--c-ink); }
 .ch__count .ch__n { color: var(--c-ink); }
 .ch__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.25rem, 3.4vw, 3.5rem); line-height: 1.04; letter-spacing: -0.01em; color: var(--c-ink); margin: 0 0 var(--s-5); }   /* the site's section-title rank */
 .ch__text { font-size: var(--fs-body); line-height: 1.6; color: var(--c-ink-2); max-width: 34ch; }
-.ch__copy .text-link { align-self: flex-start; margin-top: auto; }
+.ch__copy .text-link { align-self: flex-start; margin-top: var(--s-6); margin-bottom: auto; }   /* the action stays with its text (Alex); title, text and action centre as one group */
 @media (max-width: 767.98px) {
   .ch__frame { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); max-height: 46svh; }
   .ch__copy { padding: 0 var(--gutter); height: 150svh; }
