@@ -271,7 +271,18 @@ a.util__item:hover { color: var(--c-ink); }
 }
 .scroll-cue { display: inline-flex; align-items: center; gap: var(--s-3); min-height: var(--btn-h-sm); margin-left: auto; }
 .scroll-cue__line { width: var(--s-7); height: 1px; background: var(--c-ink); }
-.hero__pause { min-height: var(--btn-h-sm); padding: 0 var(--s-4); border: 1px solid var(--c-hair-strong); }
+.hero__pause {
+  width: 44px; height: 44px; display: inline-grid; place-items: center; margin-left: auto;
+  border: 1px solid var(--c-hair-strong); border-radius: 50%; color: var(--c-ink);
+  transition: border-color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+}
+.hero__pause:hover { border-color: var(--c-ink); background: rgba(var(--c-scrim), 0.35); }
+.hero__pause-icon { width: 14px; height: 14px; fill: currentColor; }
+.hero__pause-icon--play, .hero__pause[aria-pressed="true"] .hero__pause-icon--pause { display: none; }
+.hero__pause[aria-pressed="true"] .hero__pause-icon--play { display: block; }
+/* the hero's one call to action: filled, so it outranks the header's outline "We buy cars" */
+.btn--fill { background: var(--c-ink); color: var(--c-ground); border-color: var(--c-ink); }
+.btn--fill:hover { background: transparent; color: var(--c-ink); }
 
 /* ---------- ACT 2 · THE DOOR ---------- */
 .act-door { background: var(--c-ground); }
@@ -742,3 +753,20 @@ a.util__item:hover { color: var(--c-ink); }
   .act-hero.is-seq { height: 100svh; }
   .act-hero.is-seq .hero__media { aspect-ratio: auto; flex: 1 1 auto; min-height: 0; }
 }
+
+/* intro hold (index.html head script → motion/text.js heroEntrance releases it) */
+.intro-wait .site-header, .intro-wait .hero__media, .intro-wait .scrim--hero, .intro-wait .hero__copy--1, .intro-wait .hero__foot { opacity: 0; }
+
+/* Film → page: the bottom of the film dissolves into the page ground, 0 → 100 %, on an eased curve (a linear ramp
+   bands and shows a seam on dark footage). Alex, 2026-09-28. Top and bottom share one gradient. */
+.hero__media::before, .hero__media::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 42%; pointer-events: none; z-index: 1;
+  background: linear-gradient(180deg,
+    rgba(var(--c-scrim), 0) 0%, rgba(var(--c-scrim), 0.03) 12%, rgba(var(--c-scrim), 0.09) 24%,
+    rgba(var(--c-scrim), 0.19) 36%, rgba(var(--c-scrim), 0.32) 48%, rgba(var(--c-scrim), 0.48) 60%,
+    rgba(var(--c-scrim), 0.65) 71%, rgba(var(--c-scrim), 0.81) 82%, rgba(var(--c-scrim), 0.93) 92%,
+    rgb(var(--c-scrim)) 100%);
+}
+/* the same falloff, mirrored, on top of the film (Alex, 2026-09-28) */
+.hero__media::before { inset: 0 0 auto 0; height: 34%; transform: scaleY(-1); }
+@media (max-width: 767.98px) { .hero__media::after { height: 38%; } .hero__media::before { height: 30%; } }

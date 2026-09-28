@@ -62,10 +62,10 @@
        ink      cool near-white: equal R/G, a point more blue. Not cream.
        ink-2/3  neutral greys with a slight cool bias (B ≥ R), no yellow.
        oxblood  the door-frame red, sampled off HEIC 180304 (117,18,5). Fills only; lifted for focus/active.
-     Ratios on --c-ground (measured, WCAG): ink 17.1 · ink-2 8.5 · ink-3 6.2 · oxblood-lit 3.96 (non-text ≥ 3). */
-  --c-ground: #0a0b0f;          /* page ground */
-  --c-ground-2: #101218;        /* service text half: one step up, same hue */
-  --c-deep: #06070a;            /* closing + footer: the one step down (was #000) */
+     Ratios on --c-ground #12161d (WCAG): ink 15.6 · ink-2 7.7 · ink-3 5.6. */
+  --c-ground: #12161d;          /* page ground (Alex, 2026-09-28) */
+  --c-ground-2: #171c25;        /* one step up, same hue */
+  --c-deep: #0d1015;            /* the one step down */
   --c-ink: #eceef1;             /* primary text */
   --c-ink-2: #a7abb2;           /* secondary text */
   --c-ink-3: #8c9199;           /* tertiary text (labels, captions only) */
@@ -74,7 +74,7 @@
   --c-sheen: rgba(236, 238, 241, 0.045);      /* the peak's overhead pool of light on the ground */
   --c-oxblood: #751205;         /* sampled door-frame red — fills only */
   --c-oxblood-lit: #c8412c;     /* same hue lifted: focus ring, active mark, rule head */
-  --c-scrim: 8, 9, 13;          /* rgb triplet for scrims: the ground's hue, a step darker */
+  --c-scrim: 18, 22, 29;        /* rgb triplet for scrims = the ground, so every falloff lands on the page colour seamlessly */
 
   /* ---------- Space — one scale (spacing I3) ---------- */
   --s-1: 0.25rem;   /* 4 */

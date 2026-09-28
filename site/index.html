@@ -8,7 +8,15 @@
   <meta name="theme-color" content="#0a0b0f">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <!-- MOCKUP. Borrowed and generated media are listed in BRIEF.md §10 and are replaced before anything goes live. -->
-  <script>document.documentElement.classList.replace('no-js', 'js')</script>
+  <script>
+    document.documentElement.classList.replace('no-js', 'js');
+    // hold the hero back for its intro (motion allowed only); the intro releases it. Safety net: never longer than 2.5s.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('intro-wait');
+      setTimeout(function () { document.documentElement.classList.remove('intro-wait'); }, 2500);
+    }
+  </script>
+  <style>.intro-wait .site-header, .intro-wait .hero__media, .intro-wait .scrim--hero, .intro-wait .hero__copy--1, .intro-wait .hero__foot { opacity: 0; }</style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,8 +119,12 @@
       </div>
 
       <div class="hero__foot">
-        <button class="hero__pause label" type="button" data-video-toggle aria-pressed="false" hidden>
-          <span data-video-label>Pause film</span>
+        <a class="btn btn--fill hero__cta" href="/inventory/">Browse Inventory</a>
+        <!-- The film loops without end, so it keeps a pause control (WCAG 2.2.2): an icon, not a second CTA. -->
+        <button class="hero__pause" type="button" data-video-toggle aria-pressed="false" hidden>
+          <span class="sr-only" data-video-label>Pause film</span>
+          <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
+          <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
         </button>
       </div>
     </section>
