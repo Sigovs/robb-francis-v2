@@ -3,6 +3,7 @@
 // Messages slide in from the side, line by line (Alex, 2026-09-28). This yields motion-taste D1 (crossfade over
 // travel) by explicit direction. One direction, like a belt: the next message arrives from the right and settles,
 // the outgoing one carries on to the left and is gone before it reaches the frame edge (no clipped words, MJ4).
+// Leaving text blurs out, arriving text focuses in (Alex, 2026-09-28) — filter on small type blocks only.
 // Progressive enhancement (G7): messages 2+ ship as blocks under the hero (static / reduced-motion state). Only
 // here, with motion allowed, are they moved over the film. Every stoppable frame is composed (MJ4): the outgoing
 // message is gone before the next one starts, and the gap between is the film alone. Scrub is linear inside,
@@ -39,7 +40,9 @@ export function heroSequence(section, { mobile = false } = {}) {
   const sets = more.map(partsOf);
   // leaves to the left, but never past the frame edge: stops short of the copy's own inset
   const EXIT = () => -Math.max(0, Math.min(first.getBoundingClientRect().left - 6, 64));
-  sets.forEach((p) => gsap.set(p, { autoAlpha: 0, x: ENTER }));
+  const BLUR = 'blur(12px)', SHARP = 'blur(0px)';   // text goes soft as it leaves and comes into focus as it arrives (Alex)
+  sets.forEach((p) => gsap.set(p, { autoAlpha: 0, x: ENTER, filter: BLUR }));
+  gsap.set(outFirst, { filter: SHARP });
 
   const n = more.length;                         // transitions
   const tl = gsap.timeline({
@@ -53,14 +56,14 @@ export function heroSequence(section, { mobile = false } = {}) {
   for (let k = 0; k < n; k++) {
     const t = k;
     const leaving = k === 0 ? outFirst : sets[k - 1];
-    tl.to(leaving, { autoAlpha: 0, x: EXIT, duration: 0.25, stagger: k === 0 ? 0 : 0.025 }, t + 0.12);
-    tl.to(sets[k], { autoAlpha: 1, x: 0, duration: 0.22, stagger: 0.035 }, t + 0.48);
+    tl.to(leaving, { autoAlpha: 0, x: EXIT, filter: BLUR, duration: 0.3, stagger: k === 0 ? 0 : 0.025 }, t + 0.1);
+    tl.to(sets[k], { autoAlpha: 1, x: 0, filter: SHARP, duration: 0.26, stagger: 0.035 }, t + 0.46);
   }
   tl.to({}, { duration: 0.3 }, n);                // the last message holds, then the page releases (4th scroll)
 
   return () => {
     tl.scrollTrigger?.kill(); tl.kill();
-    gsap.set([outFirst, ...sets.flat()], { clearProps: 'opacity,visibility,transform' });
+    gsap.set([outFirst, ...sets.flat()], { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-seq');
     more.forEach((c) => { c.style.removeProperty('--seq-top'); block.appendChild(c); });
     block.hidden = false;
