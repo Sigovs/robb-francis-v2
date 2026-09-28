@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Robb Francis Sports Cars | Collector, Classic and Current State of the Art Sports Cars</title>
+  <title>Robb Francis Sports Cars | Collector. Classic. Current.</title>
   <meta name="description" content="Robb Francis Sports Cars is an Independent Full Service Dealership. Historic Peapack, NJ and California. By Appointment Only.">
   <meta name="theme-color" content="#0a0b0f">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -100,20 +100,34 @@
       </div>
       <div class="scrim scrim--hero" aria-hidden="true"></div>
 
-      <div class="hero__copy">
-        <p class="label hero__kicker">Robb Francis Sports Cars</p>
-        <h1 class="hero__title" id="hero-title">
-          <span class="display display--hero"><span class="hl">By</span> <span class="hl">Appointment</span> <span class="hl">Only</span></span>
-          <span class="lead"><span class="lead__l">Collector, Classic</span> <span class="lead__l">and Current State of the Art Sports Cars</span></span>
-        </h1>
+      <div class="hero__copy hero__copy--1">
+        <div class="hero__copy-inner" data-seq-out>
+          <p class="label hero__kicker">Robb Francis Sports Cars</p>
+          <h1 class="hero__title" id="hero-title">
+            <span class="display display--hero"><span class="hl">Collector.</span> <span class="hl">Classic.</span> <span class="hl">Current.</span></span>
+            <span class="lead"><span class="lead__l">An Independent</span> <span class="lead__l">Full Service Dealership</span></span>
+          </h1>
+        </div>
       </div>
 
-      <!-- "By Appointment Only" is not repeated here: the header carries it on every screen and Act 6 is its
-           climax — setting it on the first screen too spent the peak's phrase before the peak (C21). -->
       <div class="hero__foot">
         <button class="hero__pause label" type="button" data-video-toggle aria-pressed="false" hidden>
           <span data-video-label>Pause film</span>
         </button>
+      </div>
+    </section>
+
+    <!-- Second hero message. Static and reduced-motion: its own block under the hero. With motion allowed the
+         hero pins, this copy is moved over the film and swaps in on scroll (motion/hero.js). -->
+    <section class="act act-hero2" aria-labelledby="hero2-title" data-hero2>
+      <div class="hero__copy hero__copy--2">
+        <div class="hero__copy-inner" data-seq-in>
+          <p class="label hero__kicker">New Jersey · California</p>
+          <h2 class="hero__title" id="hero2-title">
+            <span class="display display--hero"><span class="hl">Across</span> <span class="hl">Both</span> <span class="hl">Coasts</span></span>
+            <span class="lead"><span class="lead__l">Now purchasing collector</span> <span class="lead__l">and performance vehicles</span></span>
+          </h2>
+        </div>
       </div>
     </section>
 

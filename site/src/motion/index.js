@@ -9,6 +9,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './tokens.js';
 import { heroEntrance } from './text.js';
+import { heroSequence } from './hero.js';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -24,10 +25,12 @@ export function initMotion(root) {
   const mm = gsap.matchMedia(root);
 
   mm.add(MQ, (context) => {
+    const { desktop } = context.conditions;
     const undo = [];
     const run = (fn, el) => { if (el) { const u = fn(el); if (typeof u === 'function') undo.push(u); } };
 
     run(heroEntrance, act('.act-hero'));   // V2: the page is the hero only (Alex, 2026-09-25)
+    run((el) => heroSequence(el, { mobile: !desktop }), act('.act-hero'));   // two messages over the film (2026-09-28)
 
     // Refresh is declared (G8): once when webfonts land (they change the height of every text block
     // above the later pins). Images carry width/height, so they do not move geometry.

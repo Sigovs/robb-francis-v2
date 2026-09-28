@@ -116,7 +116,8 @@ function initHeaderCollapse() {
     ticking = false;
     const y = window.scrollY, dy = y - last;
     if (Math.abs(dy) < 4) return;
-    const past = y > hero.offsetHeight * 0.8;
+    const run = hero.parentElement?.classList.contains('pin-spacer') ? hero.parentElement : hero;   // the hero pins now
+    const past = y > run.offsetHeight * 0.8;
     const drawerOpen = document.querySelector('[data-drawer]')?.hidden === false;
     const focused = header.contains(document.activeElement) && document.activeElement !== document.body;
     header.classList.toggle('is-collapsed', past && dy > 0 && !drawerOpen && !focused);

@@ -236,8 +236,8 @@ a.util__item:hover { color: var(--c-ink); }
   /* V2 (Alex): centred on the height of the frame below the header */
   .hero__copy { max-width: none; left: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2); transform: translateY(-50%); }
   /* centred, the title shares the car's height, so it must end in the air left of the car: the car's left edge
-     sits at ~34–36vw in landscape cover; "Appointment", the longest line, is 5.93 × font-size wide in Gloock (measured) */
-  .act-hero .display--hero { font-size: clamp(2.5rem, calc((29.5vw - 1.5rem) / 5.93), 6rem); }
+     sits at ~34–36vw in landscape cover; "Collector.", the longest line, is ~4.2 × font-size wide in Gloock (measured) */
+  .act-hero .display--hero { font-size: clamp(2.5rem, calc((29.5vw - 1.5rem) / 4.2), 6.5rem); }
   .act-hero .hero__foot { left: 3.5vw; }
   .act-hero .hero__title .lead { max-width: calc(30.5vw - 1rem); }   /* the lead shares the car's height: hold it to the air left of it */
   .act-hero .hero__title .lead__l { white-space: normal; text-wrap: balance; }   /* the film control keeps the copy's left edge */
@@ -726,3 +726,17 @@ a.util__item:hover { color: var(--c-ink); }
 }
 /* the one-line lead does not fit the narrowest phones: let it wrap there only */
 @media (max-width: 359.98px) { .hero__title .lead { white-space: normal; } }
+
+/* ---------- Second hero message (motion/hero.js) ----------
+   Static / reduced motion: its own block under the hero, on the ground. Sequenced: moved over the film, where
+   it takes the first message's position (desktop: the same absolute rule; phone: the first copy's offset). */
+.act-hero2 { background: var(--c-ground); min-height: 70svh; display: flex; align-items: center; }
+.act-hero2[hidden] { display: none; }
+.act-hero2 .hero__copy { position: relative; top: auto; left: auto; right: auto; transform: none; padding: var(--s-9) 3.5vw; }
+.act-hero.is-seq .hero__copy--2 { pointer-events: none; }
+@media (max-width: 767.98px) {
+  .act-hero.is-seq .hero__copy--2 { position: absolute; left: 0; right: 0; top: var(--seq-top, 0); }
+  /* pinned, the phone hero is exactly one screen: the film band takes what the copy leaves (no overflow under the header) */
+  .act-hero.is-seq { height: 100svh; }
+  .act-hero.is-seq .hero__media { aspect-ratio: auto; flex: 1 1 auto; min-height: 0; }
+}
