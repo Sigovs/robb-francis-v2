@@ -130,3 +130,39 @@ initHeaderCollapse();
 
 // Teardown hook for a future router (G1)
 window.addEventListener('pagehide', () => { ctx.revert(); stopLenis(); });
+
+
+/* ---------- Hero field (2026-09-29): the title and the car never overlap, at any stop ----------
+   The loop is stabilised, so the car holds one box in the film: x 0.335–0.65, y 0.385–0.745 of the frame (measured on
+   frames 0/40/83 of hero-loop-master, with a margin). Map that box through the cover crop at this viewport, reserve
+   the air left of it for the copy, and size the title so every message's longest line (plus the 32px slide-in)
+   ends before the car. Landscape desktop only; the phone and portrait layouts put the copy off the film. */
+const CAR = { x0: 0.335, y0: 0.385, x1: 0.65, y1: 0.745 };
+function heroField() {
+  const hero = document.querySelector('.act-hero');
+  const root = document.documentElement;
+  if (!hero) return;
+  const W = window.innerWidth, H = hero.clientHeight || window.innerHeight;
+  if (W < 768 || W / H < 1) { root.style.removeProperty('--hero-field'); root.style.removeProperty('--hero-fs'); return; }
+  const media = hero.querySelector('.hero__video') || hero.querySelector('.hero__poster img');
+  const [px, py] = (getComputedStyle(media).objectPosition || '50% 50%').split(' ').map((v) => parseFloat(v) / 100);
+  const s = Math.max(W / 1920, H / 1080), dw = 1920 * s;
+  const carLeft = (W - dw) * px + CAR.x0 * dw;
+  const inset = W * 0.035, gap = Math.max(32, W * 0.025), travel = 32;
+  const field = Math.max(160, carLeft - gap - inset);
+  // widest title line across all three messages, as a multiple of the font size
+  const lines = [...document.querySelectorAll('.hero__copy .display--hero .hl')];
+  let ratio = 0;
+  const probe = document.createElement('span');
+  probe.className = 'display';
+  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-size:100px';
+  document.body.append(probe);
+  lines.forEach((l) => { probe.textContent = l.textContent.trim(); ratio = Math.max(ratio, probe.getBoundingClientRect().width / 100); });
+  probe.remove();
+  const fs = Math.max(40, Math.min(128, Math.floor((field - travel) / (ratio || 5))));
+  root.style.setProperty('--hero-field', `${Math.round(field - travel)}px`);
+  root.style.setProperty('--hero-fs', `${fs}px`);
+}
+heroField();
+document.fonts?.ready.then(heroField);
+window.addEventListener('resize', heroField);

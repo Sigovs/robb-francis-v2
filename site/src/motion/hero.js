@@ -13,7 +13,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ENTER = () => Math.min(window.innerWidth * 0.05, 72);       // px: arrives from the right
+const ENTER = () => (window.innerWidth >= 768 ? 32 : Math.min(window.innerWidth * 0.05, 24));   // px from the right — budgeted into the hero field (main.js heroField), so an arriving line never reaches the car
 
 
 export function heroSequence(section, { mobile = false } = {}) {

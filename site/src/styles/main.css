@@ -234,8 +234,14 @@ a.util__item:hover { color: var(--c-ink); }
   /* V2 wide caps: the display lines sit ABOVE the car (over the trees), so only the lead is held to the air left
      of the car; the title runs as wide as it needs. */
   /* V2 (Alex): centred on the height of the frame below the header */
-  .hero__copy { max-width: none; left: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2); transform: translateY(-50%); }
-  .act-hero .display--hero { font-size: clamp(3rem, 7vw, 8rem); }   /* Alex's mock (2026-09-28): the title is big and may cross the car */
+  /* The copy owns a reserved field LEFT of the car and never crosses it (C22, 2026-09-29). main.js (heroField)
+     measures where the car lands in the cover crop at this viewport and sets --hero-field (the field's width) and
+     --hero-fs (the one title size that fits every message's longest line, slide-in travel included). The film is
+     shifted right (object-position 20%) so the field is wide enough for an expressive title. */
+  .hero__copy { max-width: var(--hero-field, 34vw); left: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2); transform: translateY(-50%); }
+  .act-hero .display--hero { font-size: var(--hero-fs, clamp(3rem, 6vw, 6.5rem)); }
+  .act-hero .hero__poster img, .act-hero .hero__video { object-position: 20% 45%; }
+  .act-hero .hero__title .lead__l { white-space: normal; text-wrap: balance; }
   .act-hero .hero__foot { left: 3.5vw; }   /* the film control keeps the copy's left edge */
 }
 /* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
