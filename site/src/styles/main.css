@@ -236,9 +236,11 @@ a.util__item:hover { color: var(--c-ink); }
   /* V2 (Alex): centred on the height of the frame below the header */
   .hero__copy { max-width: none; left: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2); transform: translateY(-50%); }
   /* centred, the title shares the car's height, so it must end in the air left of the car: the car's left edge
-     sits at ~34–36vw in landscape cover; "Collector," is 3.6 × font-size wide in Libre Caslon Display (measured) */
-  .act-hero .display--hero { font-size: clamp(2.5rem, calc((29.5vw - 1.5rem) / 3.6), 7rem); }
-  .act-hero .hero__foot { left: 3.5vw; }   /* the film control keeps the copy's left edge */
+     sits at ~34–36vw in landscape cover; "Appointment", the longest line, is 5.93 × font-size wide in Gloock (measured) */
+  .act-hero .display--hero { font-size: clamp(2.5rem, calc((29.5vw - 1.5rem) / 5.93), 6rem); }
+  .act-hero .hero__foot { left: 3.5vw; }
+  .act-hero .hero__title .lead { max-width: calc(30.5vw - 1rem); }   /* the lead shares the car's height: hold it to the air left of it */
+  .act-hero .hero__title .lead__l { white-space: normal; text-wrap: balance; }   /* the film control keeps the copy's left edge */
 }
 /* tablet PORTRAIT (gates: copy on the car 18.9%, 44% dead air at the right): the frame is taller than the film,
    so the car lands mid-screen. The car keeps the upper field; the copy moves beneath it, across the full measure,
@@ -260,7 +262,8 @@ a.util__item:hover { color: var(--c-ink); }
 }
 .hero__kicker { color: var(--c-ink); margin-bottom: var(--s-5); }
 .hero__title { display: flex; flex-direction: column; gap: var(--s-5); font-weight: inherit; }
-.hero__title .lead { max-width: none; white-space: nowrap; color: var(--c-ink); } /* one line (Alex, 2026-09-25) */
+.hero__title .lead { max-width: none; color: var(--c-ink); }
+.hero__title .lead__l { display: block; white-space: nowrap; } /* two chosen lines: "Collector, Classic" / "and Current State of the Art Sports Cars" */
 .hero__foot {
   position: absolute; z-index: var(--z-copy);
   left: var(--text-inset); right: var(--gutter); bottom: var(--s-6);

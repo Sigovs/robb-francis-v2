@@ -7,3 +7,5 @@ build/
 .env.*
 .DS_Store
 Thumbs.db
+
+# (preview/ is committed on purpose: it is the double-click build and the gh-pages source)
