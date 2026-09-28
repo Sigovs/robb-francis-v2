@@ -851,13 +851,13 @@ a.util__item:hover { color: var(--c-ink); }
 /* ---------- The spec card at the end of the walk-around: a record, set as a plate (typography D4) ---------- */
 .spec-card {
   position: absolute; z-index: var(--z-copy); right: 3.5vw; top: 50%; transform: translateY(-38%);
-  width: min(23rem, 26vw); padding: var(--s-6);
+  width: min(28rem, 31vw); padding: var(--s-6) var(--s-7);
   background: rgba(var(--c-scrim), 0.62); border: 1px solid rgba(236, 238, 241, 0.14);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
 }
 .spec-card__kicker { color: var(--c-ink-2); }
 .spec-card__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(1.75rem, 2.2vw, 2.25rem); line-height: 1.05; letter-spacing: -0.01em; margin: var(--s-3) 0 var(--s-5); color: var(--c-ink); }
-.spec-card__plate { display: grid; grid-template-columns: 6.5rem 1fr; margin: 0; }
+.spec-card__plate { display: grid; grid-template-columns: 7rem 1fr; margin: 0; }
 .spec-card__plate dt, .spec-card__plate dd { margin: 0; padding: var(--s-3) 0; border-top: 1px solid rgba(236, 238, 241, 0.12); }
 .spec-card__plate dt { font-size: var(--fs-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink-3); }
 .spec-card__plate dd { font-size: 1rem; color: var(--c-ink); }
@@ -875,29 +875,30 @@ a.util__item:hover { color: var(--c-ink); }
 }
 
 /* ---------- ACT 2 · Chapters 01/03 (Forge's device) ----------
-   Static / reduced motion: three stacked screens. With motion: one pinned screen, chapters stacked (motion/chapters.js). */
+   The picture side sticks for the section; the text column scrolls past it in normal flow (one screen per chapter).
+   Each chapter's picture is revealed inside the same frame as its text arrives (motion/chapters.js). Without motion
+   the first picture holds and the texts simply scroll by. */
 .act-chapters { position: relative; background: var(--c-ground); }
-.ch { position: relative; height: 100vh; height: 100svh; min-height: 36rem; overflow: hidden; }
-.ch__field { position: absolute; inset: -4%; }
-.ch__field img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: auto; }
-.ch__field::after { content: ""; position: absolute; inset: 0; background: rgba(var(--c-scrim), 0.35); }
-.ch__inset { --ins: min(40vw, 70svh); position: absolute; margin: 0; left: 13vw; top: calc(50% - var(--ins) * 0.46); width: var(--ins); aspect-ratio: 1; overflow: hidden; }   /* placed with top, no transform: the rise owns transform (GSAP also resets `translate`) */
-.ch__inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ch__copy { position: absolute; left: 66vw; right: 5vw; top: calc(var(--header-h) + 6vh); bottom: 12vh; display: flex; flex-direction: column; }
-.ch__count { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0; margin-bottom: auto; }
+.ch__media { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.ch__fields { position: absolute; inset: -4%; }
+.ch__field { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.ch__fields::after { content: ""; position: absolute; inset: 0; background: rgba(var(--c-scrim), 0.35); }
+.ch__frame { --ins: min(40vw, 70svh); position: absolute; margin: 0; left: 13vw; top: calc(50% - var(--ins) * 0.46); width: var(--ins); aspect-ratio: 1; overflow: hidden; }
+.ch__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.ch__field:not([data-k="0"]), .ch__img:not([data-k="0"]) { opacity: 0; }   /* static: the first picture holds */
+.act-chapters.is-seq .ch__field:not([data-k="0"]), .act-chapters.is-seq .ch__img:not([data-k="0"]) { opacity: 1; }
+.ch__rule { position: absolute; left: 3.5vw; right: 3.5vw; bottom: 3vh; height: 1px; background: rgba(236, 238, 241, 0.16); }
+.ch__rule span { display: block; height: 100%; width: 100%; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(0); }
+.ch__texts { position: relative; z-index: 2; margin-top: -100vh; margin-top: -100svh; }
+.ch__copy { height: 100vh; height: 100svh; min-height: 36rem; box-sizing: border-box; padding: calc(var(--header-h) + 6vh) 5vw 12vh 66vw; display: flex; flex-direction: column; }
+.ch__count { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0; color: var(--c-ink-2); margin-bottom: auto; }
 .ch__count .ch__n { color: var(--c-ink); }
-.ch__count { color: var(--c-ink-2); }
-.ch__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.25rem, 3.4vw, 3.5rem); line-height: 1.04; letter-spacing: -0.01em; color: var(--c-ink); margin: 0 0 var(--s-5); }   /* the site's section-title rank (About, Collection) */
+.ch__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.25rem, 3.4vw, 3.5rem); line-height: 1.04; letter-spacing: -0.01em; color: var(--c-ink); margin: 0 0 var(--s-5); }   /* the site's section-title rank */
 .ch__text { font-size: var(--fs-body); line-height: 1.6; color: var(--c-ink-2); max-width: 34ch; }
 .ch__copy .text-link { align-self: flex-start; margin-top: var(--s-6); }
-.ch__rule { display: none; }
-.act-chapters.is-seq .ch__stage { position: relative; height: 100vh; height: 100svh; }
-.act-chapters.is-seq .ch { position: absolute; inset: 0; }
-.act-chapters.is-seq .ch__rule { display: block; position: absolute; left: 3.5vw; right: 3.5vw; bottom: 3vh; height: 1px; background: rgba(236, 238, 241, 0.16); z-index: 5; }
-.ch__rule span { display: block; height: 100%; width: 100%; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(0); }
 @media (max-width: 767.98px) {
-  .ch__inset { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); aspect-ratio: 1; max-height: 46svh; }
-  .ch__copy { left: var(--gutter); right: var(--gutter); top: auto; bottom: var(--s-7); }
+  .ch__frame { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); max-height: 46svh; }
+  .ch__copy { padding: 0 var(--gutter) var(--s-7); justify-content: flex-end; }
   .ch__count { font-size: 1.25rem; margin-bottom: var(--s-4); }
   .ch__title { font-size: 2.25rem; margin-bottom: var(--s-3); }
   .ch__copy .text-link { margin-top: var(--s-4); }

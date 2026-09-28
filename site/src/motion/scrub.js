@@ -91,7 +91,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   const canvas = section.querySelector('.scrub__canvas');
   if (!canvas) return;
   const turn = section.classList.contains('act-turn');
-  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.9, lower: mobile ? 0.18 : 0.1 });
+  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1 });
   const ro = new ResizeObserver(() => fc.size());
   ro.observe(canvas);
   const near = ScrollTrigger.create({ trigger: section, start: 'top bottom+=200%', onEnter: fc.load, onEnterBack: fc.load });
@@ -102,13 +102,17 @@ export function scrubSection(section, { mobile = false } = {}) {
   const ins = soft ? [...soft.children] : [...section.querySelectorAll('[data-scrub-in]')];
 
   const isTurn = section.classList.contains('act-turn');
+  const appear = isTurn && !!document.querySelector('.act-about');
+  if (appear) gsap.set(section, { autoAlpha: 0 });
   const run = isTurn ? (mobile ? 280 : 400) : (mobile ? 160 : 230);   // film run, % of a screen (the turn: slow, Alex 2026-09-28)
   // About hands over by being covered (Alex: "on the last scroll the film darkens and goes into the background"):
   // it stays pinned one more screen while the next section slides up over it (Forge's stacking).
   const next = !isTurn ? section.parentElement.querySelector('.act-turn') : null;
-  const overlap = next ? 100 : 0;
+  const overlap = 0;                                           // no slide-over: the next scene appears in place (Alex)
   const dark = next ? 70 : 0;                                  // the film goes into the dark of the ground, THEN the next scene arrives
-  if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';   // the next scene enters during the last screen of this pin
+  // the next scene sits right behind this pin (-1 screen): it reaches the top exactly as the dark completes, hidden
+  // until then, and appears in place (fades up) instead of sliding in from below (Alex, 2026-09-28)
+  if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';
   const total = run + dark + overlap;
   const f = run / total;                                       // share of the timeline that plays the film
   const fd = (run + dark) / total;                             // …and the end of the dark
@@ -143,6 +147,9 @@ export function scrubSection(section, { mobile = false } = {}) {
     scrollTrigger: {
       trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1,
       invalidateOnRefresh: true,
+      // the walk-around appears in place when the About film has gone dark (it travelled up hidden behind it)
+      onEnter: () => appear && gsap.to(section, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }),
+      onLeaveBack: () => appear && gsap.to(section, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
       onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleCard(self.progress); },
     },
   });
@@ -158,7 +165,7 @@ export function scrubSection(section, { mobile = false } = {}) {
       .fromTo(inset.querySelector('img'), { scale: 1.12 }, { scale: 1, duration: 0.62 * f }, 0.1 * f)
       .to(inset, { y: () => -innerHeight * 0.05, duration: 0.28 * f }, 0.72 * f);
   }
-  if (overlap) {                                               // into the dark: the film only darkens to the page ground (no scale, Alex)
+  if (next) {                                                  // into the dark: the film only darkens to the page ground (no scale, Alex)
     tl.to(dim, { opacity: 0.94, duration: fd - f, ease: 'power1.in' }, f)
       .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - f), ease: 'power1.in' }, f)
       .to(dim, { opacity: 1, duration: 1 - fd }, fd);
@@ -166,6 +173,7 @@ export function scrubSection(section, { mobile = false } = {}) {
 
   return () => {
     tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect();
+    if (appear) gsap.set(section, { clearProps: 'opacity,visibility' });
     if (card) gsap.set([card, copyBlock, ...rows].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     if (next) next.style.marginTop = '';
     gsap.set([...ins, soft, inset, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
