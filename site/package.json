@@ -10,7 +10,8 @@
     "assets": "node scripts/build-images.mjs",
     "logo": "node scripts/trace-logo.mjs",
     "shots": "node scripts/shots.mjs",
-    "preview:build": "node scripts/build-preview.mjs"
+    "preview:build": "node scripts/build-preview.mjs",
+    "chapters": "node scripts/build-chapters.mjs"
   },
   "dependencies": {
     "gsap": "3.15",

@@ -11,6 +11,7 @@ import './tokens.js';
 import { heroEntrance } from './text.js';
 import { heroSequence } from './hero.js';
 import { scrubSection } from './scrub.js';
+import { chaptersSection } from './chapters.js';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -32,6 +33,7 @@ export function initMotion(root) {
 
     run(heroEntrance, act('.act-hero'));   // V2: the page is the hero only (Alex, 2026-09-25)
     run((el) => heroSequence(el, { mobile: !desktop }), act('.act-hero'));   // two messages over the film (2026-09-28)
+    run((el) => chaptersSection(el, { mobile: !desktop }), act('.act-chapters'));   // act 2: chapters 01/03
     root.querySelectorAll('.act-scrub').forEach((el) => run((x) => scrubSection(x, { mobile: !desktop }), el));   // acts 2–3: scrubbed films
 
     // Refresh is declared (G8): once when webfonts land (they change the height of every text block

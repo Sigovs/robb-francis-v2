@@ -805,9 +805,9 @@ a.util__item:hover { color: var(--c-ink); }
     linear-gradient(180deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.62) 8%, rgba(var(--c-scrim), 0.22) 18%, rgba(var(--c-scrim), 0) 30%),
     linear-gradient(0deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.62) 8%, rgba(var(--c-scrim), 0.22) 18%, rgba(var(--c-scrim), 0) 30%); }
 .act-about .scrub__fade { background:
-    radial-gradient(120% 90% at 0% 100%, rgba(var(--c-scrim), 0.78) 0%, rgba(var(--c-scrim), 0.45) 35%, rgba(var(--c-scrim), 0) 65%),
-    linear-gradient(180deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.62) 8%, rgba(var(--c-scrim), 0.22) 18%, rgba(var(--c-scrim), 0) 30%),
-    linear-gradient(0deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.5) 10%, rgba(var(--c-scrim), 0) 26%); }
+    radial-gradient(140% 110% at 0% 100%, rgba(var(--c-scrim), 0.7) 0%, rgba(var(--c-scrim), 0.52) 22%, rgba(var(--c-scrim), 0.3) 42%, rgba(var(--c-scrim), 0.12) 60%, rgba(var(--c-scrim), 0) 78%),
+    linear-gradient(180deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.86) 7%, rgba(var(--c-scrim), 0.64) 15%, rgba(var(--c-scrim), 0.42) 24%, rgba(var(--c-scrim), 0.22) 33%, rgba(var(--c-scrim), 0.08) 42%, rgba(var(--c-scrim), 0) 50%),
+    linear-gradient(0deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.86) 8%, rgba(var(--c-scrim), 0.64) 17%, rgba(var(--c-scrim), 0.42) 27%, rgba(var(--c-scrim), 0.22) 37%, rgba(var(--c-scrim), 0.08) 47%, rgba(var(--c-scrim), 0) 56%); }   /* long eased falloffs: no visible band (Alex) */
 .scrub__copy { position: absolute; z-index: var(--z-copy); left: 3.5vw; top: 50%; transform: translateY(-50%); max-width: min(44rem, 50vw); }
 /* About (softened, 2026-09-28): the film is the dominant — the car drives up the road to the upper right — and the
    copy is its counterweight, low left: one short display line, a quiet paragraph in the reading face, a text link. */
@@ -832,8 +832,8 @@ a.util__item:hover { color: var(--c-ink); }
   .scrub__copy { left: var(--gutter); right: var(--gutter); max-width: none; top: auto; bottom: var(--s-7); transform: none; }
   .about__copy { bottom: var(--s-7); }
   .act-about .scrub__fade { background:
-      linear-gradient(0deg, rgba(var(--c-scrim), 0.95) 0%, rgba(var(--c-scrim), 0.8) 38%, rgba(var(--c-scrim), 0) 70%),
-      linear-gradient(180deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0) 22%); }
+      linear-gradient(0deg, rgba(var(--c-scrim), 0.96) 0%, rgba(var(--c-scrim), 0.9) 20%, rgba(var(--c-scrim), 0.74) 36%, rgba(var(--c-scrim), 0.5) 50%, rgba(var(--c-scrim), 0.26) 62%, rgba(var(--c-scrim), 0.08) 72%, rgba(var(--c-scrim), 0) 80%),
+      linear-gradient(180deg, rgb(var(--c-scrim)) 0%, rgba(var(--c-scrim), 0.7) 9%, rgba(var(--c-scrim), 0.36) 20%, rgba(var(--c-scrim), 0.12) 30%, rgba(var(--c-scrim), 0) 38%); }
   .turn__copy { top: calc(var(--header-h) + var(--s-5)); bottom: auto; }
   .scrub__still, .scrub__canvas { object-position: 50% 50%; }
 }
@@ -872,4 +872,33 @@ a.util__item:hover { color: var(--c-ink); }
   .spec-card__plate dt, .spec-card__plate dd { padding: 0.375rem 0; }
   .spec-card__plate dd { font-size: 0.9375rem; }
   .spec-card .text-link { margin-top: var(--s-2); }
+}
+
+/* ---------- ACT 2 · Chapters 01/03 (Forge's device) ----------
+   Static / reduced motion: three stacked screens. With motion: one pinned screen, chapters stacked (motion/chapters.js). */
+.act-chapters { position: relative; background: var(--c-ground); }
+.ch { position: relative; height: 100vh; height: 100svh; min-height: 36rem; overflow: hidden; }
+.ch__field { position: absolute; inset: -4%; }
+.ch__field img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: auto; }
+.ch__field::after { content: ""; position: absolute; inset: 0; background: rgba(var(--c-scrim), 0.35); }
+.ch__inset { position: absolute; margin: 0; left: 13vw; top: 50%; width: min(40vw, 70svh); aspect-ratio: 1; transform: translateY(-46%); overflow: hidden; }
+.ch__inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ch__copy { position: absolute; left: 66vw; right: 5vw; top: calc(var(--header-h) + 6vh); bottom: 12vh; display: flex; flex-direction: column; }
+.ch__count { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0; margin-bottom: auto; }
+.ch__count .ch__n { color: var(--c-ink); }
+.ch__count { color: var(--c-ink-2); }
+.ch__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.25rem, 3.4vw, 3.5rem); line-height: 1.04; letter-spacing: -0.01em; color: var(--c-ink); margin: 0 0 var(--s-5); }   /* the site's section-title rank (About, Collection) */
+.ch__text { font-size: var(--fs-body); line-height: 1.6; color: var(--c-ink-2); max-width: 34ch; }
+.ch__copy .text-link { align-self: flex-start; margin-top: var(--s-6); }
+.ch__rule { display: none; }
+.act-chapters.is-seq .ch__stage { position: relative; height: 100vh; height: 100svh; }
+.act-chapters.is-seq .ch { position: absolute; inset: 0; }
+.act-chapters.is-seq .ch__rule { display: block; position: absolute; left: 3.5vw; right: 3.5vw; bottom: 3vh; height: 1px; background: rgba(236, 238, 241, 0.16); z-index: 5; }
+.ch__rule span { display: block; height: 100%; width: 100%; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(0); }
+@media (max-width: 767.98px) {
+  .ch__inset { left: var(--gutter); right: var(--gutter); width: auto; top: calc(var(--header-h) + var(--s-5)); transform: none; aspect-ratio: 1; max-height: 46svh; }
+  .ch__copy { left: var(--gutter); right: var(--gutter); top: auto; bottom: var(--s-7); }
+  .ch__count { font-size: 1.25rem; margin-bottom: var(--s-4); }
+  .ch__title { font-size: 2.25rem; margin-bottom: var(--s-3); }
+  .ch__copy .text-link { margin-top: var(--s-4); }
 }
