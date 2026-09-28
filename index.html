@@ -25,8 +25,8 @@
   <link rel="preload" as="image" href="./img/hero-poster-1920.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
   <link rel="preload" as="image" href="./img/hero-poster-m-720.avif" type="image/avif" media="(max-width: 767.98px)" fetchpriority="high">
 
-  <script defer src="./assets/index-DDNH1fb-.js"></script>
-  <link rel="stylesheet" href="./assets/style-DtZGDEVP.css">
+  <script defer src="./assets/index-BbNgLG65.js"></script>
+  <link rel="stylesheet" href="./assets/style-LFMLn5qi.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -160,7 +160,37 @@
       </div>
     </section>
 
-    <!-- Placeholder for the next section: the hero releases into it on the fourth scroll (Alex, 2026-09-28). -->
+    <!-- ============ ACT 2 · ABOUT over a scroll-scrubbed film (Alex, 2026-09-28) ============
+         The E-Type drives away up the coast road as you scroll; the About paragraph lights word by word.
+         Static / reduced motion: the first frame as a still, the paragraph fully lit. -->
+    <section class="act act-scrub act-about" id="about" aria-labelledby="about-title" data-scrub="etype">
+      <div class="scrub__stage">
+        <img class="scrub__still" src="./frames/etype/001.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+        <canvas class="scrub__canvas" data-frames="./frames/etype/" data-count="97" aria-hidden="true"></canvas>
+        <div class="scrub__fade" aria-hidden="true"></div>
+      </div>
+      <div class="scrub__copy about__copy">
+        <p class="label hero__kicker" data-scrub-in>About Us</p>
+        <h2 class="sr-only" id="about-title">About Robb Francis Sports Cars</h2>
+        <p class="about__text" data-words>Robb Francis Sports Cars is an Independent Full Service Dealership. We specialize in the purchase and sale of Superior Quality Import and Domestic Collector, Classic and Current State of the Art Sports Cars.</p>
+        <a class="btn btn--fill btn--lg hero__cta" href="/about-us/" data-scrub-in>About Us</a>
+      </div>
+    </section>
+
+    <!-- ============ ACT 3 · THE WALK-AROUND: the 356 turns on scroll ============ -->
+    <section class="act act-scrub act-turn" id="collection" aria-labelledby="turn-title" data-scrub="p356">
+      <div class="scrub__stage">
+        <img class="scrub__still" src="./frames/p356/100.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+        <canvas class="scrub__canvas" data-frames="./frames/p356/" data-count="121" aria-hidden="true"></canvas>
+        <div class="scrub__fade" aria-hidden="true"></div>
+      </div>
+      <div class="scrub__copy turn__copy">
+        <p class="label hero__kicker" data-scrub-in>The Collection</p>
+        <h2 class="display display--hero turn__title" id="turn-title" data-scrub-in><span class="hl">Every Angle.</span> <span class="hl">Every Detail.</span></h2>
+        <a class="btn btn--fill btn--lg hero__cta" href="/inventory/" data-scrub-in>View Inventory</a>
+      </div>
+    </section>
+
     <section class="act act-next" aria-label="Next section (placeholder)"></section>
 
   </main>
