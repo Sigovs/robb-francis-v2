@@ -109,13 +109,15 @@ export function scrubSection(section, { mobile = false } = {}) {
   // it stays pinned one more screen while the next section slides up over it (Forge's stacking).
   const next = !isTurn ? section.parentElement.querySelector('.act-turn') : null;
   const overlap = 0;                                           // no slide-over: the next scene appears in place (Alex)
-  const dark = next ? 70 : 0;                                  // the film goes into the dark of the ground, THEN the next scene arrives
+  const dark = next ? 70 : 0;
+  const exit = isTurn ? 60 : 0;                                // the walk-around fades out in place at the end
   // the next scene sits right behind this pin (-1 screen): it reaches the top exactly as the dark completes, hidden
   // until then, and appears in place (fades up) instead of sliding in from below (Alex, 2026-09-28)
   if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';
-  const total = run + dark + overlap;
+  const total = run + dark + overlap + exit;
   const f = run / total;                                       // share of the timeline that plays the film
   const fd = (run + dark) / total;                             // …and the end of the dark
+  const fe = (run + dark + overlap) / total;                   // start of the in-place exit
 
   // the spec card: once the turn reaches its last frames it flies in from the right BY ITSELF and completes, rows
   // cascading after it (Alex: "not scrubbed, it should arrive on its own"). It leaves only after a clear scroll back
@@ -165,6 +167,8 @@ export function scrubSection(section, { mobile = false } = {}) {
       .fromTo(inset.querySelector('img'), { scale: 1.12 }, { scale: 1, duration: 0.62 * f }, 0.1 * f)
       .to(inset, { y: () => -innerHeight * 0.05, duration: 0.28 * f }, 0.72 * f);
   }
+  const veil = section.querySelector('.scrub__veil');
+  if (exit && veil) tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 1 - fe, ease: 'power1.in' }, fe);   // gone before it moves
   if (next) {                                                  // into the dark: the film only darkens to the page ground (no scale, Alex)
     tl.to(dim, { opacity: 0.94, duration: fd - f, ease: 'power1.in' }, f)
       .to([soft, inset].filter(Boolean), { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - f), ease: 'power1.in' }, f)
@@ -174,6 +178,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   return () => {
     tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect();
     if (appear) gsap.set(section, { clearProps: 'opacity,visibility' });
+    if (veil) gsap.set(veil, { clearProps: 'opacity' });
     if (card) gsap.set([card, copyBlock, ...rows].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     if (next) next.style.marginTop = '';
     gsap.set([...ins, soft, inset, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });

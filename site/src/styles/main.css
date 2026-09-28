@@ -917,3 +917,6 @@ a.util__item:hover { color: var(--c-ink); }
 h1, h2, h3, .ch__title, .about__title, .turn__title, .spec-card__title { text-wrap: balance; }
 p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 @media (max-width: 374.98px) { .about__title { font-size: 1.875rem; } }
+
+/* the walk-around does not scroll away at the end: it fades out in place into the ground (Alex) */
+.scrub__veil { position: absolute; inset: 0; z-index: 4; background: var(--c-ground); opacity: 0; pointer-events: none; }
