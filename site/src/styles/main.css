@@ -956,79 +956,82 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .act-hero.is-scrub .hero__side { position: absolute; left: 0; right: 0; padding: 0 var(--gutter); }
   }
 
-/* ---------- v3 · the California card (Alex, 2026-09-29: "just an image of the place, an uplifting line, no blinking dots")
-   The client's own California gallery at night; the copy stands on the ground under it (over the picture, the kicker
-   landed on the lit glass and could not be read).
-   Same language as the page: square corners, a hairline, the chapters' picture wipe. No map, no pins, no loops. */
-.ca-card__inner { position: relative; overflow: hidden; border: 1px solid rgba(236, 238, 241, 0.16); background: var(--c-deep); }
-.ca-card__media { position: relative; aspect-ratio: 5 / 4; overflow: hidden; }
-.ca-card__img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 56%; }   /* the lit doors and the two cars */
-/* step inside: the interior waits inside the door's rectangle (measured on ca-place.webp: x 13.6–79.5 %, y 24.4–72.8 %
-   of the picture, mapped through this box's crop); the street pushes in toward the door as the room opens out of it */
-.ca-card { --door: inset(6.6% 20.5% 17.75% 13.6%); --door-o: 46.5% 44.4%; }
-.ca-card__img--out, .ca-card__img--in { position: absolute; inset: 0; }
-.ca-card__img--out { transform-origin: var(--door-o); }
-.ca-card__img--in { object-position: 50% 60%; clip-path: var(--door); opacity: 0; transform: scale(1.18) translate(var(--px, 0), var(--py, 0)); }
-.ca-card.is-in .ca-card__img--out { transform: scale(1.6); filter: brightness(1.25); }
-.ca-card.is-in .ca-card__img--in { clip-path: inset(0 0 0 0); opacity: 1; transform: scale(1.06) translate(var(--px, 0), var(--py, 0)); }
-.ca-card__door {
-  position: absolute; left: var(--s-4); bottom: var(--s-4); z-index: 2; display: inline-flex; align-items: center; gap: var(--s-2);
-  min-height: var(--btn-h-sm); padding: 0 var(--s-4); cursor: pointer;
-  font: 500 var(--fs-label) / 1 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink);
-  background: rgba(var(--c-scrim), 0.55); border: 1px solid rgba(236, 238, 241, 0.3);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+/* ---------- v3 · the California card, after Alex's "TravelCard" (21st.dev card-7), 2026-09-29 ----------
+   Ported to the page's own type and colour (Gloock / Figtree, ink on the ground; "our fonts, our sizes"). Kept from the
+   reference by explicit direction: rounded corners, the soft shadow, the 8px hover lift, the picture's zoom, the
+   details lifting and the contact row rising from the foot. Dialect yields (square corners, 2px lift, no decorative
+   shadow) are named in the report. Invariant kept: on touch and for keyboard focus the contact row is always shown. */
+.ca-card__inner { will-change: transform; }
+.tcard {
+  position: relative; overflow: hidden; border-radius: 12px; min-height: 30rem; isolation: isolate;
+  border: 1px solid rgba(236, 238, 241, 0.14); background: var(--c-deep);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
 }
-.ca-card__door::before { content: ""; position: absolute; inset: calc(-1 * var(--s-4)); }   /* the whole picture is the target */
-.ca-card__door-icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; }
-.ca-card__door:hover, .ca-card__door:focus-visible, .ca-card.is-in .ca-card__door { border-color: var(--c-ink); background: rgba(var(--c-scrim), 0.75); }
-.ca-card__door:focus-visible { outline: 2px solid var(--c-oxblood-lit); outline-offset: 2px; }
-.ca-card.is-in .ca-card__door-icon { transform: rotate(180deg); }
-.ca-card__media::after { z-index: 1; }
-.ca-card__media::after {   /* the picture settles into the ground under the copy: a long eased falloff, no band */
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, rgba(var(--c-scrim), 0) 62%, rgba(var(--c-scrim), 0.5) 82%, rgb(var(--c-scrim)) 100%);
+.tcard__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; transition: transform 0.5s ease-in-out; }
+.tcard__shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.84) 30%, rgba(0, 0, 0, 0.62) 50%, rgba(0, 0, 0, 0.3) 66%, rgba(0, 0, 0, 0) 84%); transition: opacity 0.5s ease-in-out; }   /* stronger than the reference: the lit glass sits behind the copy */
+.tcard__shade::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0) 75%); opacity: 0; transition: opacity 0.5s ease-in-out; }
+.tcard__body { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: inherit; padding: var(--s-5); }
+.tcard__top { height: 10rem; display: flex; align-items: flex-start; }
+.tcard__logo {
+  display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
 }
-.ca-card__copy { position: relative; padding: var(--s-3) var(--s-5) var(--s-4); background: rgb(var(--c-scrim)); }   /* the copy on the ground under the picture, never over the lit glass */
-.ca-card__kicker { color: var(--c-ink-2); }
-.ca-card__title {
-  font-family: var(--font-display); font-weight: var(--display-wght); letter-spacing: -0.01em;
-  font-size: clamp(1.75rem, 2.2vw, 2.25rem); line-height: 1.05; color: var(--c-ink); margin: var(--s-3) 0 var(--s-3);
-  text-wrap: balance;
+.tcard__logo img { width: 24px; height: auto; opacity: 0.9; }
+.tcard__details { display: flex; flex-direction: column; gap: var(--s-4); transition: transform 0.5s ease-in-out; }
+.tcard__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(1.75rem, 2.2vw, 2.125rem); line-height: 1.05; letter-spacing: -0.01em; color: #fff; text-wrap: balance; }
+.tcard__loc { margin-top: var(--s-2); font-size: 0.875rem; color: rgba(255, 255, 255, 0.8); }
+.tcard__label { font-size: var(--fs-label); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.9); margin-bottom: var(--s-1); }
+.tcard__text { font-size: 0.875rem; line-height: 1.6; color: rgba(255, 255, 255, 0.72); text-wrap: pretty; }
+.tcard__reveal {
+  position: absolute; left: 0; right: 0; bottom: -5rem; padding: var(--s-5); opacity: 0;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-3);
+  transition: bottom 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
-.ca-card__text { font-size: 0.9375rem; line-height: 1.5; color: var(--c-ink-2); max-width: 30ch; text-wrap: pretty; }
-.ca-card .text-link { margin-top: var(--s-3); }
+.tcard__contact { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tcard__contact-label { font-size: 0.75rem; letter-spacing: 0.04em; color: rgba(255, 255, 255, 0.8); }
+.tcard__phone { font-size: 1.125rem; font-weight: 500; color: #fff; white-space: nowrap; }
+.tcard__cta {
+  display: inline-flex; align-items: center; gap: var(--s-2); min-height: 2.75rem; padding: 0 var(--s-4); border-radius: 6px; flex-shrink: 0;
+  background: #fff; color: #000; font-size: 0.875rem; font-weight: 500; transition: background-color 0.2s var(--ease-out);
+}
+.tcard__cta svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.tcard__cta:hover { background: rgba(255, 255, 255, 0.9); }
+.tcard__cta:focus-visible, .tcard__phone:focus-visible { outline: 2px solid var(--c-oxblood-lit); outline-offset: 2px; }
 
-@media (prefers-reduced-motion: no-preference) {
-  /* on arrival the picture opens upward inside the frame and settles from a slight push-in (the chapters' wipe),
-     then the copy rises into place; leaving, it simply reverses */
-  .ca-card__img--out { transition: clip-path 1.1s cubic-bezier(0.65, 0, 0.35, 1), transform 1.1s cubic-bezier(0.7, 0, 0.2, 1), filter 1.1s var(--ease-out); }
-  .ca-card__copy > * { transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out); }
-  .act-hero.is-scrub .ca-card:not(.is-on) .ca-card__img--out { clip-path: inset(100% 0 0 0); transform: scale(1.14); }
-  .act-hero.is-scrub .ca-card:not(.is-on) .ca-card__copy > * { opacity: 0; transform: translateY(14px); }
-  .ca-card.is-on:not(.is-in) .ca-card__img--out { clip-path: inset(0 0 0 0); transform: scale(1); }
-  .ca-card.is-on .ca-card__copy > :nth-child(1) { transition-delay: 0.7s; }
-  .ca-card.is-on .ca-card__copy > :nth-child(2) { transition-delay: 0.8s; }
-  .ca-card.is-on .ca-card__copy > :nth-child(3) { transition-delay: 0.9s; }
-  .ca-card.is-on .ca-card__copy > :nth-child(4) { transition-delay: 1s; }
-  /* step inside: one gesture — the push toward the door, the room opening out of it, the arrow turning */
-  .ca-card .ca-card__img--in { transition: clip-path 0.95s cubic-bezier(0.7, 0, 0.2, 1) 0.12s, opacity 0.35s var(--ease-out) 0.12s, transform 1.3s var(--ease-out) 0.12s; }
-  .ca-card__door-icon { transition: transform 0.5s var(--ease-out); }
+/* hover (fine pointer) and keyboard focus: the card lifts, the picture zooms, the details rise, the contact row arrives */
+@media (hover: hover) and (pointer: fine) {
+  .tcard:hover { transform: translateY(-8px); box-shadow: 0 28px 60px -18px rgba(0, 0, 0, 0.75); }
+  .tcard:hover .tcard__img { transform: scale(1.1); }
+  .tcard:hover .tcard__details { transform: translateY(-5.5rem); }
+  .tcard:hover .tcard__shade::after { opacity: 1; }   /* the lifted copy keeps its ground */
+  .tcard:hover .tcard__reveal { bottom: 0; opacity: 1; }
+}
+.tcard:focus-within .tcard__details { transform: translateY(-5.5rem); }
+.tcard:focus-within .tcard__shade::after { opacity: 1; }
+.tcard:focus-within .tcard__reveal { bottom: 0; opacity: 1; }
+/* touch: no hover to wait for — the contact row is part of the card, in flow under the overview */
+@media (hover: none), (pointer: coarse) {
+  .tcard__details { transform: none; }
+  .tcard__shade::after { opacity: 1; }
+  .tcard__reveal { position: relative; bottom: auto; padding: 0; margin-top: var(--s-4); opacity: 1; }
+  .tcard__body { justify-content: flex-end; }
+  .tcard__top { position: absolute; top: var(--s-4); left: var(--s-4); height: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tcard, .tcard__img, .tcard__details, .tcard__reveal { transition: none; }
 }
 @media (max-width: 767.98px) {
-  /* phone: in the title's place, a landscape slice of the picture so the card stays inside the ground above the film */
-  .ca-card__media { aspect-ratio: 16 / 9; }
-  .ca-card__copy { padding: var(--s-3) var(--s-4) var(--s-3); }
-  .ca-card { --door: inset(0% 20.5% 9.1% 13.6%); --door-o: 46.5% 40%; }
-  .ca-card__door { left: var(--s-3); bottom: var(--s-3); }
-  .ca-card__img--in { object-position: 50% 34%; }   /* a letterbox of the room: the cars and the wall of art, not just a bonnet */
-  .ca-card__title { font-size: 1.5rem; margin: var(--s-2) 0; }
-  .ca-card .text-link { margin-top: var(--s-1); }
+  .tcard { min-height: 22rem; }
+  .tcard__top { height: 4.5rem; }
+  .tcard__body { padding: var(--s-4); }
+  .tcard__title { font-size: 1.5rem; }
+  .tcard__img { object-position: 50% 40%; }
 }
 @media (min-width: 768px) and (max-aspect-ratio: 1/1) {
-  .ca-card__inner { max-width: 18rem; }
-  .ca-card__media { aspect-ratio: 16 / 9; }
-  .ca-card { --door: inset(0% 20.5% 9.1% 13.6%); --door-o: 46.5% 40%; }
-  .ca-card__img--in { object-position: 50% 34%; }
+  .ca-card__inner { max-width: 20rem; }
+  .tcard { min-height: 24rem; }
+  .tcard__top { height: 5rem; }
 }
 /* the card sits above the title's box: on a phone they share one place, and the hidden title must not take its taps */
 .act-hero .hero__side { z-index: calc(var(--z-copy) + 1); }
