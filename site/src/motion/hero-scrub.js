@@ -26,22 +26,40 @@ export function heroScrub(section, { mobile = false } = {}) {
   const ro = fc ? new ResizeObserver(() => fc.size()) : null;
   if (fc) { ro.observe(canvas); fc.load(); }
 
-  // ---- the intro: film surfaces, the header settles, the one message slides in from the right and focuses ----
+  // ---- the intro, in steps (Alex, 2026-09-29: "more interesting, like a staircase") ----
+  // 1 · the frame opens as a flight of steps: ground-coloured columns lift away one after another, left to right,
+  //     while the film settles from a slight push-in; 2 · the header drops in; 3 · the title climbs — each line rises
+  //     out of its own mask a beat after the one above and from a step further right, so the three lines draw a
+  //     staircase as they land; 4 · the lead and the action follow. ~2.6s; nothing waits on it (MJ7).
   const inner = section.querySelector('.hero__copy--1 [data-seq-out]');
-  const parts = inner ? [inner.querySelector('.hero__kicker'), ...inner.querySelectorAll('.hl'), ...inner.querySelectorAll('.lead__l'), inner.querySelector('.hero__cta')].filter(Boolean) : [];
+  const kicker = inner?.querySelector('.hero__kicker');
+  const lines = inner ? [...inner.querySelectorAll('.hl')] : [];
+  const after = inner ? [...inner.querySelectorAll('.lead__l'), inner.querySelector('.hero__cta')].filter(Boolean) : [];
+  const parts = [kicker, ...lines, ...after].filter(Boolean);
   const media = [section.querySelector('.hero__media'), section.querySelector('.scrim--hero')].filter(Boolean);
   const header = document.querySelector('.site-header');
-  gsap.set(parts, { autoAlpha: 0, x: ENTER, filter: 'blur(12px)' });
-  const intro = gsap.timeline();
-  intro.fromTo(media, { autoAlpha: 0, scale: 1.1 }, { autoAlpha: 1, duration: 1.4, ease: 'power2.out' }, 0)
-    .to(media, { scale: 1, duration: 2.6, ease: 'expo.out', clearProps: 'transform' }, 0)
-    .set(media, { clearProps: 'opacity,visibility' });
-  if (header) intro.fromTo(header, { autoAlpha: 0, y: -14 }, { autoAlpha: 1, y: 0, duration: 1.3, ease: 'power3.out', clearProps: 'opacity,visibility,transform' }, 0.5);
+  const N = mobile ? 4 : 6;
+  const steps = document.createElement('div');
+  steps.className = 'hero__steps';
+  steps.setAttribute('aria-hidden', 'true');
+  for (let i = 0; i < N; i++) steps.append(document.createElement('span'));
+  section.querySelector('.hero__media')?.after(steps);
+  gsap.set(kicker, { autoAlpha: 0, y: 12 });
+  gsap.set(lines, { autoAlpha: 0, yPercent: 70, x: (i) => (i + 1) * (mobile ? 12 : 26), clipPath: 'inset(0% -5% 100% -5%)' });
+  gsap.set(after, { autoAlpha: 0, y: 16 });
+  if (header) gsap.set(header, { autoAlpha: 0, y: -14 });
+  const intro = gsap.timeline({ onComplete: () => steps.remove() });
+  intro.fromTo(steps.children, { scaleY: 1 }, { scaleY: 0, duration: 1.15, ease: 'expo.inOut', stagger: 0.085 }, 0.05)
+    .fromTo(media, { scale: 1.08 }, { scale: 1, duration: 2.6, ease: 'expo.out', clearProps: 'transform' }, 0);
+  if (header) intro.to(header, { autoAlpha: 1, y: 0, duration: 1.1, ease: 'power3.out', clearProps: 'opacity,visibility,transform' }, 0.75);
   root.classList.remove('intro-wait');
   let alive = true;
   Promise.race([document.fonts?.ready ?? Promise.resolve(), new Promise((r) => setTimeout(r, 1000))]).then(() => {
     if (!alive) return;
-    intro.to(parts, { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 1.3, stagger: 0.07, ease: 'expo.out' }, Math.max(0.45, intro.time()));
+    const t = Math.max(0.7, intro.time());
+    intro.to(kicker, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out' }, t)
+      .to(lines, { autoAlpha: 1, yPercent: 0, x: 0, clipPath: 'inset(-10% -5% -30% -5%)', duration: 1.25, ease: 'expo.out', stagger: 0.16, clearProps: 'clipPath' }, t + 0.15)
+      .to(after, { autoAlpha: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.1 }, t + 0.15 + 0.16 * lines.length + 0.2);
   });
 
   // ---- the second block, on the other side of the car: once the film is under way it arrives from the right by
@@ -116,12 +134,12 @@ export function heroScrub(section, { mobile = false } = {}) {
 
   return () => {
     alive = false;
-    intro.progress(1).kill();
+    intro.progress(1).kill(); steps.remove();
     tl.scrollTrigger?.kill(); tl.kill(); ro?.disconnect();
     removeEventListener('resize', placeSoon);
     if (side) { side.style.top = ''; side.style.bottom = ''; side.classList.remove('is-on'); }
     if (next) { next.style.marginTop = ''; next.style.zIndex = ''; gsap.set(next, { clearProps: 'opacity,visibility' }); }
-    gsap.set([...parts, ...sideParts, inner, side, dim, section.querySelector('.hero__foot')].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
+    gsap.set([...parts, ...sideParts, inner, side, dim, section.querySelector('.hero__foot')].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter,clipPath' });
     section.classList.remove('is-scrub', 'is-live');
     root.classList.remove('intro-wait');
   };
