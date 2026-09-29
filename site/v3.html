@@ -258,80 +258,101 @@
       <div class="cards__wrap">
         <div class="cards__head">
           <div>
-            <p class="label">The Boutique</p>
+            <p class="label cards__kicker">For Sale · Open to Discussion</p>
             <h2 class="cards__title" id="cards-title">Available Now.</h2>
           </div>
-          <div class="cards__side">
-            <p class="cards__lede">Offered from the Peapack showroom. Every car is open to discussion.</p>
-            <a class="btn btn--line" href="/inventory/">View Inventory <span aria-hidden="true">→</span></a>
+          <div class="cards__nav">
+            <a class="btn btn--line" href="/inventory/">View All Inventory <span aria-hidden="true">→</span></a>
+            <button class="cards__arrow" type="button" data-car-prev aria-label="Previous cars"><span aria-hidden="true">←</span></button>
+            <button class="cards__arrow" type="button" data-car-next aria-label="Next cars"><span aria-hidden="true">→</span></button>
           </div>
         </div>
-        <div class="rail" data-rail>
-          <div class="rail__track" data-rail-track>
-          <div class="rail__group">
-            <article class="icard icard--big">
-              <a class="icard__media" href="/inventory/" tabindex="-1" aria-hidden="true"><img src="/img/stage/1974-de-tomaso-pantera.webp" alt="" width="1920" height="1200" style="--pos:50% 60%" loading="lazy" decoding="async"></a>
-              <div class="icard__body">
-                <p class="icard__year tnum">1974</p>
-                <h3 class="icard__name">De Tomaso Pantera</h3>
-                <p class="icard__note">Ghia-styled Italian body · Mid-mounted Ford V8</p>
-                <a class="btn btn--sm btn--line icard__btn" href="/contact-us/" aria-label="Enquire about the 1974 De Tomaso Pantera">Enquire <span aria-hidden="true">→</span></a>
+        <ul class="cards__track" data-car-track aria-label="Cars for sale">
+          <li class="vcard">
+            <a class="vcard__media" href="/inventory/" tabindex="-1" aria-hidden="true">
+              <img src="/img/cars/corvette-stingray.webp" alt="" width="1400" height="1049" style="--pos:50% 50%" loading="lazy" decoding="async">
+              <span class="vcard__badge">Featured</span>
+            </a>
+            <div class="vcard__body">
+              <h3 class="vcard__title"><span class="tnum">1973</span> Chevrolet Corvette Stingray</h3>
+              <ul class="vcard__specs"><li>Coupé</li><li>V8</li></ul>
+              <div class="vcard__foot">
+                <span class="vcard__price">Price on request</span>
+                <a class="btn btn--sm btn--line vcard__btn" href="/contact-us/" aria-label="Enquire about the 1973 Chevrolet Corvette Stingray">Enquire <span aria-hidden="true">→</span></a>
               </div>
-            </article>
-            <div class="rail__side">
-              <article class="icard icard--small">
-                <a class="icard__media" href="/inventory/" tabindex="-1" aria-hidden="true"><img src="/img/stage/1948-mg-tc.webp" alt="" width="1440" height="1440" style="--pos:50% 70%" loading="lazy" decoding="async"></a>
-                <div class="icard__body">
-                  <p class="icard__year tnum">1948</p>
-                  <h3 class="icard__name">MG TC</h3>
-                  <p class="icard__note">Ivory over Green Apple · Right-hand drive</p>
-                  <a class="btn btn--sm btn--line icard__btn icard__btn--icon" href="/contact-us/" aria-label="Enquire about the 1948 MG TC"><span aria-hidden="true">→</span></a>
-                </div>
-              </article>
-              <article class="icard icard--small">
-                <a class="icard__media" href="/inventory/" tabindex="-1" aria-hidden="true"><img src="/img/stage/1999-land-rover-defender-90.webp" alt="" width="1440" height="1440" style="--pos:50% 72%" loading="lazy" decoding="async"></a>
-                <div class="icard__body">
-                  <p class="icard__year tnum">1999</p>
-                  <h3 class="icard__name">Land Rover Defender 90</h3>
-                  <p class="icard__note">Coniston Green · Italian delivery</p>
-                  <a class="btn btn--sm btn--line icard__btn icard__btn--icon" href="/contact-us/" aria-label="Enquire about the 1999 Land Rover Defender 90"><span aria-hidden="true">→</span></a>
-                </div>
-              </article>
             </div>
-          </div>
-          <div class="rail__group">
-            <article class="icard icard--big">
-              <a class="icard__media" href="/inventory/" tabindex="-1" aria-hidden="true"><img src="/img/featured/1965-sunbeam-tiger-260.webp" alt="" width="1100" height="1100" style="--pos:50% 72%" loading="lazy" decoding="async"></a>
-              <div class="icard__body">
-                <p class="icard__year tnum">1965</p>
-                <h3 class="icard__name">Sunbeam Tiger 260</h3>
-                <p class="icard__note">Forest Green · Rootes Group demonstrator</p>
-                <a class="btn btn--sm btn--line icard__btn" href="/contact-us/" aria-label="Enquire about the 1965 Sunbeam Tiger 260">Enquire <span aria-hidden="true">→</span></a>
+          </li>
+          <li class="vcard">
+            <a class="vcard__media" href="/inventory/" tabindex="-1" aria-hidden="true">
+              <img src="/img/cars/trans-am.webp" alt="" width="1080" height="717" style="--pos:35% 65%" loading="lazy" decoding="async">
+              <span class="vcard__badge">New Arrival</span>
+            </a>
+            <div class="vcard__body">
+              <h3 class="vcard__title">Pontiac Firebird Trans Am</h3>
+              <ul class="vcard__specs"><li>Coupé</li><li>V8</li></ul>
+              <div class="vcard__foot">
+                <span class="vcard__price">Price on request</span>
+                <a class="btn btn--sm btn--line vcard__btn" href="/contact-us/" aria-label="Enquire about the Pontiac Firebird Trans Am">Enquire <span aria-hidden="true">→</span></a>
               </div>
-            </article>
-            <div class="rail__side">
-              <article class="icard icard--small">
-                <a class="icard__media" href="/inventory/" tabindex="-1" aria-hidden="true"><img src="/img/featured/1988-ford-mustang-gt-convertible.webp" alt="" width="1100" height="1100" style="--pos:50% 62%" loading="lazy" decoding="async"></a>
-                <div class="icard__body">
-                  <p class="icard__year tnum">1988</p>
-                  <h3 class="icard__name">Ford Mustang GT Convertible</h3>
-                  <p class="icard__note">Original owner · 9,084 miles</p>
-                  <a class="btn btn--sm btn--line icard__btn icard__btn--icon" href="/contact-us/" aria-label="Enquire about the 1988 Ford Mustang GT Convertible"><span aria-hidden="true">→</span></a>
-                </div>
-              </article>
-              <article class="icard icard--small">
-                <a class="icard__media" href="/inventory/" tabindex="-1" aria-hidden="true"><img src="/img/featured/1933-bsa-249cc.webp" alt="" width="1100" height="1100" style="--pos:50% 78%" loading="lazy" decoding="async"></a>
-                <div class="icard__body">
-                  <p class="icard__year tnum">1933</p>
-                  <h3 class="icard__name">BSA 249cc</h3>
-                  <p class="icard__note">Three-speed manual · Imported from the UK</p>
-                  <a class="btn btn--sm btn--line icard__btn icard__btn--icon" href="/contact-us/" aria-label="Enquire about the 1933 BSA 249cc"><span aria-hidden="true">→</span></a>
-                </div>
-              </article>
             </div>
-          </div>
-          </div>
-        </div>
+          </li>
+          <li class="vcard">
+            <a class="vcard__media" href="/inventory/" tabindex="-1" aria-hidden="true">
+              <img src="/img/stage/1974-de-tomaso-pantera.webp" alt="" width="1920" height="1200" style="--pos:50% 60%" loading="lazy" decoding="async">
+              <span class="vcard__badge">Featured</span>
+            </a>
+            <div class="vcard__body">
+              <h3 class="vcard__title"><span class="tnum">1974</span> De Tomaso Pantera</h3>
+              <ul class="vcard__specs"><li>Coupé</li><li>Mid-engine V8</li><li>Manual</li></ul>
+              <div class="vcard__foot">
+                <span class="vcard__price">Price on request</span>
+                <a class="btn btn--sm btn--line vcard__btn" href="/contact-us/" aria-label="Enquire about the 1974 De Tomaso Pantera">Enquire <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </li>
+          <li class="vcard">
+            <a class="vcard__media" href="/inventory/" tabindex="-1" aria-hidden="true">
+              <img src="/img/cars/356-speedster.webp" alt="" width="1400" height="934" style="--pos:50% 62%" loading="lazy" decoding="async">
+              <span class="vcard__badge">Featured</span>
+            </a>
+            <div class="vcard__body">
+              <h3 class="vcard__title">Porsche 356 Speedster</h3>
+              <ul class="vcard__specs"><li>Roadster</li><li>Air-cooled flat-four</li></ul>
+              <div class="vcard__foot">
+                <span class="vcard__price">Price on request</span>
+                <a class="btn btn--sm btn--line vcard__btn" href="/contact-us/" aria-label="Enquire about the Porsche 356 Speedster">Enquire <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </li>
+          <li class="vcard">
+            <a class="vcard__media" href="/inventory/" tabindex="-1" aria-hidden="true">
+              <img src="/img/cars/911-grey.webp" alt="" width="1400" height="781" style="--pos:55% 60%" loading="lazy" decoding="async">
+              <span class="vcard__badge">New Arrival</span>
+            </a>
+            <div class="vcard__body">
+              <h3 class="vcard__title">Porsche 911</h3>
+              <ul class="vcard__specs"><li>Coupé</li><li>Air-cooled flat-six</li></ul>
+              <div class="vcard__foot">
+                <span class="vcard__price">Price on request</span>
+                <a class="btn btn--sm btn--line vcard__btn" href="/contact-us/" aria-label="Enquire about the Porsche 911">Enquire <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </li>
+          <li class="vcard">
+            <a class="vcard__media" href="/inventory/" tabindex="-1" aria-hidden="true">
+              <img src="/img/stage/1948-mg-tc.webp" alt="" width="1440" height="1440" style="--pos:50% 70%" loading="lazy" decoding="async">
+              <span class="vcard__badge">New Arrival</span>
+            </a>
+            <div class="vcard__body">
+              <h3 class="vcard__title"><span class="tnum">1948</span> MG TC</h3>
+              <ul class="vcard__specs"><li>Roadster</li><li>Right-hand drive</li></ul>
+              <div class="vcard__foot">
+                <span class="vcard__price">Price on request</span>
+                <a class="btn btn--sm btn--line vcard__btn" href="/contact-us/" aria-label="Enquire about the 1948 MG TC">Enquire <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </section>
 
