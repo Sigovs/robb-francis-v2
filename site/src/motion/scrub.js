@@ -93,7 +93,8 @@ export function scrubSection(section, { mobile = false } = {}) {
   if (!canvas) return;
   const turn = section.classList.contains('act-turn');
   // shift: a film whose car ends wide (the v3 Ferrari, data-shift) sits a little left so the spec card keeps its air
-  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1, shift: mobile ? 0 : +(canvas.dataset.shift || 0), ...(canvas.dataset.lower && !mobile ? { lower: +canvas.dataset.lower } : {}) });
+  let placeCardLater = () => {};
+  const fc = frameCanvas(canvas, { onPaint: () => placeCardLater(), contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1, shift: mobile ? 0 : +(canvas.dataset.shift || 0), ...(canvas.dataset.lower && !mobile ? { lower: +canvas.dataset.lower } : {}) });
   const ro = new ResizeObserver(() => fc.size());
   ro.observe(canvas);
   const near = ScrollTrigger.create({ trigger: section, start: 'top bottom+=200%', onEnter: fc.load, onEnterBack: fc.load });
@@ -149,19 +150,32 @@ export function scrubSection(section, { mobile = false } = {}) {
     }
   };
 
-  // v3: the turn's four stops — a counter and a thin track (bottom left), and the numbered notes under the film,
-  // each lit when the turn reaches it (stop 2 → note 01 …). Only state classes and one scaleX: no scrubbed text.
-  const stepEl = section.querySelector('[data-turn-step]');
-  const fillEl = section.querySelector('[data-turn-fill]');
+  // v3: the turn's four stops light the numbered notes under the film, each when the turn reaches it (stop 2 →
+  // note 01 …). Only state classes: no scrubbed text. (The 01—04 counter was removed, Alex 2026-09-29.)
   const notes = [...section.querySelectorAll('.turn-notes__item')];
   let lastStep = 0;
   const stops = (p) => {
-    if (fillEl) fillEl.style.transform = `scaleX(${p.toFixed(3)})`;
     const step = Math.min(4, Math.floor(p * 4) + 1);
     if (step === lastStep) return;
     lastStep = step;
-    if (stepEl) stepEl.textContent = String(step).padStart(2, '0');
     notes.forEach((n, i) => { n.classList.toggle('is-active', i === step - 2); n.classList.toggle('is-past', i < step - 2); });
+  };
+
+  // v3 (Alex, 2026-09-29: "align the right part to something, closer to the car"): the hairline panel is placed
+  // FROM THE CAR — its rule a fixed gap behind the car's tail, its middle on the car's middle — measured on the last
+  // frame (data-car: x0,y0,x1,y1 of the frame, roll hoops to tyre contact) and mapped through the same fit as the paint.
+  const carBox = canvas.dataset.car ? canvas.dataset.car.split(',').map(Number) : null;
+  placeCardLater = () => placeCard();
+  const placeCard = () => {
+    if (!card || !carBox || mobile) return;
+    const tail = fc.map(carBox[2], (carBox[1] + carBox[3]) / 2);
+    if (!tail) return;
+    const gap = Math.max(48, innerWidth * 0.045);
+    const left = Math.round(tail.x + gap);
+    card.style.left = `${left}px`;
+    card.style.right = 'auto';
+    card.style.width = `${Math.round(Math.min(352, innerWidth * 0.965 - left))}px`;
+    card.style.top = `${Math.round(tail.y - card.offsetHeight / 2)}px`;
   };
 
   cardAt = f * 0.9; cardOff = f * 0.72;                        // the card lands on the last frames of the turn
@@ -197,6 +211,7 @@ export function scrubSection(section, { mobile = false } = {}) {
     if (appear) gsap.set(section, { clearProps: 'opacity,visibility' });
     if (veil) gsap.set(veil, { clearProps: 'opacity' });
     if (card) gsap.set([card, copyBlock, ...rows].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
+    if (card && carBox) ['left', 'right', 'width', 'top'].forEach((k) => card.style.removeProperty(k));
     if (next) next.style.marginTop = '';
     gsap.set([...ins, soft, stage, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-live');
