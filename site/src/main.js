@@ -16,7 +16,7 @@ const drawerMode = window.matchMedia('(max-width: 1180px)'); // the nav lives in
 let lenis = null;
 function startLenis() {
   if (lenis || reduceMotion.matches) return;
-  lenis = new Lenis({ autoRaf: false, anchors: true, lerp: 0.055, wheelMultiplier: 0.9 });   // a slower, heavier glide (Alex, 2026-09-28)
+  lenis = new Lenis({ autoRaf: false, anchors: false, lerp: 0.055, wheelMultiplier: 0.9 });   // a slower, heavier glide (Alex, 2026-09-28)
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(lenisRaf);
   gsap.ticker.lagSmoothing(0);
@@ -31,6 +31,30 @@ function stopLenis() {
   window.__lenis = null;
 }
 startLenis();
+
+/* ---------- In-page links (Alex, 2026-09-29: one page, every nav item lands on its own section) ----------
+   Lenis's own anchors measure the target where it stands at click time, and a pinned section stands somewhere else
+   while pinned, so About and Virtual Tour landed in the dark between two pins. A pinned target is placed from its pin's
+   own range, read from ScrollTrigger; anything else goes to its measured top. */
+function anchorY(el) {
+  const st = ScrollTrigger.getAll().find((t) => t.pin && (t.pin === el || t.trigger === el));
+  if (!st) return el.getBoundingClientRect().top + window.scrollY;
+  // a scrubbed act lands where its copy has fully arrived (~0.2 of the run, measured at 1440 and 390); the inventory
+  // lands on its first car
+  return el.id === 'inventory' ? st.start + 2 : st.start + (st.end - st.start) * 0.25;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  const id = a?.getAttribute('href').slice(1);
+  const el = id && document.getElementById(id);
+  if (!el) return;
+  e.preventDefault();
+  const y = id === 'top' ? 0 : anchorY(el);
+  if (lenis) lenis.scrollTo(y, { duration: 1.6 });
+  else window.scrollTo({ top: y, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+  history.replaceState(null, '', `#${id}`);
+  if (id === 'main') el.focus?.();
+});
 reduceMotion.addEventListener('change', () => (reduceMotion.matches ? stopLenis() : startLenis()));
 
 /* ---------- Motion scope (G1, G5): matchMedia is the context; revert() tears every branch down ---------- */
