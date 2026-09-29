@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const pad = (i) => String(i + 1).padStart(3, '0');
 
-export function frameCanvas(canvas, { contain = false, containScale = 1, lower = 0.1, pos, onPaint } = {}) {
+export function frameCanvas(canvas, { contain = false, containScale = 1, lower = 0.1, shift = 0, pos, onPaint } = {}) {
   const base = canvas.dataset.frames;
   const count = +canvas.dataset.count;
   const ctx = canvas.getContext('2d');
@@ -39,7 +39,7 @@ export function frameCanvas(canvas, { contain = false, containScale = 1, lower =
     // the studio wall above it becomes the reading field for the title (desktop), the band fits a phone
     const ground = getComputedStyle(document.documentElement).getPropertyValue('--c-ground').trim() || '#12161d';
     const k = containScale;
-    const s = Math.min((cw / iw) * k, (ch / ih) * 1.1), w = iw * s, h = ih * s, x = (cw - w) / 2, y = (ch - h) / 2 + ch * lower;
+    const s = Math.min((cw / iw) * k, (ch / ih) * 1.1), w = iw * s, h = ih * s, x = (cw - w) / 2 + cw * shift, y = (ch - h) / 2 + ch * lower;
     ctx.fillStyle = ground; ctx.fillRect(0, 0, cw, ch);
     box = { x, y, w, h };
     ctx.drawImage(img, x, y, w, h);
@@ -92,7 +92,8 @@ export function scrubSection(section, { mobile = false } = {}) {
   const canvas = section.querySelector('.scrub__canvas');
   if (!canvas) return;
   const turn = section.classList.contains('act-turn');
-  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1 });
+  // shift: a film whose car ends wide (the v3 Ferrari, data-shift) sits a little left so the spec card keeps its air
+  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1, shift: mobile ? 0 : +(canvas.dataset.shift || 0) });
   const ro = new ResizeObserver(() => fc.size());
   ro.observe(canvas);
   const near = ScrollTrigger.create({ trigger: section, start: 'top bottom+=200%', onEnter: fc.load, onEnterBack: fc.load });
