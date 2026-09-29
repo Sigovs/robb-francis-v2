@@ -22,9 +22,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500&display=swap">
 
-  <link rel="preload" as="image" href="./frames/hero/001.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="./img/hero-poster-1920.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
+  <link rel="preload" as="image" href="./img/hero-poster-m-720.avif" type="image/avif" media="(max-width: 767.98px)" fetchpriority="high">
 
-  <script defer src="./assets/v3-pmRfzm54.js"></script>
+  <script defer src="./assets/v3-ys3Qn-HI.js"></script>
   <link rel="stylesheet" href="./assets/style-Cq2rTlaE.css">
 </head>
 <body>
@@ -99,11 +100,17 @@
     <!-- ============ ACT 1 · HERO · push-in (footage drives at the camera) ============ -->
     <section class="act act-hero" id="top" aria-labelledby="hero-title" data-act="1" data-hero-scrub>
       <div class="hero__media" aria-hidden="true">
-        <!-- v3: the film is scrubbed by the scroll (motion/hero-scrub.js); frame 1 is the still underneath -->
         <picture class="hero__poster">
-          <img src="./frames/hero/001.webp" alt="" width="1600" height="900" fetchpriority="high" decoding="async">
+          <source media="(max-width: 767.98px)" type="image/avif" srcset="img/hero-poster-m-720.avif">
+          <source media="(max-width: 767.98px)" type="image/webp" srcset="img/hero-poster-m-720.webp">
+          <source media="(max-width: 767.98px)" srcset="img/hero-poster-m-720.jpg">
+          <source type="image/avif" srcset="img/hero-poster-1280.avif 1280w, img/hero-poster-1920.avif 1920w" sizes="100vw">
+          <source type="image/webp" srcset="img/hero-poster-1280.webp 1280w, img/hero-poster-1920.webp 1920w" sizes="100vw">
+          <img src="./img/hero-poster-1920.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
         </picture>
-        <canvas class="hero__canvas" data-frames="./frames/hero/" data-count="113"></canvas>
+        <video class="hero__video" muted loop playsinline preload="none"
+          data-src-desktop="./video/hero-1080.mp4" data-src-desktop-av1="./video/hero-1080.av1.mp4"
+          data-src-mobile="./video/hero-720x900.mp4"></video>
       </div>
       <div class="scrim scrim--hero" aria-hidden="true"></div>
       <div class="scrub__dim" aria-hidden="true"></div>
@@ -119,6 +126,14 @@
         </div>
       </div>
 
+      <div class="hero__foot">
+        <!-- The film loops without end, so it keeps a pause control (WCAG 2.2.2): an icon, not a second CTA. -->
+        <button class="hero__pause" type="button" data-video-toggle aria-pressed="false" hidden>
+          <span class="sr-only" data-video-label>Pause film</span>
+          <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
+          <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
+        </button>
+      </div>
       <!-- v3 (Alex, 2026-09-29): on the other side of the car, a card — the client's own California place at night (their
            photo, reference/place/180522), one uplifting line, one link. It arrives mid-film (motion/hero-scrub.js); the
            picture opens inside it the way the chapters' pictures do. -->
