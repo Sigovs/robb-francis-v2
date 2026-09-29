@@ -25,8 +25,8 @@
   <link rel="preload" as="image" href="./img/hero-poster-1920.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
   <link rel="preload" as="image" href="./img/hero-poster-m-720.avif" type="image/avif" media="(max-width: 767.98px)" fetchpriority="high">
 
-  <script defer src="./assets/v3-DKKhfvgC.js"></script>
-  <link rel="stylesheet" href="./assets/style-R-AE0G2j.css">
+  <script defer src="./assets/v3-DqaWVhb_.js"></script>
+  <link rel="stylesheet" href="./assets/style-B8BiYnmm.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -120,53 +120,40 @@
           <p class="label hero__kicker">Robb Francis Sports Cars</p>
           <h1 class="hero__title" id="hero-title">
             <span class="display display--hero"><span class="hl">Collector.</span> <span class="hl">Classic.</span> <span class="hl">Current.</span></span>
-            <span class="lead"><span class="lead__l">Now Purchasing Collector and Performance Vehicles</span></span>
+            <span class="lead"><span class="lead__l">Now purchasing collector and performance vehicles.</span></span>
           </h1>
-          <a class="btn btn--fill btn--lg hero__cta" href="/inventory/">View Inventory</a>
+          <a class="btn btn--lg hero__cta hero__cta--line" href="/inventory/">View Inventory <span aria-hidden="true">→</span></a>
         </div>
       </div>
 
-      <div class="hero__foot">
+      <!-- v3 (Alex's hero mock, 2026-09-29): bottom centre, a thin film line with its dot and timecodes. It reads the
+           real film (main.js initFilmLine), and keeps the pause control beside it (WCAG 2.2.2). -->
+      <div class="hero__foot hero__foot--line">
         <!-- The film loops without end, so it keeps a pause control (WCAG 2.2.2): an icon, not a second CTA. -->
         <button class="hero__pause" type="button" data-video-toggle aria-pressed="false" hidden>
           <span class="sr-only" data-video-label>Pause film</span>
           <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
           <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
         </button>
+        <div class="film-line" aria-hidden="true">
+          <span class="film-line__t tnum" data-film-now>00:00</span>
+          <span class="film-line__track"><span class="film-line__fill" data-film-fill></span><span class="film-line__dot" data-film-dot></span></span>
+          <span class="film-line__t film-line__t--end tnum" data-film-end>00:00</span>
+        </div>
       </div>
-      <!-- v3 (Alex, 2026-09-29): the California card, after the "TravelCard" design Alex sent (21st.dev card-7), ported
-           to this page's HTML/CSS/type — no React, Tailwind or shadcn. Full-bleed picture of the client's California
-           gallery at night; a monogram disc; title, place and overview; on hover the details lift and the contact row
-           rises from the foot. On touch and keyboard the contact row is simply there (nothing depends on hover, U12).
+      <!-- v3 (Alex's hero mock, 2026-09-29): a small, quiet glass announcement card, lower right, clear of the car:
+           a thumbnail of the California gallery, the place, one line, one link (the whole card is the link).
            It arrives on scroll (motion/hero-scrub.js). -->
-      <aside class="hero__side ca-card" data-hero-side aria-labelledby="ca-title">
+      <aside class="hero__side ca-card ca-card--glass" data-hero-side aria-labelledby="ca-title">
         <div class="ca-card__inner" data-loc-inner>
-          <article class="tcard">
-            <img class="tcard__img" src="./img/ca-place.webp" alt="The Robb Francis gallery in California at night, its glass doors lit, a red roadster and a silver E-Type inside" width="900" height="1125" loading="lazy" decoding="async">
-            <div class="tcard__shade" aria-hidden="true"></div>
-            <div class="tcard__body">
-              <div class="tcard__top">
-                <span class="tcard__logo" aria-hidden="true"><img src="./img/brand/rf-shield.svg" alt="" width="24" height="24"></span>
-              </div>
-              <div class="tcard__details">
-                <div>
-                  <h2 class="tcard__title" id="ca-title">Now on the California Coast</h2>
-                  <p class="tcard__loc">Montecito, California</p>
-                </div>
-                <div>
-                  <h3 class="tcard__label">Overview</h3>
-                  <p class="tcard__text">Collector, classic and current sports cars, now on both coasts. Viewings by&nbsp;appointment.</p>
-                </div>
-              </div>
-              <div class="tcard__reveal">
-                <div class="tcard__contact">
-                  <span class="tcard__contact-label">California enquiries</span>
-                  <a class="tcard__phone tnum" href="tel:+19082342100">(908) 234-2100</a>
-                </div>
-                <a class="tcard__cta" href="/contact-us/" aria-label="Visit by appointment">Visit <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/></svg></a>
-              </div>
-            </div>
-          </article>
+          <a class="gcard" href="/contact-us/">
+            <span class="gcard__thumb"><img src="./img/ca-place.webp" alt="" width="900" height="1125" loading="lazy" decoding="async"></span>
+            <span class="gcard__copy">
+              <span class="label gcard__kicker">Montecito · California</span>
+              <span class="gcard__title" id="ca-title">Now on the California Coast.</span>
+              <span class="gcard__link">Visit by Appointment <span class="gcard__arrow" aria-hidden="true">→</span></span>
+            </span>
+          </a>
         </div>
       </aside>
     </section>
