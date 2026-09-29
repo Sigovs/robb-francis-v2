@@ -62,9 +62,31 @@ export function chaptersSection(section, { mobile = false } = {}) {
   shapes.forEach((s, i) => { const [x, y, r] = drift[i % drift.length]; whole.fromTo(s, { xPercent: -x / 2, yPercent: -y / 2, rotation: -r / 2 }, { xPercent: x / 2, yPercent: y / 2, rotation: r / 2, duration: 1 }, 0); });
   triggers.push(whole);
 
+  // v3 (Alex, 2026-09-29): the chapters hand over to the Jaguar the way the hero hands over to them — the last
+  // screen goes dark and the next scene appears in place (scrub.js, data-appear). The next section overlaps this
+  // one's last screen (-100vh), so that screen is the dark: the last text lets go, then the ground closes over.
+  const nextEl = section.nextElementSibling;
+  let dim = null;
+  if (nextEl?.hasAttribute('data-appear')) {
+    const media = section.querySelector('.ch__media');
+    dim = document.createElement('div');
+    dim.className = 'ch__dim';
+    media.append(dim);
+    const lastCopy = copies[copies.length - 1];
+    lastCopy.style.height = `calc(${getComputedStyle(lastCopy).height} + ${mobile ? '100svh' : '100vh'})`;   // the dark takes a screen: the last chapter keeps its full read
+    const last = lastCopy.querySelector('.ch__inner');
+    const out = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: section, start: 'bottom bottom+=100%', end: 'bottom bottom', scrub: 0.6 } });
+    if (last) out.to(last.children, { autoAlpha: 0, y: -30, filter: 'blur(8px)', duration: 0.5, stagger: 0.04, ease: 'power1.in' }, 0);
+    if (last) out.to(last, { borderLeftColor: 'rgba(236, 238, 241, 0)', duration: 0.5 }, 0);   // the hairline goes with its text
+    out.fromTo(dim, { opacity: 0 }, { opacity: 1, duration: 0.85, ease: 'power1.in' }, 0.1);
+    triggers.push(out);
+  }
+
   return () => {
     triggers.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); });
     section.classList.remove('is-seq');
+    dim?.remove();
+    if (dim) { copies[copies.length - 1].style.height = ''; gsap.set(copies[copies.length - 1].querySelector('.ch__inner'), { clearProps: 'borderLeftColor' }); }
     gsap.set([...imgs, ...fields, ...section.querySelectorAll('.ch__shape'), frame, rule, ...copies.flatMap((c) => [...(c.querySelector('.ch__inner')?.children || [])])].filter(Boolean), { clearProps: 'all' });
   };
 }

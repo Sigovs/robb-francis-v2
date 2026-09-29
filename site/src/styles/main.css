@@ -1162,3 +1162,4 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .act-chapters--line .ch__inner { border-left: 0; padding-left: 0; }
   .act-chapters--line .ch__copy { padding-left: var(--gutter); }
 }
+.ch__dim { position: absolute; inset: 0; background: var(--c-ground); opacity: 0; pointer-events: none; }   /* v3: chapters → Jaguar, into the dark */

@@ -105,8 +105,11 @@ export function scrubSection(section, { mobile = false } = {}) {
   const ins = soft ? [...soft.children] : [...section.querySelectorAll('[data-scrub-in]')];
 
   const isTurn = section.classList.contains('act-turn');
-  const appear = isTurn && !!document.querySelector('.act-about');
+  // appear in place instead of sliding up: the turn after About, and (v3, data-appear) About after the chapters —
+  // it travels up hidden behind the section before it and fades up once that one has gone dark
+  const appear = (isTurn && !!document.querySelector('.act-about')) || section.hasAttribute('data-appear');
   if (appear) gsap.set(section, { autoAlpha: 0 });
+  if (section.hasAttribute('data-appear')) { section.style.marginTop = mobile ? '-100svh' : '-100vh'; section.style.zIndex = '3'; }   // over the section it covers (the chapters are z 3 too; later in the page wins)
   const run = isTurn ? (mobile ? 280 : 400) : (mobile ? 160 : 230);   // film run, % of a screen (the turn: slow, Alex 2026-09-28)
   // About hands over by being covered (Alex: "on the last scroll the film darkens and goes into the background"):
   // it stays pinned one more screen while the next section slides up over it (Forge's stacking).
@@ -209,6 +212,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   return () => {
     tl.scrollTrigger?.kill(); tl.kill(); near.kill(); ro.disconnect();
     if (appear) gsap.set(section, { clearProps: 'opacity,visibility' });
+    if (section.hasAttribute('data-appear')) { section.style.marginTop = ''; section.style.zIndex = ''; }
     if (veil) gsap.set(veil, { clearProps: 'opacity' });
     if (card) gsap.set([card, copyBlock, ...rows].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     if (card && carBox) ['left', 'right', 'width', 'top'].forEach((k) => card.style.removeProperty(k));
