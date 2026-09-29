@@ -66,26 +66,10 @@ export function heroScrub(section, { mobile = false } = {}) {
         ? { autoAlpha: 0, x: -24, filter: 'blur(12px)', duration: 0.35, stagger: 0.03, ease: 'power2.in' }
         : { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 0.9, stagger: 0.05, delay: 0.3, ease: 'expo.out' });
     }
-    side.classList.toggle('is-on', on);                    // starts the card's own CSS choreography (map, route, pins)
+    side.classList.toggle('is-on', on);                    // starts the card's own CSS choreography (the picture opens, the copy rises)
     if (on) gsap.to(sideParts, { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 1.2, stagger: 0.07, delay: mobile ? 0.3 : 0, ease: 'expo.out' });
     else gsap.to(sideParts, { autoAlpha: 0, x: ENTER() * 1.5, filter: 'blur(12px)', duration: 0.5, stagger: { each: 0.04, from: 'end' }, ease: 'power2.in' });
   };
-
-  // the card leans a few degrees toward the pointer (desktop, fine pointer only): a quiet sense of a physical plate
-  let offTilt = () => {};
-  if (sideInner && !mobile && matchMedia('(pointer: fine)').matches) {
-    const rx = gsap.quickTo(sideInner, 'rotationX', { duration: 0.9, ease: 'power3.out' });
-    const ry = gsap.quickTo(sideInner, 'rotationY', { duration: 0.9, ease: 'power3.out' });
-    const onMove = (e) => {
-      if (!sideOn) return;
-      const r = sideInner.getBoundingClientRect();
-      const dx = gsap.utils.clamp(-1, 1, (e.clientX - (r.left + r.width / 2)) / (innerWidth / 2));
-      const dy = gsap.utils.clamp(-1, 1, (e.clientY - (r.top + r.height / 2)) / (innerHeight / 2));
-      ry(dx * 6); rx(-dy * 5);
-    };
-    section.addEventListener('pointermove', onMove);
-    offTilt = () => section.removeEventListener('pointermove', onMove);
-  }
 
   // ---- the run: film → a short hold on the last frame → into the dark; the next section appears in place ----
   const run = mobile ? 160 : 230, hold = 40, dark = 70;
@@ -116,7 +100,6 @@ export function heroScrub(section, { mobile = false } = {}) {
 
   return () => {
     alive = false;
-    offTilt();
     intro.progress(1).kill();
     tl.scrollTrigger?.kill(); tl.kill(); ro.disconnect();
     if (side) { side.style.top = ''; side.classList.remove('is-on'); }
