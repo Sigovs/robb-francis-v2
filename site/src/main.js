@@ -196,6 +196,11 @@ function initFeatured() {
     onEnter: () => { gsap.to(sec, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }); rise(); },
     onLeaveBack: () => gsap.to(sec, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
   });
+  // the stage is one screen: it holds while the cars are chosen, like the Ferrari's pause (Alex: "something's
+  // broken" — unpinned, it faded in and was already scrolling away). On a phone it is taller than the screen: no pin.
+  if (sec.classList.contains('act-stage') && !isMobile.matches) {
+    ScrollTrigger.create({ trigger: sec, start: 'top top', end: '+=90%', pin: true, anticipatePin: 1 });
+  }
   ScrollTrigger.refresh();
 }
 initFeatured();
