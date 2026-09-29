@@ -575,6 +575,9 @@ a.util__item:hover { color: var(--c-ink); }
 }
 .closing__kicker { color: var(--c-ink-2); max-width: 34ch; margin-bottom: var(--s-5); }
 .closing__title { margin-bottom: var(--s-6); }
+/* each line rises out of its own mask; the padding keeps the J and y descenders inside it */
+.closing__title .cl { display: block; overflow: hidden; padding: 0.04em 0.06em 0.14em; margin: -0.04em -0.06em -0.14em; }
+.closing__title .cl__in { display: block; will-change: transform; }
 .closing__phone { margin-top: var(--s-3); color: var(--c-ink); }
 .closing__phone a { display: inline-flex; min-height: var(--btn-h-sm); align-items: center; }
 
@@ -1204,6 +1207,7 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 .act-cards {
   position: relative; overflow: hidden;
   background:
+    linear-gradient(180deg, transparent 78%, var(--c-deep) 100%),   /* hands the ground to the closing without a seam */
     radial-gradient(58% 52% at 52% 62%, rgba(92, 100, 112, 0.30), transparent 72%),
     radial-gradient(38% 44% at 14% 18%, rgba(70, 82, 98, 0.22), transparent 70%),
     radial-gradient(46% 36% at 86% 96%, rgba(117, 18, 5, 0.16), transparent 72%),
