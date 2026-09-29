@@ -1,4 +1,6 @@
-// ACT 1 · v3 (Alex, 2026-09-29): the hero is a scrubbed film too, with ONE message that slides in from the side.
+// ACT 1 · v3 (Alex, 2026-09-29): ONE message that slides in from the side; on scroll the California card arrives.
+// Later the same day: "keep video running like before" — the looping film is back; the canvas scrub below stays
+// available (a .hero__canvas in the markup switches it on) but v3 ships without it.
 // The tracking shot (source frames n3–n115 of reference/found/hero1d.mp4, between its two cuts) is drawn on a
 // canvas by the scroll: the 356 comes down the forest road as you scroll. The message arrives by itself on load
 // (time-based), holds while the film runs, and blurs away as the film goes dark. The chapters then APPEAR IN
@@ -13,18 +15,16 @@ gsap.registerPlugin(ScrollTrigger);
 const ENTER = () => (window.innerWidth >= 768 ? 32 : Math.min(window.innerWidth * 0.05, 24));   // budgeted into heroField (main.js)
 
 export function heroScrub(section, { mobile = false } = {}) {
-  const canvas = section.querySelector('.hero__canvas');
+  const canvas = section.querySelector('.hero__canvas');   // optional: without it the looping film plays (Alex, 2026-09-29)
   const still = section.querySelector('.hero__poster img');
-  if (!canvas) return;
   const root = document.documentElement;
   section.classList.add('is-scrub');
 
   // the canvas crops exactly like the still under it (object-position from CSS: 20% 45% landscape, centred on a phone)
   const pos = () => (getComputedStyle(still || canvas).objectPosition || '50% 50%').split(' ').map((v) => parseFloat(v) / 100);
-  const fc = frameCanvas(canvas, { pos, onPaint: () => section.classList.add('is-live') });
-  const ro = new ResizeObserver(() => fc.size());
-  ro.observe(canvas);
-  fc.load();
+  const fc = canvas ? frameCanvas(canvas, { pos, onPaint: () => section.classList.add('is-live') }) : null;
+  const ro = fc ? new ResizeObserver(() => fc.size()) : null;
+  if (fc) { ro.observe(canvas); fc.load(); }
 
   // ---- the intro: film surfaces, the header settles, the one message slides in from the right and focuses ----
   const inner = section.querySelector('.hero__copy--1 [data-seq-out]');
@@ -72,7 +72,8 @@ export function heroScrub(section, { mobile = false } = {}) {
   };
 
   // ---- the run: film → a short hold on the last frame → into the dark; the next section appears in place ----
-  const run = mobile ? 160 : 230, hold = 40, dark = 70;
+  // the film loops by itself now: the pinned run only has to carry the card's arrival and a read of it
+  const run = fc ? (mobile ? 160 : 230) : (mobile ? 70 : 90), hold = 40, dark = 70;
   const total = run + hold + dark;
   const f = run / total, fh = (run + hold) / total, fd = 1;
   const dim = section.querySelector('.scrub__dim');
@@ -87,7 +88,7 @@ export function heroScrub(section, { mobile = false } = {}) {
     defaults: { ease: 'none' },
     scrollTrigger: {
       trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: placeSide,
-      onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleSide(self.progress, f * 0.3, f * 0.18); },
+      onUpdate: (self) => { fc?.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleSide(self.progress, fc ? f * 0.3 : f * 0.12, fc ? f * 0.18 : f * 0.05); },
       onLeave: () => next && gsap.to(next, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }),
       onEnterBack: () => next && gsap.to(next, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
     },
@@ -96,15 +97,17 @@ export function heroScrub(section, { mobile = false } = {}) {
   if (inner) tl.fromTo(inner, { y: 0 }, { y: () => (mobile ? 0 : -innerHeight * 0.04), duration: f }, 0)     // the message barely drifts while the car comes on (not on a phone: it sits under the header)
     .to(inner, { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh);
   if (side) tl.fromTo(side, { autoAlpha: 1 }, { autoAlpha: 0, filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in', immediateRender: false }, fh);   // leaves with the title, into the dark (no y: the CSS centring owns transform)
+  const foot = section.querySelector('.hero__foot');
+  if (foot) tl.fromTo(foot, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.5 * (fd - fh), immediateRender: false }, fh);   // the film control goes with the film
   if (dim) tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh);   // only darkens to the ground, no scale (Alex)
 
   return () => {
     alive = false;
     intro.progress(1).kill();
-    tl.scrollTrigger?.kill(); tl.kill(); ro.disconnect();
+    tl.scrollTrigger?.kill(); tl.kill(); ro?.disconnect();
     if (side) { side.style.top = ''; side.classList.remove('is-on'); }
     if (next) { next.style.marginTop = ''; next.style.zIndex = ''; gsap.set(next, { clearProps: 'opacity,visibility' }); }
-    gsap.set([...parts, ...sideParts, inner, side, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
+    gsap.set([...parts, ...sideParts, inner, side, dim, section.querySelector('.hero__foot')].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-scrub', 'is-live');
     root.classList.remove('intro-wait');
   };
