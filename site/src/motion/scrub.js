@@ -114,7 +114,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   const overlap = 0;                                           // no slide-over: the next scene appears in place (Alex)
   const dark = next ? 70 : 0;
   const exit = isTurn ? 60 : 0;                                // the walk-around fades out in place at the end
-  const hold = isTurn ? 50 : 40;                               // a small pause on the last frame before it goes (Alex)
+  const hold = isTurn ? +(canvas.dataset.hold || 50) : 40;   // v3 Ferrari: a long hold so the card can be read (data-hold, Alex 2026-09-29); otherwise a small pause on the last frame
   // the next scene sits right behind this pin (-1 screen): it reaches the top exactly as the dark completes, hidden
   // until then, and appears in place (fades up) instead of sliding in from below (Alex, 2026-09-28)
   if (next) next.style.marginTop = mobile ? '-100svh' : '-100vh';
