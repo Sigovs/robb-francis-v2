@@ -51,8 +51,21 @@ export function heroScrub(section, { mobile = false } = {}) {
   const sideParts = side ? (sideInner ? [sideInner] : [...side.children]) : [];
   let sideOn = false;
   if (side) gsap.set(sideParts, { autoAlpha: 0, x: ENTER() * 1.5, filter: 'blur(12px)' });
-  const placeSide = () => { if (mobile && side && inner) side.style.top = `${inner.parentElement.offsetTop + inner.offsetTop}px`; };   // phone: exactly where the title stands
-  placeSide();
+  const placeSide = () => {
+    if (!side || !inner) return;
+    if (mobile) { side.style.top = `${inner.parentElement.offsetTop + inner.offsetTop}px`; return; }   // phone: exactly where the title stands
+    // landscape desktop (Alex, 2026-09-29: "align it"): the card's foot sits on the CTA's foot — one line across
+    // the hero. Measured without the scroll drift on the message (its GSAP y).
+    const cta = inner.querySelector('.hero__cta');
+    const landscape = innerWidth >= 768 && innerWidth / section.clientHeight >= 1;
+    if (!cta || !landscape) { side.style.removeProperty('bottom'); return; }
+    const foot = cta.getBoundingClientRect().bottom - section.getBoundingClientRect().top - (+gsap.getProperty(inner, 'y') || 0);
+    side.style.bottom = `${Math.round(section.clientHeight - foot)}px`;
+  };
+  const placeSoon = () => requestAnimationFrame(placeSide);   // after heroField (main.js) has sized the title
+  placeSide(); placeSoon();
+  document.fonts?.ready.then(placeSoon);
+  addEventListener('resize', placeSoon);
   const toggleSide = (p, at, off) => {
     if (!side) return;
     const on = sideOn ? p > off : p >= at;
@@ -94,8 +107,8 @@ export function heroScrub(section, { mobile = false } = {}) {
     },
   });
   tl.to({}, { duration: 1 }, 0);
-  if (inner) tl.fromTo(inner, { y: 0 }, { y: () => (mobile ? 0 : -innerHeight * 0.04), duration: f }, 0)     // the message barely drifts while the car comes on (not on a phone: it sits under the header)
-    .to(inner, { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh);
+  // no drift on the message while the film runs: the card's foot is aligned to the CTA's foot (Alex)
+  if (inner) tl.to(inner, { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh);
   if (side) tl.fromTo(side, { autoAlpha: 1 }, { autoAlpha: 0, filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in', immediateRender: false }, fh);   // leaves with the title, into the dark (no y: the CSS centring owns transform)
   const foot = section.querySelector('.hero__foot');
   if (foot) tl.fromTo(foot, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.5 * (fd - fh), immediateRender: false }, fh);   // the film control goes with the film
@@ -105,7 +118,8 @@ export function heroScrub(section, { mobile = false } = {}) {
     alive = false;
     intro.progress(1).kill();
     tl.scrollTrigger?.kill(); tl.kill(); ro?.disconnect();
-    if (side) { side.style.top = ''; side.classList.remove('is-on'); }
+    removeEventListener('resize', placeSoon);
+    if (side) { side.style.top = ''; side.style.bottom = ''; side.classList.remove('is-on'); }
     if (next) { next.style.marginTop = ''; next.style.zIndex = ''; gsap.set(next, { clearProps: 'opacity,visibility' }); }
     gsap.set([...parts, ...sideParts, inner, side, dim, section.querySelector('.hero__foot')].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-scrub', 'is-live');
