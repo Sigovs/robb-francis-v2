@@ -200,22 +200,48 @@ function initFeatured() {
 }
 initFeatured();
 
-// Available Now: the arrows move the row by one card; they grey out at either end. Swipe and trackpad scroll natively.
+// Available Now: a centre-stage carousel. Each card's distance from the middle of the row (in card widths) is written
+// to --k on every scroll frame, so the card arriving in the centre grows and brightens as it comes, and the ones
+// leaving shrink back. Arrows, swipe, trackpad and a click on a side card all end on a card centred (scroll-snap).
 function initCarCarousel() {
   const track = document.querySelector('[data-car-track]');
   if (!track) return;
+  const cards = [...track.children];
   const prev = document.querySelector('[data-car-prev]'), next = document.querySelector('[data-car-next]');
-  const step = () => { const c = track.children[0]; return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : 0; };
-  const sync = () => {
-    const max = track.scrollWidth - track.clientWidth - 2;
-    if (prev) prev.disabled = track.scrollLeft <= 2;
-    if (next) next.disabled = track.scrollLeft >= max;
+  let cur = 0, raf = 0;
+  // centres measured on screen (a centred scale leaves the middle of a card where it was), so nothing depends on
+  // offsetParent or on 100vw vs a visible scrollbar
+  const mid = (el) => { const r = el.getBoundingClientRect(), t = track.getBoundingClientRect(); return r.left + r.width / 2 - t.left - track.clientLeft; };
+  const center = (el) => track.scrollLeft + mid(el) - track.clientWidth / 2;
+  const go = (i, instant) => {
+    i = Math.max(0, Math.min(cards.length - 1, i));
+    track.scrollTo({ left: center(cards[i]), behavior: instant || reduceMotion.matches ? 'auto' : 'smooth' });
   };
-  prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: reduceMotion.matches ? 'auto' : 'smooth' }));
-  next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: reduceMotion.matches ? 'auto' : 'smooth' }));
-  track.addEventListener('scroll', () => requestAnimationFrame(sync), { passive: true });
-  addEventListener('resize', sync);
-  sync();
+  const paint = () => {
+    raf = 0;
+    const half = track.clientWidth / 2;
+    let best = 0, bestD = Infinity;
+    cards.forEach((c, i) => {
+      const d = Math.abs(mid(c) - half) / (c.offsetWidth || 1);
+      c.style.setProperty('--k', Math.min(1, d).toFixed(3));
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    cur = best;
+    cards.forEach((c, i) => { c.classList.toggle('is-center', i === cur); c.inert = false; });
+    if (prev) prev.disabled = cur === 0;
+    if (next) next.disabled = cur === cards.length - 1;
+  };
+  const queue = () => { if (!raf) raf = requestAnimationFrame(paint); };
+  track.addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', () => { go(cur, true); queue(); });
+  prev?.addEventListener('click', () => go(cur - 1));
+  next?.addEventListener('click', () => go(cur + 1));
+  cards.forEach((c, i) => c.addEventListener('click', (e) => {
+    if (i === cur) return;
+    e.preventDefault(); go(i);
+  }));
+  go(Math.floor((cards.length - 1) / 2), true);   // open on the middle card, cars on either side
+  paint();
 }
 initCarCarousel();
 

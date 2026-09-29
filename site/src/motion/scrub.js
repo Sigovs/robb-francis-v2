@@ -191,7 +191,9 @@ export function scrubSection(section, { mobile = false } = {}) {
       onEnter: () => appear && gsap.to(section, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }),
       onLeaveBack: () => appear && gsap.to(section, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
       // never scroll away visible: when the pin lets go, the veil is complete whatever the scrub lag (Alex)
-      onLeave: () => { const v = section.querySelector('.scrub__veil'); if (v && isTurn) { gsap.killTweensOf(v); gsap.set(v, { opacity: 1 }); } },
+      // (set, never killTweensOf: killing the timeline's own veil tween left the Ferrari covered on the way back up)
+      onLeave: () => { const v = section.querySelector('.scrub__veil'); if (v && isTurn) gsap.set(v, { opacity: 1 }); },
+      onEnterBack: (self) => { const v = section.querySelector('.scrub__veil'); if (v && isTurn) self.animation?.progress(self.progress); },
       onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleCard(self.progress); stops(Math.min(1, self.progress / f)); },
     },
   });
