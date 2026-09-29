@@ -10,6 +10,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './tokens.js';
 import { heroEntrance } from './text.js';
 import { heroSequence } from './hero.js';
+import { heroScrub } from './hero-scrub.js';
 import { scrubSection } from './scrub.js';
 import { chaptersSection } from './chapters.js';
 
@@ -31,8 +32,12 @@ export function initMotion(root) {
     const undo = [];
     const run = (fn, el) => { if (el) { const u = fn(el); if (typeof u === 'function') undo.push(u); } };
 
-    run(heroEntrance, act('.act-hero'));   // V2: the page is the hero only (Alex, 2026-09-25)
-    run((el) => heroSequence(el, { mobile: !desktop }), act('.act-hero'));   // two messages over the film (2026-09-28)
+    if (act('.act-hero[data-hero-scrub]')) {
+      run((el) => heroScrub(el, { mobile: !desktop }), act('.act-hero'));   // v3: the hero is a scrubbed film, one message (2026-09-29)
+    } else {
+      run(heroEntrance, act('.act-hero'));   // V2: the page is the hero only (Alex, 2026-09-25)
+      run((el) => heroSequence(el, { mobile: !desktop }), act('.act-hero'));   // two messages over the film (2026-09-28)
+    }
     run((el) => chaptersSection(el, { mobile: !desktop }), act('.act-chapters'));   // act 2: chapters 01/03 (sticky picture, scrolling text)
     root.querySelectorAll('.act-scrub').forEach((el) => run((x) => scrubSection(x, { mobile: !desktop }), el));   // acts 2–3: scrubbed films
 

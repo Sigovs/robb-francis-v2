@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const pad = (i) => String(i + 1).padStart(3, '0');
 
-function frameCanvas(canvas, { contain = false, containScale = 1, lower = 0.1, onPaint } = {}) {
+export function frameCanvas(canvas, { contain = false, containScale = 1, lower = 0.1, pos, onPaint } = {}) {
   const base = canvas.dataset.frames;
   const count = +canvas.dataset.count;
   const ctx = canvas.getContext('2d');
@@ -30,7 +30,8 @@ function frameCanvas(canvas, { contain = false, containScale = 1, lower = 0.1, o
     const cw = canvas.width, ch = canvas.height, iw = img.naturalWidth, ih = img.naturalHeight;
     if (!contain) {
       const s = Math.max(cw / iw, ch / ih), w = iw * s, h = ih * s;
-      box = { x: (cw - w) / 2, y: (ch - h) / 2, w, h };
+      const [px, py] = pos ? pos() : [0.5, 0.5];              // like object-position (the v3 hero follows its still)
+      box = { x: (cw - w) * px, y: (ch - h) * py, w, h };
       ctx.drawImage(img, box.x, box.y, w, h);
       return;
     }
