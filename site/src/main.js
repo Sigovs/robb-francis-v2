@@ -273,25 +273,22 @@ initCarCarousel();
 
 // Closing (Alex, 2026-09-29: "animate it"). The plate comes up with the scroll: the garage settles from a slow push
 // and the three cars rise out of the dark and light up. When the copy is well in view it plays once, in steps: the
-// kicker, then each title line out of its own mask a beat apart, then the action and the phone. Reduced motion: the
+// kicker, then each title line out of its own mask a beat apart. Reduced motion: the
 // section as it stands.
 function initClosing() {
   const sec = document.querySelector('.act-closing');
   if (!sec || reduceMotion.matches) return;
   const facade = sec.querySelector('.closing__facade'), cars = sec.querySelector('.closing__cars');
   const kicker = sec.querySelector('.closing__kicker'), lines = sec.querySelectorAll('.cl__in');
-  const tail = [sec.querySelector('.closing__copy .btn'), sec.querySelector('.closing__phone')].filter(Boolean);
   gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom bottom', scrub: 1 } })
     .fromTo(facade, { scale: 1.12, opacity: 0.2 }, { scale: 1, opacity: 0.55 }, 0)
     .fromTo(cars, { yPercent: 14, filter: 'brightness(0.25)' }, { yPercent: 0, filter: 'brightness(1)' }, 0);
   gsap.set(facade, { xPercent: -50, x: 0 });   // CSS centres it with translateX(-50%); GSAP owns the transform now
   gsap.set(kicker, { autoAlpha: 0, y: 18 });
   gsap.set(lines, { yPercent: 110 });
-  gsap.set(tail, { autoAlpha: 0, y: 16 });
   gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 55%', once: true } })
     .to(kicker, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0)
-    .to(lines, { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: 0.14 }, 0.15)
-    .to(tail, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1 }, 0.7);
+    .to(lines, { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: 0.14 }, 0.15);
 }
 initClosing();
 
