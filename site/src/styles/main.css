@@ -605,6 +605,14 @@ a.util__item:hover { color: var(--c-ink); }
   transition: opacity var(--dur-2) var(--ease-in), transform var(--dur-2) var(--ease-in), visibility 0s linear var(--dur-2);
 }
 .site-header.is-collapsed::before { transform: scaleY(0.55); }
+/* Past the hero (Alex, 2026-09-29): the header leaves whole on the way down and returns on an opaque band of the
+   ground on the way up, closed by a hairline — nothing slides under the nav or shows through it. */
+.site-header { transition: transform var(--dur-3) var(--ease-out); }
+.site-header.is-hidden { transform: translateY(-100%); transition-timing-function: var(--ease-in); }
+.site-header.is-solid::before {
+  inset: 0; height: auto; background: var(--c-ground);
+  border-bottom: 1px solid var(--c-hair);
+}
 
 /* Tablet band, 768–1180 (critique): seven nav items no longer fit one row beside the utility bar — at 1024 they
    wrapped and "My Collection" touched the shield. The nav moves into the drawer; the utility bar becomes two
@@ -1221,6 +1229,13 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   transform: scale(calc(1 - 0.16 * var(--k))); opacity: calc(1 - 0.5 * var(--k)); transform-origin: 50% 50%;
   will-change: transform, opacity;
 }
+.cards__track.is-driven { scroll-snap-type: none; overflow-x: hidden; }   /* the page scroll drives it (main.js) */
+/* pinned, the whole section is one screen: the header has left on the way down, so no room is kept for it, and
+   the card is sized by the viewport height as well as its width */
+.act-cards.is-driven { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.act-cards.is-driven .cards__wrap { padding-top: var(--s-6); }
+.act-cards.is-driven .cards__head { margin-bottom: var(--s-4); }
+.cards__track.is-driven { --card: min(clamp(19rem, 30vw, 27rem), (100vh - 26rem) * 1.2); padding-bottom: var(--s-6); }
 .vcard.is-center { border-color: rgba(236, 238, 241, 0.22); }
 .vcard:not(.is-center) { cursor: pointer; }
 .vcard:not(.is-center) .vcard__btn { pointer-events: none; }   /* a side card centres itself first */

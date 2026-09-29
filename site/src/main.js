@@ -121,11 +121,14 @@ function initHeaderCollapse() {
     const past = y > run.offsetHeight * 0.8;
     const drawerOpen = document.querySelector('[data-drawer]')?.hidden === false;
     const focused = header.contains(document.activeElement) && document.activeElement !== document.body;
-    header.classList.toggle('is-collapsed', past && dy > 0 && !drawerOpen && !focused);
+    // past the hero it leaves entirely on the way down and comes back on a solid band on the way up (Alex,
+    // 2026-09-29: nothing may slide under the nav or show through it)
+    header.classList.toggle('is-hidden', past && dy > 0 && !drawerOpen && !focused);
+    header.classList.toggle('is-solid', past);
     last = y;
   };
   window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-  header.addEventListener('focusin', () => header.classList.remove('is-collapsed'));
+  header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
 }
 initHeaderCollapse();
 
@@ -233,6 +236,31 @@ function initCarCarousel() {
   };
   const queue = () => { if (!raf) raf = requestAnimationFrame(paint); };
   track.addEventListener('scroll', queue, { passive: true });
+
+  // Desktop (Alex, 2026-09-29: "horizontal scroll on the inventory"): the section pins and the page's own scroll
+  // walks the row from the first car to the last, settling on a centred car. The padding centres the first card
+  // at scrollLeft 0 and the last at the maximum, so progress maps straight onto the scroll range.
+  // Phone and reduced motion keep the native swipe with scroll-snap.
+  if (!isMobile.matches && !reduceMotion.matches) {
+    track.classList.add('is-driven');
+    track.closest('.act-cards')?.classList.add('is-driven');
+    const n = cards.length;
+    const range = () => track.scrollWidth - track.clientWidth;
+    const st = ScrollTrigger.create({
+      trigger: track.closest('.act-cards'), start: 'top top', end: () => `+=${(n - 1) * innerHeight * 0.6}`,
+      pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+      onUpdate: (self) => { track.scrollLeft = self.progress * range(); },
+      snap: { snapTo: 1 / (n - 1), duration: { min: 0.25, max: 0.7 }, delay: 0.08, ease: 'power2.inOut' },
+    });
+    const toCard = (i) => {
+      const y = st.start + (st.end - st.start) * (i / (n - 1));
+      window.__lenis ? window.__lenis.scrollTo(y, { duration: 1.1 }) : scrollTo({ top: y, behavior: 'smooth' });
+    };
+    cards.forEach((c, i) => c.addEventListener('click', (e) => { if (i !== cur) { e.preventDefault(); toCard(i); } }));
+    addEventListener('resize', queue);
+    paint();
+    return;
+  }
   addEventListener('resize', () => { go(cur, true); queue(); });
   prev?.addEventListener('click', () => go(cur - 1));
   next?.addEventListener('click', () => go(cur + 1));
