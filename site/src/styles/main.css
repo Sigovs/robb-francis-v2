@@ -1163,3 +1163,24 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .act-chapters--line .ch__copy { padding-left: var(--gutter); }
 }
 .ch__dim { position: absolute; inset: 0; background: var(--c-ground); opacity: 0; pointer-events: none; }   /* v3: chapters → Jaguar, into the dark */
+
+/* ---------- v3 · every call to action is a button (Alex, 2026-09-29: "an older audience won't see an underline") ----------
+   One outline button everywhere, the hero's: a clear frame, larger type, generous target (52px tall), the arrow
+   stepping on hover. The underlined text-link is retired on this page. */
+.btn--line {
+  display: inline-flex; align-items: center; gap: var(--s-3); min-height: 3.25rem; padding: 0 var(--s-6);
+  background: transparent; border: 1px solid rgba(236, 238, 241, 0.7); color: var(--c-ink);
+  font-size: 0.875rem; letter-spacing: 0.08em;
+}
+.btn--line span { transition: transform var(--dur-2) var(--ease-out); }
+.btn--line:hover { background: rgba(236, 238, 241, 0.1); border-color: var(--c-ink); }
+.btn--line:hover span { transform: translateX(3px); }
+.btn--line:focus-visible { outline: 2px solid var(--c-oxblood-lit); outline-offset: 3px; }
+.cta { align-self: flex-start; }
+.ch__copy .cta { margin-top: var(--s-6); margin-bottom: auto; }
+.about__copy .cta { margin-top: var(--s-6); }
+.spec-card .cta { margin-top: var(--s-5); }
+@media (max-width: 767.98px) {
+  .ch__copy .cta, .about__copy .cta { margin-top: var(--s-4); }
+  .spec-card .cta { margin-top: var(--s-3); min-height: 2.75rem; }
+}

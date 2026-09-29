@@ -132,7 +132,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   // (hysteresis 0.8 → 0.62), so it never flickers at the threshold.
   const card = section.querySelector('[data-card]');
   const copyBlock = section.querySelector('.turn__copy');
-  const rows = card ? [card.querySelector('.spec-card__kicker'), card.querySelector('.spec-card__title'), ...card.querySelectorAll('dt, dd'), card.querySelector('.text-link')].filter(Boolean) : [];
+  const rows = card ? [card.querySelector('.spec-card__kicker'), card.querySelector('.spec-card__title'), ...card.querySelectorAll('dt, dd'), card.querySelector('.text-link, .btn')].filter(Boolean) : [];
   let cardOn = false;
   let cardAt = 0.8, cardOff = 0.62;                                          // set once the run's shares are known
   const FROM = () => (mobile ? 60 : Math.min(innerWidth * 0.1, 140));
