@@ -22,11 +22,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500&display=swap">
 
-  <link rel="preload" as="image" href="./img/hero-poster-1920.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
-  <link rel="preload" as="image" href="./img/hero-poster-m-720.avif" type="image/avif" media="(max-width: 767.98px)" fetchpriority="high">
+  <link rel="preload" as="image" href="./frames/hero/001.webp" fetchpriority="high">
 
-  <script defer src="./assets/v3-f0L4Fydj.js"></script>
-  <link rel="stylesheet" href="./assets/style-B8BiYnmm.css">
+  <script defer src="./assets/v3-DePoBReL.js"></script>
+  <link rel="stylesheet" href="./assets/style-Bi0es06d.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -100,17 +99,12 @@
     <!-- ============ ACT 1 · HERO · push-in (footage drives at the camera) ============ -->
     <section class="act act-hero" id="top" aria-labelledby="hero-title" data-act="1" data-hero-scrub>
       <div class="hero__media" aria-hidden="true">
+        <!-- v3 (Alex, 2026-09-29: "just scrub"): the film is drawn by the scroll on a canvas (motion/hero-scrub.js), no
+             video, no loop; frame 1 is the still underneath (and the whole picture without motion). -->
         <picture class="hero__poster">
-          <source media="(max-width: 767.98px)" type="image/avif" srcset="img/hero-poster-m-720.avif">
-          <source media="(max-width: 767.98px)" type="image/webp" srcset="img/hero-poster-m-720.webp">
-          <source media="(max-width: 767.98px)" srcset="img/hero-poster-m-720.jpg">
-          <source type="image/avif" srcset="img/hero-poster-1280.avif 1280w, img/hero-poster-1920.avif 1920w" sizes="100vw">
-          <source type="image/webp" srcset="img/hero-poster-1280.webp 1280w, img/hero-poster-1920.webp 1920w" sizes="100vw">
-          <img src="./img/hero-poster-1920.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
+          <img src="./frames/hero/001.webp" alt="" width="1600" height="900" fetchpriority="high" decoding="async">
         </picture>
-        <video class="hero__video" muted loop playsinline preload="none"
-          data-src-desktop="./video/hero-1080.mp4" data-src-desktop-av1="./video/hero-1080.av1.mp4"
-          data-src-mobile="./video/hero-720x900.mp4"></video>
+        <canvas class="hero__canvas" data-frames="./frames/hero/" data-count="113"></canvas>
       </div>
       <div class="scrim scrim--hero" aria-hidden="true"></div>
       <div class="scrub__dim" aria-hidden="true"></div>
@@ -126,21 +120,6 @@
         </div>
       </div>
 
-      <!-- v3 (Alex's hero mock, 2026-09-29): bottom centre, a thin film line with its dot and timecodes. It reads the
-           real film (main.js initFilmLine), and keeps the pause control beside it (WCAG 2.2.2). -->
-      <div class="hero__foot hero__foot--line">
-        <!-- The film loops without end, so it keeps a pause control (WCAG 2.2.2): an icon, not a second CTA. -->
-        <button class="hero__pause" type="button" data-video-toggle aria-pressed="false" hidden>
-          <span class="sr-only" data-video-label>Pause film</span>
-          <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
-          <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
-        </button>
-        <div class="film-line" aria-hidden="true">
-          <span class="film-line__t tnum" data-film-now>00:00</span>
-          <span class="film-line__track"><span class="film-line__fill" data-film-fill></span><span class="film-line__dot" data-film-dot></span></span>
-          <span class="film-line__t film-line__t--end tnum" data-film-end>00:00</span>
-        </div>
-      </div>
       <!-- v3 (Alex's hero mock, 2026-09-29): a small, quiet glass announcement card, lower right, clear of the car:
            a thumbnail of the California gallery, the place, one line, one link (the whole card is the link).
            It arrives on scroll (motion/hero-scrub.js). -->
@@ -168,17 +147,20 @@
            scrolls past it in normal flow, and each chapter's picture is revealed INSIDE the same frame as its text
            arrives. Photos: site/_masters/chapters → npm run chapters (Forge placeholders for now). -->
       <div class="ch__media" aria-hidden="true">
-        <div class="ch__fields">
-          <img class="ch__field" src="./img/chapters/01-field.jpg" alt="" width="48" height="27" loading="lazy" data-k="0">
-          <img class="ch__field" src="./img/chapters/02-field.jpg" alt="" width="48" height="27" loading="lazy" data-k="1">
-          <img class="ch__field" src="./img/chapters/03-field.jpg" alt="" width="48" height="27" loading="lazy" data-k="2">
+        <!-- v3 (Alex, 2026-09-29): the page's own ground instead of the photographs' blurred fields, with a gradient built
+             from a few irregular soft shapes (cool slate and steel from the site, one breath of the sampled oxblood).
+             They drift a little across the section (motion/chapters.js). -->
+        <div class="ch__fields ch__fields--shapes">
+          <span class="ch__shape ch__shape--a"></span>
+          <span class="ch__shape ch__shape--b"></span>
+          <span class="ch__shape ch__shape--c"></span>
+          <span class="ch__shape ch__shape--d"></span>
         </div>
         <figure class="ch__frame">
             <img class="ch__img" src="./img/chapters/01.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="0">
             <img class="ch__img" src="./img/chapters/02.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="1">
             <img class="ch__img" src="./img/chapters/03.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="2">
         </figure>
-        <div class="ch__rule"><span></span></div>
       </div>
       <div class="ch__texts">
         <div class="ch__copy" data-ch aria-labelledby="ch01-title">
@@ -254,7 +236,6 @@
       <div class="scrub__veil" aria-hidden="true"></div>
       <div class="scrub__copy turn__copy">
         <p class="label hero__kicker" data-scrub-in>The Collection</p>
-        <span class="turn__rule" data-scrub-in aria-hidden="true"></span>
         <h2 class="display display--hero turn__title" id="turn-title" data-scrub-in><span class="hl">Every Angle.</span> <span class="hl">Every Detail.</span></h2>
       </div>
       <!-- three numbered notes in their own band under the film — never on the bodywork. Each lights as the turn
