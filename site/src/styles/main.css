@@ -1202,17 +1202,12 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
    The inventory language already approved on LUX CARS, Prestige and Sports Car Rescue: even cards — picture with a
    badge, "year make model", a spec line, a hairline, status and action — in a row that slides sideways (arrows in
    the head, swipe or trackpad). Dark, in the house palette. The Ferrari above is the private collection. */
-/* a dirty radial ground (Alex, 2026-09-29): uneven smoke lifted behind the centre card, a cold bruise off the top
-   left and the faintest oxblood at the foot, all under a fixed-size grain so the falloff never bands */
+/* a dirty radial ground (Alex, 2026-09-29): smoke lifted behind the centre card, a cold bruise off the top left,
+   an oxblood breath at the foot, a vignette, and the last quarter landing exactly on the closing's ground. Baked into
+   one dithered image (public/img/inventory-ground.jpg) because dark CSS gradients band into visible steps. */
 .act-cards {
   position: relative; overflow: hidden;
-  background:
-    linear-gradient(180deg, transparent 78%, var(--c-deep) 100%),   /* hands the ground to the closing without a seam */
-    radial-gradient(58% 52% at 52% 62%, rgba(92, 100, 112, 0.30), transparent 72%),
-    radial-gradient(38% 44% at 14% 18%, rgba(70, 82, 98, 0.22), transparent 70%),
-    radial-gradient(46% 36% at 86% 96%, rgba(117, 18, 5, 0.16), transparent 72%),
-    radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(6, 8, 11, 0.55) 100%),
-    var(--c-ground);
+  background: var(--c-deep) url("/img/inventory-ground.jpg") center / 100% 100% no-repeat;
 }
 .act-cards::before {
   content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.16; mix-blend-mode: overlay;
