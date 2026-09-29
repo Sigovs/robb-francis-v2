@@ -159,7 +159,8 @@ function heroField() {
   document.body.append(probe);
   lines.forEach((l) => { probe.textContent = l.textContent.trim(); ratio = Math.max(ratio, probe.getBoundingClientRect().width / 100); });
   probe.remove();
-  const fs = Math.max(40, Math.min(128, Math.floor((field - travel) / (ratio || 5))));
+  const cap = hero.hasAttribute('data-hero-scrub') ? Math.round(W * 0.05) : 128;   // v3 (Alex's mock): a smaller, more refined title
+  const fs = Math.max(40, Math.min(cap, Math.floor((field - travel) / (ratio || 5))));
   root.style.setProperty('--hero-field', `${Math.round(field - travel)}px`);
   // v3: the block on the other side of the car owns the air RIGHT of it
   const carRight = (W - dw) * px + CAR.x1 * dw;
@@ -170,3 +171,26 @@ heroField();
 document.fonts?.ready.then(heroField);
 window.addEventListener('resize', heroField);
 
+
+/* ---------- v3 · the film line (Alex's hero mock): a thin line, a dot and timecodes that read the real film ---------- */
+function initFilmLine() {
+  const video = document.querySelector('.hero__video');
+  const line = document.querySelector('.film-line');
+  if (!video || !line) return;
+  const now = line.querySelector('[data-film-now]'), end = line.querySelector('[data-film-end]');
+  const fmt = (t) => `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  let raf = 0, lastSec = -1;
+  const tick = () => {
+    const d = video.duration || 0;
+    if (d) {
+      line.style.setProperty('--film-p', (video.currentTime / d).toFixed(4));
+      const sec = Math.floor(video.currentTime);
+      if (sec !== lastSec) { lastSec = sec; now.textContent = fmt(video.currentTime); }
+    }
+    raf = video.paused ? 0 : requestAnimationFrame(tick);
+  };
+  video.addEventListener('loadedmetadata', () => { end.textContent = fmt(Math.ceil(video.duration)); });
+  video.addEventListener('playing', () => { if (!raf) raf = requestAnimationFrame(tick); });
+  video.addEventListener('pause', () => { cancelAnimationFrame(raf); raf = 0; tick(); });
+}
+initFilmLine();
