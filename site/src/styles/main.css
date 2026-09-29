@@ -1185,94 +1185,54 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .spec-card .cta { margin-top: var(--s-3); min-height: 2.75rem; }
 }
 
-/* ---------- v3 · Now Showing (Alex, 2026-09-29: the salon wall was "terrible") ----------
-   One car at a time, full frame, like every other act on the page. The pictures are the client's own and uneven, so
-   they share one grade and one scrim; the copy sits bottom-left where the hero puts its message, and the choice of
-   car is three large, always-visible buttons (no hover-only content, U12). Nothing moves by itself. */
-.act-stage { position: relative; height: 100vh; height: 100svh; min-height: 40rem; overflow: hidden; background: var(--c-ground); isolation: isolate; }
-.stage__media { position: absolute; inset: 0; z-index: var(--z-plate); }
-.stage__img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%);
-  opacity: 0; filter: saturate(0.82) contrast(1.06) brightness(0.84);   /* one grade across three different phones and days */
+/* ---------- v3 · Available Now: inventory cards (Alex, 2026-09-29) ----------
+   The Ferrari above is the private collection; below it, the boutique: what is for sale. Plain cards on one grid,
+   one step up from the ground, every picture under the same grade and the same 4:3 crop so six different phones
+   read as one set. The action is a visible button on every card (U12). */
+.act-cards { background: var(--c-ground); padding: calc(var(--header-h) + var(--s-8)) 3.5vw var(--s-9); }
+.cards__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-7); margin-bottom: var(--s-8); }
+.cards__title { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.02; letter-spacing: -0.012em; color: var(--c-ink); margin: var(--s-4) 0 0; }
+.cards__side { display: flex; align-items: center; gap: var(--s-6); }
+.cards__lede { font-size: 1.0625rem; line-height: 1.5; color: var(--c-ink-2); max-width: 26ch; margin: 0; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.25rem, 2vw, 2rem); }
+.icard { display: flex; flex-direction: column; background: var(--c-ground-2); border: 1px solid rgba(236, 238, 241, 0.1); }
+.icard__media { display: block; overflow: hidden; aspect-ratio: 4 / 3; }
+.icard__media img {
+  display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%);
+  filter: saturate(0.85) contrast(1.05) brightness(0.9);
 }
-.stage__img.is-on { opacity: 1; }
-.stage__scrim {
-  position: absolute; inset: 0; z-index: var(--z-scrim); pointer-events: none;
-  background:
-    linear-gradient(to right, rgba(18, 22, 29, 0.88) 0%, rgba(18, 22, 29, 0.55) 30%, rgba(18, 22, 29, 0) 58%),
-    linear-gradient(to top, rgba(18, 22, 29, 0.92) 0%, rgba(18, 22, 29, 0.35) 34%, rgba(18, 22, 29, 0) 55%),
-    radial-gradient(48% 62% at 100% 100%, rgba(18, 22, 29, 0.9) 0%, rgba(18, 22, 29, 0.72) 55%, rgba(18, 22, 29, 0) 100%),   /* under the choice */
-    linear-gradient(to bottom, rgba(18, 22, 29, 0.6) 0%, rgba(18, 22, 29, 0) 20%);
-}
-.stage__inner {
-  position: relative; z-index: var(--z-copy); height: 100%;
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto 1fr auto auto;
-  column-gap: var(--s-8); padding: calc(var(--header-h) + var(--s-6)) 3.5vw clamp(2.5rem, 7vh, 4.5rem);
-}
-.stage__kicker { grid-column: 1 / -1; display: flex; gap: var(--s-4); align-items: baseline; color: var(--c-ink-2); }
-.stage__count { color: var(--c-ink-3); letter-spacing: 0.1em; }
-.stage__copy { grid-column: 1; grid-row: 3; align-self: end; display: grid; }
-.stage__car { grid-area: 1 / 1; }
-.stage__car[hidden] { display: block; visibility: hidden; }   /* kept in the grid cell so the block never jumps */
-.stage__year { font-size: var(--fs-label); letter-spacing: 0.12em; color: var(--c-ink-2); margin: 0 0 var(--s-3); }
-.stage__name {
-  font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(2.75rem, 5.2vw, 5.25rem);
-  line-height: 1; letter-spacing: -0.015em; color: var(--c-ink); margin: 0; max-width: 12ch; text-wrap: balance;
-}
-.stage__note { font-size: 1.0625rem; line-height: 1.5; color: var(--c-ink-2); margin: var(--s-4) 0 0; }
-.stage__actions { grid-column: 1; grid-row: 4; display: flex; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-6); }
-.stage__pick { grid-column: 2; grid-row: 3 / span 2; align-self: end; display: grid; width: clamp(17rem, 22vw, 22rem); }
-.stage__btn {
-  display: grid; gap: var(--s-1); text-align: left; padding: var(--s-4) 0; min-height: 3.5rem;
-  background: none; border: 0; border-top: 1px solid var(--c-hair); color: var(--c-ink-2); cursor: pointer; font: inherit;
-  position: relative;
-}
-.stage__btn:last-child { border-bottom: 1px solid var(--c-hair); }
-.stage__btn::before {   /* the chosen car's line lights up from the left */
-  content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 100%; background: var(--c-ink);
-  transform: scaleX(0); transform-origin: 0 50%;
-}
-.stage__btn.is-on { color: var(--c-ink); }
-.stage__btn.is-on::before { transform: scaleX(1); }
-.stage__btn-year { font-size: var(--fs-label); letter-spacing: 0.12em; color: var(--c-ink-3); }
-.stage__btn.is-on .stage__btn-year { color: var(--c-ink-2); }
-.stage__btn-name { font-family: var(--font-display); font-weight: var(--display-wght); font-size: 1.375rem; line-height: 1.15; }
-.stage__btn:focus-visible { outline: 2px solid var(--c-oxblood-lit); outline-offset: 4px; }
-@media (hover: hover) and (pointer: fine) { .stage__btn:hover { color: var(--c-ink); } }
+.icard__body { display: flex; flex-direction: column; flex: 1; padding: var(--s-5) var(--s-5) var(--s-6); }
+.icard__year { font-size: var(--fs-label); letter-spacing: 0.12em; color: var(--c-ink-3); margin: 0; }
+.icard__name { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(1.5rem, 1.8vw, 1.75rem); line-height: 1.12; color: var(--c-ink); margin: var(--s-2) 0 0; }
+.icard__note { font-size: 1rem; line-height: 1.5; color: var(--c-ink-2); margin: var(--s-3) 0 var(--s-5); }
+.icard__btn { margin-top: auto; align-self: flex-start; }
+.icard__btn:focus-visible { outline: 2px solid var(--c-oxblood-lit); outline-offset: 4px; }
 @media (prefers-reduced-motion: no-preference) {
-  .stage__btn, .stage__btn-year { transition: color 0.4s var(--ease-out); }
-  .stage__btn::before { transition: transform 0.9s var(--ease-out); }
-  /* arrival: the copy and the choice come up once the act has appeared */
-  .act-stage:not(.is-in) .stage__inner > * { opacity: 0; transform: translateY(24px); }
-  .act-stage .stage__inner > * { transition: opacity 0.9s var(--ease-out), transform 1.1s var(--ease-out); }
-  .act-stage.is-in .stage__copy { transition-delay: 0.15s; }
-  .act-stage.is-in .stage__actions { transition-delay: 0.3s; }
-  .act-stage.is-in .stage__pick { transition-delay: 0.4s; }
+  .icard { transition: border-color 0.45s var(--ease-out); }
+  .icard__media img { transition: transform 1.1s var(--ease-out), filter 0.6s var(--ease-out); }
+  .act-cards:not(.is-in) .cards__head, .act-cards:not(.is-in) .icard { opacity: 0; transform: translateY(28px); }
+  .act-cards .cards__head, .act-cards .icard { transition: opacity 0.9s var(--ease-out), transform 1.1s var(--ease-out), border-color 0.45s var(--ease-out); }
+  .act-cards.is-in .icard:nth-child(1) { transition-delay: 0.1s; }
+  .act-cards.is-in .icard:nth-child(2) { transition-delay: 0.18s; }
+  .act-cards.is-in .icard:nth-child(3) { transition-delay: 0.26s; }
+  .act-cards.is-in .icard:nth-child(4) { transition-delay: 0.34s; }
+  .act-cards.is-in .icard:nth-child(5) { transition-delay: 0.42s; }
+  .act-cards.is-in .icard:nth-child(6) { transition-delay: 0.5s; }
 }
-
+@media (hover: hover) and (pointer: fine) {
+  .icard:hover { border-color: rgba(236, 238, 241, 0.32); }
+  .icard:hover .icard__media img { transform: scale(1.04); filter: saturate(0.95) contrast(1.05) brightness(1); }
+}
 @media (max-width: 1023.98px) {
-  .stage__pick { width: clamp(15rem, 30vw, 18rem); }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cards__head { flex-direction: column; align-items: flex-start; gap: var(--s-5); }
 }
-/* phone: the picture keeps the top of the screen whole (a square photo cannot be cut to a portrait without losing
-   the car); the name, the actions and the choice sit on the ground beneath it */
 @media (max-width: 767.98px) {
-  .act-stage { height: auto; min-height: 100svh; }
-  .stage__media { inset: var(--header-h) 0 auto 0; height: auto; aspect-ratio: 4 / 3.4; }
-  .stage__scrim { inset: var(--header-h) 0 auto 0; aspect-ratio: 4 / 3.4; height: auto;
-    background: linear-gradient(to top, var(--c-ground) 0%, rgba(18, 22, 29, 0) 38%); }
-  .stage__inner {
-    grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto;
-    padding: calc(var(--header-h) + var(--s-4)) var(--gutter) var(--s-8);
-  }
-  .stage__kicker { margin: calc(100vw * 3.4 / 4 - var(--s-9) - 2.5rem) 0 var(--s-4); }   /* on the picture's fade, just above the name */
-  .stage__copy, .stage__actions, .stage__pick { grid-column: 1; grid-row: auto; }
-  .stage__name { font-size: 2.5rem; }
-  .stage__note { font-size: 1rem; }
-  .stage__actions { margin-top: var(--s-5); }
-  .stage__actions .btn { flex: 1 1 auto; }
-  .stage__pick { width: auto; margin-top: var(--s-7); }
-  .stage__btn { grid-template-columns: 3.5rem 1fr; align-items: baseline; padding: var(--s-3) 0; min-height: 3rem; }
-  .stage__btn-name { font-size: 1.125rem; }
+  .act-cards { padding: calc(var(--header-h) + var(--s-6)) var(--gutter) var(--s-8); }
+  .cards__side { flex-direction: column; align-items: flex-start; gap: var(--s-4); }
+  .cards { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+  .cards__head { margin-bottom: var(--s-6); }
+  .icard__name { font-size: 1.5rem; }
 }
 
 /* v3 hero intro in steps: ground-coloured columns over the film, lifted away one after another (hero-scrub.js) */
