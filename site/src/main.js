@@ -143,7 +143,7 @@ function heroField() {
   const root = document.documentElement;
   if (!hero) return;
   const W = window.innerWidth, H = hero.clientHeight || window.innerHeight;
-  if (W < 768 || W / H < 1) { root.style.removeProperty('--hero-field'); root.style.removeProperty('--hero-fs'); return; }
+  if (W < 768 || W / H < 1) { ['--hero-field', '--hero-fs', '--hero-side'].forEach((k) => root.style.removeProperty(k)); return; }
   const media = hero.querySelector('.hero__video') || hero.querySelector('.hero__poster img');
   const [px, py] = (getComputedStyle(media).objectPosition || '50% 50%').split(' ').map((v) => parseFloat(v) / 100);
   const s = Math.max(W / 1920, H / 1080), dw = 1920 * s;
@@ -161,6 +161,9 @@ function heroField() {
   probe.remove();
   const fs = Math.max(40, Math.min(128, Math.floor((field - travel) / (ratio || 5))));
   root.style.setProperty('--hero-field', `${Math.round(field - travel)}px`);
+  // v3: the block on the other side of the car owns the air RIGHT of it
+  const carRight = (W - dw) * px + CAR.x1 * dw;
+  root.style.setProperty('--hero-side', `${Math.round(Math.max(200, W - carRight - gap - inset - travel))}px`);
   root.style.setProperty('--hero-fs', `${fs}px`);
 }
 heroField();

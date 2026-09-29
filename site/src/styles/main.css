@@ -933,3 +933,34 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .act-hero.is-scrub { height: 100svh; }
   .act-hero.is-scrub .hero__media { aspect-ratio: auto; flex: 1 1 auto; min-height: 0; }
 }
+
+/* v3 · the second hero block, on the other side of the car (Alex, 2026-09-29). Subordinate to the title: About-rank
+   display, one short paragraph, a text link. It owns the air RIGHT of the car: main.js heroField measures it
+   (--hero-side). A right-hand falloff joins the scrim so it reads over the sunlit verge. */
+.hero__side {
+  position: absolute; z-index: var(--z-copy); right: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2);
+  transform: translateY(-50%); width: var(--hero-side, 22rem); max-width: 26rem;
+}
+.hero__side .hero__kicker { margin-bottom: 0; }
+.hero__side-title {
+  font-family: var(--font-display); font-weight: var(--display-wght); letter-spacing: -0.01em;
+  font-size: clamp(2rem, 2.9vw, 3.25rem); line-height: 1.04; color: var(--c-ink); margin: var(--s-4) 0 var(--s-4);
+  text-wrap: balance;
+}
+.hero__side-text { font-size: var(--fs-body); line-height: 1.6; color: var(--c-ink-2); max-width: 32ch; text-wrap: pretty; }
+.act-hero[data-hero-scrub] .scrim--hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(270deg, rgba(var(--c-scrim), 0.72) 0, rgba(var(--c-scrim), 0.5) 22%, rgba(var(--c-scrim), 0.14) 34%, rgba(var(--c-scrim), 0) 42%);
+}
+@media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+  /* tablet portrait: the title holds the bottom, so this block takes the trees above the car */
+  .hero__side { top: calc(var(--header-h) + var(--s-6)); left: var(--gutter); right: auto; width: auto; max-width: 30rem; transform: none; }
+  .act-hero[data-hero-scrub] .scrim--hero::after { background: linear-gradient(180deg, rgba(var(--c-scrim), 0.7) 0, rgba(var(--c-scrim), 0) 40%); }
+}
+@media (max-width: 767.98px) {
+  /* phone: no air beside the car — the block takes the title's place on the ground above the film, in turn
+     (hero-scrub.js sets its top to the title's); static, it follows the title in flow */
+  .hero__side { position: relative; order: 1; top: auto; left: auto; right: auto; width: auto; max-width: none; transform: none; padding: 0 var(--gutter) var(--s-6); }
+  .act-hero.is-scrub .hero__side { position: absolute; left: 0; right: 0; padding: 0 var(--gutter); }
+  .hero__side-title { font-size: 2rem; }
+}

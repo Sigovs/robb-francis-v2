@@ -44,6 +44,31 @@ export function heroScrub(section, { mobile = false } = {}) {
     intro.to(parts, { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 1.3, stagger: 0.07, ease: 'expo.out' }, Math.max(0.45, intro.time()));
   });
 
+  // ---- the second block, on the other side of the car: once the film is under way it arrives from the right by
+  // itself and completes (not scrubbed, like the spec card), and goes back only after a clear scroll back ----
+  const side = section.querySelector('[data-hero-side]');
+  const sideParts = side ? [...side.children] : [];
+  let sideOn = false;
+  if (side) gsap.set(sideParts, { autoAlpha: 0, x: ENTER() * 1.5, filter: 'blur(12px)' });
+  const placeSide = () => { if (mobile && side && inner) side.style.top = `${inner.parentElement.offsetTop + inner.offsetTop}px`; };   // phone: exactly where the title stands
+  placeSide();
+  const toggleSide = (p, at, off) => {
+    if (!side) return;
+    const on = sideOn ? p > off : p >= at;
+    if (on === sideOn) return;
+    sideOn = on;
+    gsap.killTweensOf(sideParts);
+    // phone: no air beside the car, so the two take turns in the title's place (the old belt: out left, in from right)
+    if (mobile) {
+      gsap.killTweensOf(parts);
+      gsap.to(parts, on
+        ? { autoAlpha: 0, x: -24, filter: 'blur(12px)', duration: 0.35, stagger: 0.03, ease: 'power2.in' }
+        : { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 0.9, stagger: 0.05, delay: 0.3, ease: 'expo.out' });
+    }
+    if (on) gsap.to(sideParts, { autoAlpha: 1, x: 0, filter: 'blur(0px)', duration: 1.2, stagger: 0.07, delay: mobile ? 0.3 : 0, ease: 'expo.out' });
+    else gsap.to(sideParts, { autoAlpha: 0, x: ENTER() * 1.5, filter: 'blur(12px)', duration: 0.5, stagger: { each: 0.04, from: 'end' }, ease: 'power2.in' });
+  };
+
   // ---- the run: film → a short hold on the last frame → into the dark; the next section appears in place ----
   const run = mobile ? 160 : 230, hold = 40, dark = 70;
   const total = run + hold + dark;
@@ -59,8 +84,8 @@ export function heroScrub(section, { mobile = false } = {}) {
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {
-      trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: (self) => fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))),
+      trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: placeSide,
+      onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleSide(self.progress, f * 0.3, f * 0.18); },
       onLeave: () => next && gsap.to(next, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }),
       onEnterBack: () => next && gsap.to(next, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
     },
@@ -68,14 +93,16 @@ export function heroScrub(section, { mobile = false } = {}) {
   tl.to({}, { duration: 1 }, 0);
   if (inner) tl.fromTo(inner, { y: 0 }, { y: () => (mobile ? 0 : -innerHeight * 0.04), duration: f }, 0)     // the message barely drifts while the car comes on (not on a phone: it sits under the header)
     .to(inner, { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh);
+  if (side) tl.fromTo(side, { autoAlpha: 1 }, { autoAlpha: 0, filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in', immediateRender: false }, fh);   // leaves with the title, into the dark (no y: the CSS centring owns transform)
   if (dim) tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh);   // only darkens to the ground, no scale (Alex)
 
   return () => {
     alive = false;
     intro.progress(1).kill();
     tl.scrollTrigger?.kill(); tl.kill(); ro.disconnect();
+    if (side) side.style.top = '';
     if (next) { next.style.marginTop = ''; next.style.zIndex = ''; gsap.set(next, { clearProps: 'opacity,visibility' }); }
-    gsap.set([...parts, inner, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
+    gsap.set([...parts, ...sideParts, inner, side, dim].filter(Boolean), { clearProps: 'opacity,visibility,transform,filter' });
     section.classList.remove('is-scrub', 'is-live');
     root.classList.remove('intro-wait');
   };
