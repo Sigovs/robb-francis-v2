@@ -121,15 +121,13 @@ function initHeaderCollapse() {
     const past = y > run.offsetHeight * 0.8;
     const drawerOpen = document.querySelector('[data-drawer]')?.hidden === false;
     const focused = header.contains(document.activeElement) && document.activeElement !== document.body;
-    // past the hero it leaves entirely on the way down and comes back on a solid band on the way up (Alex,
-    // 2026-09-29: nothing may slide under the nav or show through it)
-    header.classList.toggle('is-hidden', past && dy > 0 && !drawerOpen && !focused);
+    // past the hero it stays put on a solid band (Alex, 2026-09-29: nothing may slide under the nav or show
+    // through it, and the nav itself never moves)
     header.classList.toggle('is-solid', past);
     last = y;
   };
   window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-  header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
-}
+  }
 initHeaderCollapse();
 
 // Teardown hook for a future router (G1)

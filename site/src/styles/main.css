@@ -555,6 +555,7 @@ a.util__item:hover { color: var(--c-ink); }
 /* ---------- ACT 8 · CLOSING (Forge d11–d18) ---------- */
 .act-closing { position: relative; height: 100vh; height: 100svh; min-height: 46rem; overflow: hidden; background: var(--c-deep); }
 .closing__plate { position: absolute; inset: 0; z-index: var(--z-plate); }
+.closing__plate::after { content: ""; position: absolute; inset: auto 0 0 0; height: 28%; background: linear-gradient(180deg, rgba(13,16,21,0) 0, var(--c-deep) 100%); }   /* the floor runs into the footer */
 .closing__facade {
   position: absolute; left: 50%; top: 22%; width: 118vw; transform: translateX(-50%);
   opacity: 0.55; filter: saturate(0.6);
@@ -562,7 +563,11 @@ a.util__item:hover { color: var(--c-ink); }
   mask-image: linear-gradient(180deg, transparent 0, #000 22%, #000 58%, transparent 86%);
 }
 .closing__facade img { width: 100%; height: auto; }
-.closing__cars { position: absolute; left: 0; right: 0; bottom: -20vh; mix-blend-mode: lighten; }
+.closing__cars {
+  position: absolute; left: 0; right: 0; bottom: -20vh; mix-blend-mode: lighten;
+  /* the render's black is a touch lighter than the facade's dark: fade its top edge so no seam crosses the plate */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 30%); mask-image: linear-gradient(180deg, transparent 0, #000 30%);
+}
 .closing__cars img { width: 100%; height: auto; }
 .closing__copy {
   position: absolute; z-index: var(--z-copy); left: 0; right: 0; top: calc(var(--header-h) + var(--s-7));  /* clear of the full header (critique) */
@@ -574,7 +579,7 @@ a.util__item:hover { color: var(--c-ink); }
 .closing__phone a { display: inline-flex; min-height: var(--btn-h-sm); align-items: center; }
 
 /* ---------- FOOTER ---------- */
-.site-footer { background: var(--c-deep); padding: var(--s-9) var(--gutter) var(--s-6); border-top: 1px solid var(--c-hair); }
+.site-footer { background: var(--c-deep); padding: var(--s-9) max(var(--gutter), (100% - 75rem) / 2) var(--s-6); }   /* on the page's 75rem column */
 .footer__grid {
   display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: var(--s-7) var(--s-6);
   padding-bottom: var(--s-9);
@@ -605,13 +610,10 @@ a.util__item:hover { color: var(--c-ink); }
   transition: opacity var(--dur-2) var(--ease-in), transform var(--dur-2) var(--ease-in), visibility 0s linear var(--dur-2);
 }
 .site-header.is-collapsed::before { transform: scaleY(0.55); }
-/* Past the hero (Alex, 2026-09-29): the header leaves whole on the way down and returns on an opaque band of the
-   ground on the way up, closed by a hairline — nothing slides under the nav or shows through it. */
-.site-header { transition: transform var(--dur-3) var(--ease-out); }
-.site-header.is-hidden { transform: translateY(-100%); transition-timing-function: var(--ease-in); }
+/* Past the hero (Alex, 2026-09-29): the header stays where it is on an opaque band of the ground, no rule under
+   it — nothing slides under the nav or shows through it, and the nav never moves. */
 .site-header.is-solid::before {
   inset: 0; height: auto; background: var(--c-ground);
-  border-bottom: 1px solid var(--c-hair);
 }
 
 /* Tablet band, 768–1180 (critique): seven nav items no longer fit one row beside the utility bar — at 1024 they
@@ -1197,7 +1199,22 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
    The inventory language already approved on LUX CARS, Prestige and Sports Car Rescue: even cards — picture with a
    badge, "year make model", a spec line, a hairline, status and action — in a row that slides sideways (arrows in
    the head, swipe or trackpad). Dark, in the house palette. The Ferrari above is the private collection. */
-.act-cards { background: var(--c-ground); overflow: hidden; }
+/* a dirty radial ground (Alex, 2026-09-29): uneven smoke lifted behind the centre card, a cold bruise off the top
+   left and the faintest oxblood at the foot, all under a fixed-size grain so the falloff never bands */
+.act-cards {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(58% 52% at 52% 62%, rgba(92, 100, 112, 0.30), transparent 72%),
+    radial-gradient(38% 44% at 14% 18%, rgba(70, 82, 98, 0.22), transparent 70%),
+    radial-gradient(46% 36% at 86% 96%, rgba(117, 18, 5, 0.16), transparent 72%),
+    radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(6, 8, 11, 0.55) 100%),
+    var(--c-ground);
+}
+.act-cards::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.16; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.2 -0.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.act-cards > * { position: relative; z-index: 1; }
 .cards__wrap { width: min(75rem, 100% - 2 * var(--s-8)); margin: 0 auto; padding: calc(var(--header-h) + var(--s-7)) 0 0; }
 .cards__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-6); margin-bottom: var(--s-7); }
 .cards__kicker { color: var(--c-ink-2); }
@@ -1230,12 +1247,12 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   will-change: transform, opacity;
 }
 .cards__track.is-driven { scroll-snap-type: none; overflow-x: hidden; }   /* the page scroll drives it (main.js) */
-/* pinned, the whole section is one screen: the header has left on the way down, so no room is kept for it, and
+/* pinned, the whole section is one screen: the header band is kept clear, and
    the card is sized by the viewport height as well as its width */
 .act-cards.is-driven { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-.act-cards.is-driven .cards__wrap { padding-top: var(--s-6); }
+.act-cards.is-driven .cards__wrap { padding-top: calc(var(--header-h) + var(--s-5)); }
 .act-cards.is-driven .cards__head { margin-bottom: var(--s-4); }
-.cards__track.is-driven { --card: min(clamp(19rem, 30vw, 27rem), (100vh - 26rem) * 1.2); padding-bottom: var(--s-6); }
+.cards__track.is-driven { --card: min(clamp(19rem, 30vw, 27rem), (100vh - 34rem) * 1.25); padding-bottom: var(--s-6); }
 .vcard.is-center { border-color: rgba(236, 238, 241, 0.22); }
 .vcard:not(.is-center) { cursor: pointer; }
 .vcard:not(.is-center) .vcard__btn { pointer-events: none; }   /* a side card centres itself first */
