@@ -196,6 +196,22 @@ function initFeatured() {
     onEnter: () => { gsap.to(sec, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }); rise(); },
     onLeaveBack: () => gsap.to(sec, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
   });
+  // the boutique rail: the act holds and the scroll carries the frames from right to left. Inside each frame the
+  // picture slides the other way a little (parallax), so the move reads as depth rather than a conveyor. Desktop only; below 1024 the rail is swiped (CSS scroll-snap).
+  const track = sec.querySelector('[data-rail-track]');
+  if (track && matchMedia('(min-width: 1024px)').matches) {
+    const dist = () => Math.max(0, track.scrollWidth - track.parentElement.clientWidth);
+    const imgs = track.querySelectorAll('.icard__media img');
+    gsap.set(imgs, { scale: 1.14 });
+    const tl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: { trigger: sec, start: 'top top', end: () => `+=${dist() * 1.3 + innerHeight * 0.35}`, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true },
+    });
+    tl.to({}, { duration: 0.12 })   // a beat to read the first frame before the rail moves
+      .to(track, { x: () => -dist(), duration: 1 }, 0.12)
+      .fromTo(imgs, { xPercent: 5 }, { xPercent: -5, duration: 1 }, 0.12)
+      .to({}, { duration: 0.15 });
+  }
   ScrollTrigger.refresh();
 }
 initFeatured();
