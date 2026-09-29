@@ -934,20 +934,12 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .act-hero.is-scrub .hero__media { aspect-ratio: auto; flex: 1 1 auto; min-height: 0; }
 }
 
-/* v3 · the second hero block, on the other side of the car (Alex, 2026-09-29). Subordinate to the title: About-rank
-   display, one short paragraph, a text link. It owns the air RIGHT of the car: main.js heroField measures it
-   (--hero-side). A right-hand falloff joins the scrim so it reads over the sunlit verge. */
+/* v3 · the block on the other side of the car (Alex, 2026-09-29) — now the location card below. It owns the air
+   RIGHT of the car: main.js heroField measures it (--hero-side). A right-hand falloff joins the scrim. */
 .hero__side {
   position: absolute; z-index: var(--z-copy); right: 3.5vw; top: calc(var(--header-h) + (100svh - var(--header-h)) / 2);
   transform: translateY(-50%); width: var(--hero-side, 22rem); max-width: 26rem;
 }
-.hero__side .hero__kicker { margin-bottom: 0; }
-.hero__side-title {
-  font-family: var(--font-display); font-weight: var(--display-wght); letter-spacing: -0.01em;
-  font-size: clamp(2rem, 2.9vw, 3.25rem); line-height: 1.04; color: var(--c-ink); margin: var(--s-4) 0 var(--s-4);
-  text-wrap: balance;
-}
-.hero__side-text { font-size: var(--fs-body); line-height: 1.6; color: var(--c-ink-2); max-width: 32ch; text-wrap: pretty; }
 .act-hero[data-hero-scrub] .scrim--hero::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(270deg, rgba(var(--c-scrim), 0.72) 0, rgba(var(--c-scrim), 0.5) 22%, rgba(var(--c-scrim), 0.14) 34%, rgba(var(--c-scrim), 0) 42%);
@@ -962,5 +954,87 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
      (hero-scrub.js sets its top to the title's); static, it follows the title in flow */
   .hero__side { position: relative; order: 1; top: auto; left: auto; right: auto; width: auto; max-width: none; transform: none; padding: 0 var(--gutter) var(--s-6); }
   .act-hero.is-scrub .hero__side { position: absolute; left: 0; right: 0; padding: 0 var(--gutter); }
-  .hero__side-title { font-size: 2rem; }
+  }
+
+/* ---------- v3 · the location card (Alex, 2026-09-29: "a card with effects, California in Montecito, a map") ----------
+   The spec card's language (glass on the ground, hairline, square corners), so it belongs to the page. The map is
+   the real lower-48 outline as a dot matrix; the arc runs Peapack → Montecito. Everything below animates only once
+   the card has arrived (.is-on, hero-scrub.js) and only with motion allowed; static, the card is its final state. */
+.loc-card { perspective: 900px; }
+.loc-card__inner {
+  position: relative; overflow: hidden; padding: var(--s-5) var(--s-5) var(--s-4);
+  background: rgba(var(--c-scrim), 0.58); border: 1px solid rgba(236, 238, 241, 0.14);
+  backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  transform-style: preserve-3d; will-change: transform;
+}
+.loc-card__kicker { color: var(--c-ink-2); display: flex; align-items: center; gap: var(--s-2); }
+.loc-card__kicker::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c-oxblood-lit); box-shadow: 0 0 0 3px rgba(200, 65, 44, 0.22); }
+.loc-card__title {
+  font-family: var(--font-display); font-weight: var(--display-wght); letter-spacing: -0.01em;
+  font-size: clamp(1.75rem, 2.2vw, 2.25rem); line-height: 1.05; color: var(--c-ink); margin: var(--s-3) 0 var(--s-4);
+}
+.loc-map { position: relative; margin: 0 calc(var(--s-2) * -1); }
+.loc-map__svg { display: block; width: 100%; height: auto; overflow: visible; }
+.loc-map__dots path { fill: none; stroke: rgba(236, 238, 241, 0.32); stroke-width: 2.1; stroke-linecap: round; }
+.loc-map__arc { fill: none; stroke: rgba(236, 238, 241, 0.55); stroke-width: 0.9; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.loc-map__comet { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 0.06 1.2; stroke-dashoffset: 2; filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.9)); opacity: 0; }
+.loc-map__pin { transform-box: fill-box; transform-origin: center; }
+.loc-map__core { fill: var(--c-ink); }
+.loc-map__pin--w .loc-map__core { fill: var(--c-oxblood-lit); }
+.loc-map__ring { fill: none; stroke: var(--c-oxblood-lit); stroke-width: 0.8; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.loc-map__label {
+  position: absolute; transform: translate(-50%, calc(-100% - 7px)); white-space: nowrap; pointer-events: none;
+  font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink);
+}
+.loc-map__label--w { transform: translate(-12%, 9px); }
+.loc-card__plate { display: grid; grid-template-columns: 3.5rem 1fr; margin: var(--s-4) 0 0; }
+.loc-card__plate dt, .loc-card__plate dd { margin: 0; padding: var(--s-2) 0; border-top: 1px solid rgba(236, 238, 241, 0.12); }
+.loc-card__plate dt { font-size: var(--fs-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink-3); padding-top: 0.55rem; }
+.loc-card__plate dd { font-size: 0.9375rem; color: var(--c-ink); line-height: 1.35; }
+.loc-card__geo { display: block; font-size: 0.75rem; color: var(--c-ink-3); letter-spacing: 0.02em; margin-top: 2px; }
+.loc-card .text-link { margin-top: var(--s-3); }
+.loc-card__sheen {
+  position: absolute; inset: -20% auto -20% 0; width: 45%; pointer-events: none; opacity: 0;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.09) 45%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 255, 255, 0.09) 55%, transparent);
+  transform: translateX(-120%) skewX(-12deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* waiting to arrive: the map empty, the route undrawn */
+  .act-hero.is-scrub .loc-card:not(.is-on) .loc-map__dots path { opacity: 0; }
+  .act-hero.is-scrub .loc-card:not(.is-on) .loc-map__arc { stroke-dashoffset: 1; }
+  .act-hero.is-scrub .loc-card:not(.is-on) .loc-map__pin, .act-hero.is-scrub .loc-card:not(.is-on) .loc-map__label { opacity: 0; }
+
+  /* 1 · the continent fills in from the east coast to the west, column by column */
+  .loc-card.is-on .loc-map__dots path { animation: loc-dot 0.7s var(--ease-out) both; animation-delay: calc(0.25s + (56 - var(--c)) * 16ms); }
+  /* 2 · Peapack lights, 3 · the route draws west, 4 · Montecito lands and keeps a slow pulse */
+  .loc-card.is-on .loc-map__pin--e { animation: loc-pop 0.6s var(--ease-out) 0.35s both; }
+  .loc-card.is-on .loc-map__label--e { animation: loc-fade 0.6s var(--ease-out) 0.5s both; }
+  .loc-card.is-on .loc-map__arc { animation: loc-draw 1.5s cubic-bezier(0.65, 0, 0.35, 1) 0.7s both; }
+  .loc-card.is-on .loc-map__pin--w { animation: loc-pop 0.7s var(--ease-out) 2.05s both; }
+  .loc-card.is-on .loc-map__label--w { animation: loc-fade 0.7s var(--ease-out) 2.2s both; }
+  .loc-card.is-on .loc-map__ring { animation: loc-ring 2.6s var(--ease-out) 2.3s infinite; }
+  .loc-card.is-on .loc-map__ring--2 { animation-delay: 3.6s; }
+  /* 5 · a light keeps travelling the route, east to west */
+  .loc-card.is-on .loc-map__comet { animation: loc-comet 3.2s cubic-bezier(0.45, 0, 0.3, 1) 2.4s infinite; }
+  /* the glass catches the light once as it lands */
+  .loc-card.is-on .loc-card__sheen { animation: loc-sheen 1.6s var(--ease-out) 0.3s both; }
+}
+@keyframes loc-dot { from { opacity: 0; } 40% { opacity: 1; stroke: rgba(236, 238, 241, 0.7); } to { opacity: 1; } }
+@keyframes loc-pop { from { opacity: 0; transform: scale(0); } 60% { transform: scale(1.35); } to { opacity: 1; transform: scale(1); } }
+@keyframes loc-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes loc-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes loc-ring { from { opacity: 0.8; transform: scale(1); } to { opacity: 0; transform: scale(4.2); } }
+@keyframes loc-comet { 0% { stroke-dashoffset: 0.06; opacity: 0; } 12% { opacity: 1; } 85% { opacity: 1; } 100% { stroke-dashoffset: -1; opacity: 0; } }
+@keyframes loc-sheen { 0% { opacity: 1; transform: translateX(-120%) skewX(-12deg); } 100% { opacity: 1; transform: translateX(330%) skewX(-12deg); } }
+
+@media (max-width: 767.98px) {
+  .loc-card__inner { padding: var(--s-4); }
+  .loc-card__title { font-size: 1.5rem; margin: var(--s-2) 0 var(--s-2); }
+  .loc-card__plate { display: none; }   /* the map's own labels carry both places on a phone */
+  .loc-map { max-width: 20rem; }
+}
+@media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+  .loc-card__plate { display: none; }   /* tablet portrait: kept short so it clears the car's roof */
+  .loc-card__inner { max-width: 22rem; }
 }
