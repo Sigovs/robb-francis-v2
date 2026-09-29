@@ -169,3 +169,34 @@ function heroField() {
 heroField();
 document.fonts?.ready.then(heroField);
 window.addEventListener('resize', heroField);
+
+
+/* ---------- v3 · California card: step inside (Alex, 2026-09-29: "more interactive") ----------
+   One state, three ways in: hover (fine pointer, with a short intent delay so a passing pointer does not fire it),
+   tap, and Enter/Space on the always-visible button. Inside, the room follows the pointer a few percent — looking
+   around. Without motion the same toggle simply swaps the picture (the CSS transitions live under no-preference). */
+function initCaCard() {
+  const card = document.querySelector('.ca-card');
+  const btn = card?.querySelector('[data-ca-door]');
+  const media = card?.querySelector('[data-ca-media]');
+  if (!btn || !media) return;
+  const label = btn.querySelector('[data-ca-label]');
+  let pinned = false, timer;
+  const set = (inside) => {
+    card.classList.toggle('is-in', inside);
+    btn.setAttribute('aria-pressed', String(inside));
+    label.textContent = inside ? 'Step outside' : 'Step inside';
+    if (!inside) { media.style.removeProperty('--px'); media.style.removeProperty('--py'); }
+  };
+  btn.addEventListener('click', () => { pinned = !card.classList.contains('is-in'); set(pinned); });
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  media.addEventListener('pointerenter', () => { if (!fine.matches) return; clearTimeout(timer); timer = setTimeout(() => set(true), 140); });
+  media.addEventListener('pointerleave', () => { clearTimeout(timer); if (fine.matches && !pinned) set(false); });
+  media.addEventListener('pointermove', (e) => {
+    if (!card.classList.contains('is-in') || reduceMotion.matches) return;
+    const r = media.getBoundingClientRect();
+    media.style.setProperty('--px', `${(((e.clientX - r.left) / r.width) - 0.5) * -4}%`);
+    media.style.setProperty('--py', `${(((e.clientY - r.top) / r.height) - 0.5) * -4}%`);
+  });
+}
+initCaCard();

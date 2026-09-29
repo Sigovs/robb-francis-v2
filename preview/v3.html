@@ -24,8 +24,8 @@
 
   <link rel="preload" as="image" href="./frames/hero/001.webp" fetchpriority="high">
 
-  <script defer src="./assets/v3-I6hxs47B.js"></script>
-  <link rel="stylesheet" href="./assets/style-CHBKFmyo.css">
+  <script defer src="./assets/v3-pmRfzm54.js"></script>
+  <link rel="stylesheet" href="./assets/style-Cq2rTlaE.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -124,7 +124,17 @@
            picture opens inside it the way the chapters' pictures do. -->
       <aside class="hero__side ca-card" data-hero-side aria-labelledby="ca-title">
         <div class="ca-card__inner" data-loc-inner>
-          <div class="ca-card__media"><img class="ca-card__img" src="./img/ca-place.webp" alt="The Robb Francis gallery in California at night, its glass doors lit, a red roadster and a silver E-Type inside" width="900" height="1125" loading="lazy" decoding="async"></div>
+          <!-- Step inside (Alex, 2026-09-29: "more interactive"): hover, tap or Enter takes you through the lit glass door —
+               the street pushes in toward it and the gallery floor opens out of the door's own rectangle (main.js
+               initCaCard). The button is always visible, so nothing depends on hover (U12). -->
+          <div class="ca-card__media" data-ca-media>
+            <img class="ca-card__img ca-card__img--out" src="./img/ca-place.webp" alt="The Robb Francis gallery in California at night, its glass doors lit, a red roadster and a silver E-Type inside" width="900" height="1125" loading="lazy" decoding="async">
+            <img class="ca-card__img ca-card__img--in" src="./img/ca-inside.webp" alt="Inside the gallery: a red roadster between a silver E-Type and a 911, vintage bicycles on the mezzanine" width="900" height="1125" loading="lazy" decoding="async">
+            <button class="ca-card__door" type="button" aria-pressed="false" data-ca-door>
+              <span class="ca-card__door-label" data-ca-label>Step inside</span>
+              <svg class="ca-card__door-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/></svg>
+            </button>
+          </div>
           <div class="ca-card__copy">
             <p class="label ca-card__kicker">Montecito · California</p>
             <h2 class="ca-card__title" id="ca-title">Now on the California Coast.</h2>
