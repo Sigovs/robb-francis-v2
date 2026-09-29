@@ -178,32 +178,24 @@ window.addEventListener('resize', heroField);
 
 
 
-/* ---------- v3 · Selected Motorcars: choose a lot, its picture takes the stage ----------
-   Hover (fine pointer), focus or tap a row. The rows are buttons (aria-pressed), so it works by keyboard and touch;
-   nothing is hidden behind hover. The section rises once as it comes into view. */
+/* ---------- v3 · The Salon: appears in place after the Ferrari, then rises once ----------
+   Like every other seam on v3: the Ferrari's turn dissolves to the ground, and this section — lifted one screen so it
+   sits behind that last dark frame — fades up where it was, instead of scrolling in after a blank screen (critique
+   P1). Without motion it is simply the next section. The hover spotlight is CSS. */
 function initFeatured() {
   const sec = document.querySelector('.act-featured');
   if (!sec) return;
-  const rows = [...sec.querySelectorAll('.feat__row')];
-  const imgs = [...sec.querySelectorAll('.feat__img')];
-  const n = sec.querySelector('[data-feat-n]'), cap = sec.querySelector('[data-feat-cap]');
-  let cur = 0;
-  const pick = (i) => {
-    if (i === cur) return;
-    cur = i;
-    rows.forEach((r, k) => { r.classList.toggle('is-active', k === i); r.setAttribute('aria-pressed', String(k === i)); });
-    imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
-    n.textContent = String(i + 1).padStart(2, '0');
-    cap.textContent = rows[i].dataset.cap;
-  };
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  rows.forEach((r, i) => {
-    r.addEventListener('click', () => pick(i));
-    r.addEventListener('focus', () => pick(i));
-    r.addEventListener('pointerenter', () => { if (fine.matches) pick(i); });
+  const rise = () => sec.classList.add('is-in');
+  if (reduceMotion.matches) { rise(); return; }
+  sec.style.marginTop = isMobile.matches ? '-100svh' : '-100vh';
+  sec.style.position = 'relative';
+  sec.style.zIndex = '4';
+  gsap.set(sec, { autoAlpha: 0 });
+  ScrollTrigger.create({
+    trigger: sec, start: 'top top+=1',
+    onEnter: () => { gsap.to(sec, { autoAlpha: 1, duration: 0.9, ease: 'power2.out', overwrite: true }); rise(); },
+    onLeaveBack: () => gsap.to(sec, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
   });
-  if (reduceMotion.matches || !('IntersectionObserver' in window)) { sec.classList.add('is-in'); return; }
-  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { sec.classList.add('is-in'); io.disconnect(); } }, { threshold: 0.15 });
-  io.observe(sec);
+  ScrollTrigger.refresh();
 }
 initFeatured();

@@ -31,8 +31,8 @@ export function chaptersSection(section, { mobile = false } = {}) {
     });
     tl.to(imgs[k], { clipPath: 'inset(0% 0% 0% 0%)', duration: 1 }, 0)
       .to(imgs[k], { scale: 1, duration: 1 }, 0)
-      .to(imgs[k - 1], { scale: 1.06, duration: 1 }, 0)
-      .to(fields[k] || {}, { opacity: 1, duration: 0.8 }, 0.1);   // v3 has no photo fields (the ground + shapes instead)
+      .to(imgs[k - 1], { scale: 1.06, duration: 1 }, 0);
+    if (fields[k]) tl.to(fields[k], { opacity: 1, duration: 0.8 }, 0.1);   // v3 has no photo fields (the ground + shapes instead)
     triggers.push(tl);
   }
 
