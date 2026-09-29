@@ -247,6 +247,66 @@
       </ol>
     </section>
 
+    <!-- ============ v3 · SELECTED MOTORCARS (Alex, 2026-09-29: "under the Ferrari, something sophisticated with several cars") ============
+         An auction-catalogue index (the house dialect, auction-editorial): one large picture, a hairline-ruled list of lots.
+         Hover, focus or tap a lot and its picture takes the stage (main.js initFeatured). The cars and notes are the
+         client's own Instagram features, verbatim (reference/sold/SOLD.md, 2026-09-24). Their availability is NOT
+         confirmed, so the section says "Featured" and "availability on enquiry", never "in stock". -->
+    <section class="act act-featured" id="featured" aria-labelledby="feat-title">
+      <div class="feat__head">
+        <div>
+          <p class="label hero__kicker">Currently Featured</p>
+          <h2 class="feat__title" id="feat-title">Selected Motorcars.</h2>
+        </div>
+        <a class="btn btn--lg btn--line" href="/inventory/">View Inventory <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="feat__body">
+        <figure class="feat__stage">
+          <div class="feat__frame">
+              <img class="feat__img is-active" data-i="0" src="/img/featured/1965-sunbeam-tiger-260.webp" alt="The 1965 Sunbeam Tiger 260 in Forest Green, bonnet open, in the Peapack showroom" width="1100" height="1100" loading="lazy" decoding="async">
+              <img class="feat__img" data-i="1" src="/img/featured/1999-land-rover-defender-90.webp" alt="The 1999 Land Rover Defender 90 in Coniston Green outside the Robb Francis building in Peapack" width="1100" height="1100" loading="lazy" decoding="async">
+              <img class="feat__img" data-i="2" src="/img/featured/1948-mg-tc.webp" alt="The 1948 MG TC in ivory with green upholstery, parked on the street" width="1100" height="1100" loading="lazy" decoding="async">
+              <img class="feat__img" data-i="3" src="/img/featured/1988-ford-mustang-gt-convertible.webp" alt="The 1988 Ford Mustang GT Convertible in red with a white top, in the showroom" width="1100" height="1100" loading="lazy" decoding="async">
+              <img class="feat__img" data-i="4" src="/img/featured/1933-bsa-249cc.webp" alt="The 1933 BSA 249cc motorcycle in green, in the showroom" width="1100" height="1100" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="feat__label"><span class="feat__label-n tnum" data-feat-n>01</span><span class="feat__label-rule" aria-hidden="true"></span><span data-feat-cap>1965 Sunbeam Tiger 260</span></figcaption>
+        </figure>
+        <div class="feat__index">
+          <ol class="feat__list" aria-label="Featured motorcars">
+          <li><button class="feat__row is-active" type="button" data-i="0" aria-pressed="true" data-cap="1965 Sunbeam Tiger 260">
+            <span class="feat__n tnum">01</span>
+            <span class="feat__main"><span class="feat__year tnum">1965</span><span class="feat__name">Sunbeam Tiger 260</span><span class="feat__note">Forest Green (Code 86) · Right-hand drive · Rootes Group demonstrator</span></span>
+            <span class="feat__arrow" aria-hidden="true">→</span>
+          </button></li>
+          <li><button class="feat__row" type="button" data-i="1" aria-pressed="false" data-cap="1999 Land Rover Defender 90">
+            <span class="feat__n tnum">02</span>
+            <span class="feat__main"><span class="feat__year tnum">1999</span><span class="feat__name">Land Rover Defender 90</span><span class="feat__note">Coniston Green · 125,000 km · Italian delivery</span></span>
+            <span class="feat__arrow" aria-hidden="true">→</span>
+          </button></li>
+          <li><button class="feat__row" type="button" data-i="2" aria-pressed="false" data-cap="1948 MG TC">
+            <span class="feat__n tnum">03</span>
+            <span class="feat__main"><span class="feat__year tnum">1948</span><span class="feat__name">MG TC</span><span class="feat__note">Ivory over Green Apple · Right-hand drive</span></span>
+            <span class="feat__arrow" aria-hidden="true">→</span>
+          </button></li>
+          <li><button class="feat__row" type="button" data-i="3" aria-pressed="false" data-cap="1988 Ford Mustang GT Convertible">
+            <span class="feat__n tnum">04</span>
+            <span class="feat__main"><span class="feat__year tnum">1988</span><span class="feat__name">Ford Mustang GT Convertible</span><span class="feat__note">Original owner · 9,084 miles · 5.0 V8, five-speed manual</span></span>
+            <span class="feat__arrow" aria-hidden="true">→</span>
+          </button></li>
+          <li><button class="feat__row" type="button" data-i="4" aria-pressed="false" data-cap="1933 BSA 249cc">
+            <span class="feat__n tnum">05</span>
+            <span class="feat__main"><span class="feat__year tnum">1933</span><span class="feat__name">BSA 249cc</span><span class="feat__note">Birmingham Small Arms Co. · Three-speed manual · Imported from the UK</span></span>
+            <span class="feat__arrow" aria-hidden="true">→</span>
+          </button></li>
+          </ol>
+          <div class="feat__foot">
+            <p class="feat__status">Featured by Robb Francis · Availability on enquiry</p>
+            <a class="btn btn--lg btn--line" href="/contact-us/">Enquire <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="act act-next" aria-label="Next section (placeholder)"></section>
 
   </main>

@@ -177,3 +177,33 @@ document.fonts?.ready.then(heroField);
 window.addEventListener('resize', heroField);
 
 
+
+/* ---------- v3 · Selected Motorcars: choose a lot, its picture takes the stage ----------
+   Hover (fine pointer), focus or tap a row. The rows are buttons (aria-pressed), so it works by keyboard and touch;
+   nothing is hidden behind hover. The section rises once as it comes into view. */
+function initFeatured() {
+  const sec = document.querySelector('.act-featured');
+  if (!sec) return;
+  const rows = [...sec.querySelectorAll('.feat__row')];
+  const imgs = [...sec.querySelectorAll('.feat__img')];
+  const n = sec.querySelector('[data-feat-n]'), cap = sec.querySelector('[data-feat-cap]');
+  let cur = 0;
+  const pick = (i) => {
+    if (i === cur) return;
+    cur = i;
+    rows.forEach((r, k) => { r.classList.toggle('is-active', k === i); r.setAttribute('aria-pressed', String(k === i)); });
+    imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
+    n.textContent = String(i + 1).padStart(2, '0');
+    cap.textContent = rows[i].dataset.cap;
+  };
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  rows.forEach((r, i) => {
+    r.addEventListener('click', () => pick(i));
+    r.addEventListener('focus', () => pick(i));
+    r.addEventListener('pointerenter', () => { if (fine.matches) pick(i); });
+  });
+  if (reduceMotion.matches || !('IntersectionObserver' in window)) { sec.classList.add('is-in'); return; }
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { sec.classList.add('is-in'); io.disconnect(); } }, { threshold: 0.15 });
+  io.observe(sec);
+}
+initFeatured();
