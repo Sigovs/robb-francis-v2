@@ -32,7 +32,7 @@ export function chaptersSection(section, { mobile = false } = {}) {
     tl.to(imgs[k], { clipPath: 'inset(0% 0% 0% 0%)', duration: 1 }, 0)
       .to(imgs[k], { scale: 1, duration: 1 }, 0)
       .to(imgs[k - 1], { scale: 1.06, duration: 1 }, 0)
-      .to(fields[k], { opacity: 1, duration: 0.8 }, 0.1);
+      .to(fields[k] || {}, { opacity: 1, duration: 0.8 }, 0.1);   // v3 has no photo fields (the ground + shapes instead)
     triggers.push(tl);
   }
 
@@ -56,11 +56,15 @@ export function chaptersSection(section, { mobile = false } = {}) {
   const whole = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.8 } });
   if (frame) whole.fromTo(frame, { xPercent: -4 }, { xPercent: 4, duration: 1 }, 0);
   if (rule) whole.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1 }, 0);
+  // v3: the soft shapes of the ground drift a little, each its own way, across the whole section
+  const shapes = [...section.querySelectorAll('.ch__shape')];
+  const drift = [[8, 14, 12], [-10, 8, -9], [-6, -12, 7], [12, -6, -14]];
+  shapes.forEach((s, i) => { const [x, y, r] = drift[i % drift.length]; whole.fromTo(s, { xPercent: -x / 2, yPercent: -y / 2, rotation: -r / 2 }, { xPercent: x / 2, yPercent: y / 2, rotation: r / 2, duration: 1 }, 0); });
   triggers.push(whole);
 
   return () => {
     triggers.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); });
     section.classList.remove('is-seq');
-    gsap.set([...imgs, ...fields, frame, rule, ...copies.flatMap((c) => [...(c.querySelector('.ch__inner')?.children || [])])].filter(Boolean), { clearProps: 'all' });
+    gsap.set([...imgs, ...fields, ...section.querySelectorAll('.ch__shape'), frame, rule, ...copies.flatMap((c) => [...(c.querySelector('.ch__inner')?.children || [])])].filter(Boolean), { clearProps: 'all' });
   };
 }

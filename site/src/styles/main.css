@@ -1039,7 +1039,8 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 /* ---------- v3 · The Collection after Alex's layout (2026-09-29) ----------
    The Ferrari's turn is the event: the title holds the left (the progress counter was cut, Alex), the spec card is a hairline
    panel that arrives only at the final stop, and three numbered notes sit in their own band under the film. */
-.turn__rule { display: block; width: 1.5rem; height: 1px; background: var(--c-hair); margin: var(--s-3) 0 0; }
+/* one style for every section head (Alex): kicker → title exactly as About — no rule between them */
+.act-turn .turn__title { margin: var(--s-4) 0 var(--s-5); }
 .spec-card--line {
   background: none; border: 0; border-left: 1px solid var(--c-hair); backdrop-filter: none; -webkit-backdrop-filter: none;
   padding: var(--s-2) 0 var(--s-2) var(--s-7); width: min(22rem, 26vw); top: 46%;
@@ -1085,8 +1086,8 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 }
 
 /* ---------- v3 · hero after Alex's mock (2026-09-29): refined, spacious, quiet ----------
-   Smaller title (main.js caps it), a thin outline CTA, a soft vignette, a small glass announcement card lower right,
-   a thin film line bottom centre. */
+   Smaller title (main.js caps it), a thin outline CTA, a soft vignette, a small glass announcement card lower right.
+   (The film line was cut when the hero went back to a pure scroll scrub, Alex.) */
 .hero__cta--line { background: transparent; border-color: rgba(236, 238, 241, 0.7); gap: var(--s-3); padding: 0 var(--s-6); }
 .hero__cta--line span { transition: transform var(--dur-2) var(--ease-out); }
 .hero__cta--line:hover { background: rgba(236, 238, 241, 0.08); border-color: var(--c-ink); }
@@ -1117,7 +1118,8 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 .gcard__link { font-size: var(--fs-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink); margin-top: var(--s-1); white-space: nowrap; }
 @container (max-width: 22rem) {
   .gcard { gap: var(--s-3); }
-  .gcard__thumb { flex-basis: 5.5rem; }
+  .gcard__thumb { flex-basis: 5rem; }
+  .gcard__kicker { white-space: nowrap; letter-spacing: 0.1em; font-size: 0.625rem; }
   .gcard__title { font-size: 1.25rem; }
   .gcard__link { letter-spacing: 0.05em; }
 }
@@ -1128,16 +1130,6 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 .gcard:hover .gcard__arrow, .gcard:focus-visible .gcard__arrow { transform: translateX(4px); }
 .gcard:focus-visible { outline: 2px solid var(--c-oxblood-lit); outline-offset: 3px; }
 
-/* the film line: decorative, reads the real film */
-.hero__foot--line { left: 0; right: 0; justify-content: center; bottom: var(--s-6); }
-.hero__foot--line .hero__pause { margin-left: 0; width: 36px; height: 36px; }
-.film-line { display: flex; align-items: center; gap: var(--s-4); }
-.film-line__t { font-size: 0.75rem; letter-spacing: 0.06em; color: var(--c-ink); min-width: 2.75rem; }
-.film-line__t--end { color: var(--c-ink-3); text-align: right; }
-.film-line__track { position: relative; width: clamp(14rem, 24vw, 25rem); height: 1px; background: rgba(236, 238, 241, 0.22); }
-.film-line__fill { position: absolute; inset: 0; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(var(--film-p, 0)); }
-.film-line__dot { position: absolute; top: 50%; left: calc(var(--film-p, 0) * 100%); width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--c-ink); }
-
 @media (min-width: 768px) and (max-aspect-ratio: 1/1) {
   .ca-card--glass { top: calc(var(--header-h) + var(--s-6)); bottom: auto; left: var(--gutter); right: auto; width: 24rem; }
 }
@@ -1145,6 +1137,15 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
   .ca-card--glass { width: auto; bottom: auto; }
   .gcard__thumb { flex-basis: 5.5rem; }
   .gcard__title { font-size: 1.25rem; }
-  .film-line__track { width: 8rem; }
-  .hero__foot--line { bottom: var(--s-4); }
 }
+
+/* ---------- v3 · chapters ground (Alex, 2026-09-29): the site colour, and a gradient from several uneven shapes ----------
+   Explicit direction; it yields the dialect's "no decorative blobs" and is named in the report. Cool slate/steel from
+   the palette plus one low breath of the sampled oxblood; heavy blur so the edges read as light, not as shapes. */
+.ch__fields--shapes { background: var(--c-ground); overflow: hidden; }
+.ch__fields--shapes::after { background: none; }
+.ch__shape { position: absolute; display: block; filter: blur(70px); opacity: 0.9; will-change: transform; }
+.ch__shape--a { left: -8%; top: 8%; width: 58%; height: 62%; border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; background: radial-gradient(closest-side, #2a3a50, rgba(42, 58, 80, 0)); }
+.ch__shape--b { right: -10%; top: -12%; width: 52%; height: 58%; border-radius: 61% 39% 45% 55% / 52% 62% 38% 48%; background: radial-gradient(closest-side, #22303f, rgba(34, 48, 63, 0)); }
+.ch__shape--c { left: 34%; bottom: -18%; width: 46%; height: 52%; border-radius: 37% 63% 51% 49% / 60% 36% 64% 40%; background: radial-gradient(closest-side, rgba(117, 18, 5, 0.55), rgba(117, 18, 5, 0)); }
+.ch__shape--d { right: 6%; bottom: 4%; width: 30%; height: 36%; border-radius: 55% 45% 32% 68% / 47% 58% 42% 53%; background: radial-gradient(closest-side, #34465c, rgba(52, 70, 92, 0)); opacity: 0.7; }

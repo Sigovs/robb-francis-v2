@@ -75,6 +75,7 @@ function initHeroVideo() {
   let inView = true;
   const sync = () => {
     if (userPaused) return; // visitor paused it: respect that
+    if (video.ended) return; // v3 plays once: a finished film stays on its last frame
     if (inView && document.visibilityState === 'visible') { if (video.src && video.paused) video.play().catch(() => {}); }
     else if (!video.paused) video.pause();
   };
@@ -138,6 +139,9 @@ window.addEventListener('pagehide', () => { ctx.revert(); stopLenis(); });
    the air left of it for the copy, and size the title so every message's longest line (plus the 32px slide-in)
    ends before the car. Landscape desktop only; the phone and portrait layouts put the copy off the film. */
 const CAR = { x0: 0.335, y0: 0.385, x1: 0.65, y1: 0.745 };
+// v3 scrubs the raw tracking shot (not the stabilised loop): the car wanders further right, to ~0.68 of the frame
+// (measured on the 113 frames, OpenCV, 2026-09-29)
+const CAR_SCRUB = { x0: 0.33, y0: 0.38, x1: 0.69, y1: 0.75 };
 function heroField() {
   const hero = document.querySelector('.act-hero');
   const root = document.documentElement;
@@ -147,7 +151,8 @@ function heroField() {
   const media = hero.querySelector('.hero__video') || hero.querySelector('.hero__poster img');
   const [px, py] = (getComputedStyle(media).objectPosition || '50% 50%').split(' ').map((v) => parseFloat(v) / 100);
   const s = Math.max(W / 1920, H / 1080), dw = 1920 * s;
-  const carLeft = (W - dw) * px + CAR.x0 * dw;
+  const car = hero.querySelector('.hero__canvas') ? CAR_SCRUB : CAR;
+  const carLeft = (W - dw) * px + car.x0 * dw;
   const inset = W * 0.035, gap = Math.max(32, W * 0.025), travel = 32;
   const field = Math.max(160, carLeft - gap - inset);
   // widest title line across all three messages, as a multiple of the font size
@@ -163,7 +168,7 @@ function heroField() {
   const fs = Math.max(40, Math.min(cap, Math.floor((field - travel) / (ratio || 5))));
   root.style.setProperty('--hero-field', `${Math.round(field - travel)}px`);
   // v3: the block on the other side of the car owns the air RIGHT of it
-  const carRight = (W - dw) * px + CAR.x1 * dw;
+  const carRight = (W - dw) * px + car.x1 * dw;
   root.style.setProperty('--hero-side', `${Math.round(Math.max(200, W - carRight - gap - inset - travel))}px`);
   root.style.setProperty('--hero-fs', `${fs}px`);
 }
@@ -172,25 +177,3 @@ document.fonts?.ready.then(heroField);
 window.addEventListener('resize', heroField);
 
 
-/* ---------- v3 · the film line (Alex's hero mock): a thin line, a dot and timecodes that read the real film ---------- */
-function initFilmLine() {
-  const video = document.querySelector('.hero__video');
-  const line = document.querySelector('.film-line');
-  if (!video || !line) return;
-  const now = line.querySelector('[data-film-now]'), end = line.querySelector('[data-film-end]');
-  const fmt = (t) => `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
-  let raf = 0, lastSec = -1;
-  const tick = () => {
-    const d = video.duration || 0;
-    if (d) {
-      line.style.setProperty('--film-p', (video.currentTime / d).toFixed(4));
-      const sec = Math.floor(video.currentTime);
-      if (sec !== lastSec) { lastSec = sec; now.textContent = fmt(video.currentTime); }
-    }
-    raf = video.paused ? 0 : requestAnimationFrame(tick);
-  };
-  video.addEventListener('loadedmetadata', () => { end.textContent = fmt(Math.ceil(video.duration)); });
-  video.addEventListener('playing', () => { if (!raf) raf = requestAnimationFrame(tick); });
-  video.addEventListener('pause', () => { cancelAnimationFrame(raf); raf = 0; tick(); });
-}
-initFilmLine();
