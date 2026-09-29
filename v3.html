@@ -24,8 +24,8 @@
 
   <link rel="preload" as="image" href="./frames/hero/001.webp" fetchpriority="high">
 
-  <script defer src="./assets/v3-e7lbGrsp.js"></script>
-  <link rel="stylesheet" href="./assets/style-CG9a8ddn.css">
+  <script defer src="./assets/v3-HnfSNFgl.js"></script>
+  <link rel="stylesheet" href="./assets/style-CSkV-uUC.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -128,8 +128,8 @@
           <a class="gcard" href="/contact-us/">
             <span class="gcard__thumb"><img src="./img/ca-place.webp" alt="" width="900" height="1125" loading="lazy" decoding="async"></span>
             <span class="gcard__copy">
-              <span class="label gcard__kicker">Montecito · California</span>
               <span class="gcard__title" id="ca-title">Now on the California Coast.</span>
+              <span class="gcard__place">Montecito, California</span>
               <span class="gcard__link">Visit by Appointment <span class="gcard__arrow" aria-hidden="true">→</span></span>
             </span>
           </a>
@@ -168,7 +168,7 @@
             <p class="ch__count"><span class="ch__n">01</span><span class="ch__dash" aria-hidden="true"></span>03</p>
             <h2 class="ch__title" id="ch01-title">Finance</h2>
             <p class="ch__text">Financing arranged for collector, classic and current sports cars, shaped around how you buy.</p>
-            <a class="btn btn--lg btn--line cta" href="/finance/">Financing <span aria-hidden="true">→</span></a>
+            <a class="btn btn--lg btn--line cta" href="/financing/">Financing <span aria-hidden="true">→</span></a>
 </div>
         </div>
         <div class="ch__copy" data-ch aria-labelledby="ch02-title">
@@ -247,63 +247,75 @@
       </ol>
     </section>
 
-    <!-- ============ v3 · SELECTED MOTORCARS (Alex, 2026-09-29: "under the Ferrari, something sophisticated with several cars") ============
-         An auction-catalogue index (the house dialect, auction-editorial): one large picture, a hairline-ruled list of lots.
-         Hover, focus or tap a lot and its picture takes the stage (main.js initFeatured). The cars and notes are the
-         client's own Instagram features, verbatim (reference/sold/SOLD.md, 2026-09-24). Their availability is NOT
-         confirmed, so the section says "Featured" and "availability on enquiry", never "in stock". -->
-    <section class="act act-featured" id="featured" aria-labelledby="feat-title">
+    <!-- ============ v3 · THE SALON (Alex chose direction B, 2026-09-29) ============
+         The client's cars hung the way the Montecito gallery hangs its motorsport art: an asymmetric salon wall on the
+         page ground — one lead lot large, four smaller at mixed sizes on shared top lines — each with a printed museum
+         label beneath. Still on purpose: after two scrubbed pins, the calm is the contrast. Hover a frame and the others
+         dim (a spotlight, not movement). Cars and notes: the client's own Instagram features, verbatim
+         (reference/sold/SOLD.md); availability NOT confirmed, so "Featured · availability on enquiry", never "in stock".
+         It appears in place after the Ferrari (main.js initFeatured). -->
+    <section class="act act-featured act-salon" id="featured" aria-labelledby="feat-title">
       <div class="feat__head">
         <div>
           <p class="label hero__kicker">Currently Featured</p>
-          <h2 class="feat__title" id="feat-title">Selected Motorcars.</h2>
+          <h2 class="feat__title" id="feat-title">The Salon.</h2>
         </div>
-        <a class="btn btn--lg btn--line" href="/inventory/">View Inventory <span aria-hidden="true">→</span></a>
+        <div class="feat__head-side">
+          <p class="feat__status">Featured by Robb Francis · Availability on enquiry</p>
+          <a class="btn btn--lg btn--line" href="/inventory/">View Inventory <span aria-hidden="true">→</span></a>
+        </div>
       </div>
-      <div class="feat__body">
-        <figure class="feat__stage">
-          <div class="feat__frame">
-              <img class="feat__img is-active" data-i="0" src="./img/featured/1965-sunbeam-tiger-260.webp" alt="The 1965 Sunbeam Tiger 260 in Forest Green, bonnet open, in the Peapack showroom" width="1100" height="1100" loading="lazy" decoding="async">
-              <img class="feat__img" data-i="1" src="./img/featured/1999-land-rover-defender-90.webp" alt="The 1999 Land Rover Defender 90 in Coniston Green outside the Robb Francis building in Peapack" width="1100" height="1100" loading="lazy" decoding="async">
-              <img class="feat__img" data-i="2" src="./img/featured/1948-mg-tc.webp" alt="The 1948 MG TC in ivory with green upholstery, parked on the street" width="1100" height="1100" loading="lazy" decoding="async">
-              <img class="feat__img" data-i="3" src="./img/featured/1988-ford-mustang-gt-convertible.webp" alt="The 1988 Ford Mustang GT Convertible in red with a white top, in the showroom" width="1100" height="1100" loading="lazy" decoding="async">
-              <img class="feat__img" data-i="4" src="./img/featured/1933-bsa-249cc.webp" alt="The 1933 BSA 249cc motorcycle in green, in the showroom" width="1100" height="1100" loading="lazy" decoding="async">
-          </div>
-          <figcaption class="feat__label"><span class="feat__label-n tnum" data-feat-n>01</span><span class="feat__label-rule" aria-hidden="true"></span><span data-feat-cap>1965 Sunbeam Tiger 260</span></figcaption>
+      <div class="salon">
+        <figure class="salon__piece salon__piece--lead">
+          <a class="salon__frame" href="/inventory/" aria-label="1948 MG TC, view in the inventory">
+            <span class="salon__mat"><img src="./img/featured/1948-mg-tc.webp" alt="The 1948 MG TC in ivory with green upholstery, parked on the street" width="1100" height="1100" loading="lazy" decoding="async"></span>
+          </a>
+          <figcaption class="salon__label">
+            <span class="salon__meta"><span class="salon__n tnum">01</span><span class="salon__year tnum">1948</span></span>
+            <span class="salon__name">MG TC</span>
+            <span class="salon__note">Ivory over Green Apple · Right-hand drive</span>
+          </figcaption>
         </figure>
-        <div class="feat__index">
-          <ol class="feat__list" aria-label="Featured motorcars">
-          <li><button class="feat__row is-active" type="button" data-i="0" aria-pressed="true" data-cap="1965 Sunbeam Tiger 260">
-            <span class="feat__n tnum">01</span>
-            <span class="feat__main"><span class="feat__year tnum">1965</span><span class="feat__name">Sunbeam Tiger 260</span><span class="feat__note">Forest Green (Code 86) · Right-hand drive · Rootes Group demonstrator</span></span>
-            <span class="feat__arrow" aria-hidden="true">→</span>
-          </button></li>
-          <li><button class="feat__row" type="button" data-i="1" aria-pressed="false" data-cap="1999 Land Rover Defender 90">
-            <span class="feat__n tnum">02</span>
-            <span class="feat__main"><span class="feat__year tnum">1999</span><span class="feat__name">Land Rover Defender 90</span><span class="feat__note">Coniston Green · 125,000 km · Italian delivery</span></span>
-            <span class="feat__arrow" aria-hidden="true">→</span>
-          </button></li>
-          <li><button class="feat__row" type="button" data-i="2" aria-pressed="false" data-cap="1948 MG TC">
-            <span class="feat__n tnum">03</span>
-            <span class="feat__main"><span class="feat__year tnum">1948</span><span class="feat__name">MG TC</span><span class="feat__note">Ivory over Green Apple · Right-hand drive</span></span>
-            <span class="feat__arrow" aria-hidden="true">→</span>
-          </button></li>
-          <li><button class="feat__row" type="button" data-i="3" aria-pressed="false" data-cap="1988 Ford Mustang GT Convertible">
-            <span class="feat__n tnum">04</span>
-            <span class="feat__main"><span class="feat__year tnum">1988</span><span class="feat__name">Ford Mustang GT Convertible</span><span class="feat__note">Original owner · 9,084 miles · 5.0 V8, five-speed manual</span></span>
-            <span class="feat__arrow" aria-hidden="true">→</span>
-          </button></li>
-          <li><button class="feat__row" type="button" data-i="4" aria-pressed="false" data-cap="1933 BSA 249cc">
-            <span class="feat__n tnum">05</span>
-            <span class="feat__main"><span class="feat__year tnum">1933</span><span class="feat__name">BSA 249cc</span><span class="feat__note">Birmingham Small Arms Co. · Three-speed manual · Imported from the UK</span></span>
-            <span class="feat__arrow" aria-hidden="true">→</span>
-          </button></li>
-          </ol>
-          <div class="feat__foot">
-            <p class="feat__status">Featured by Robb Francis · Availability on enquiry</p>
-            <a class="btn btn--lg btn--line" href="/contact-us/">Enquire <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
+        <figure class="salon__piece salon__piece--b">
+          <a class="salon__frame" href="/inventory/" aria-label="1999 Land Rover Defender 90, view in the inventory">
+            <span class="salon__mat"><img src="./img/featured/1999-land-rover-defender-90.webp" alt="The 1999 Land Rover Defender 90 in Coniston Green outside the Robb Francis building in Peapack" width="1100" height="1100" loading="lazy" decoding="async"></span>
+          </a>
+          <figcaption class="salon__label">
+            <span class="salon__meta"><span class="salon__n tnum">02</span><span class="salon__year tnum">1999</span></span>
+            <span class="salon__name">Land Rover Defender 90</span>
+            <span class="salon__note">Coniston Green · Italian delivery</span>
+          </figcaption>
+        </figure>
+        <figure class="salon__piece salon__piece--c">
+          <a class="salon__frame" href="/inventory/" aria-label="1965 Sunbeam Tiger 260, view in the inventory">
+            <span class="salon__mat"><img src="./img/featured/1965-sunbeam-tiger-260.webp" alt="The 1965 Sunbeam Tiger 260 in Forest Green in the Peapack showroom" width="1100" height="1100" loading="lazy" decoding="async"></span>
+          </a>
+          <figcaption class="salon__label">
+            <span class="salon__meta"><span class="salon__n tnum">03</span><span class="salon__year tnum">1965</span></span>
+            <span class="salon__name">Sunbeam Tiger 260</span>
+            <span class="salon__note">Forest Green · Rootes Group demonstrator</span>
+          </figcaption>
+        </figure>
+        <figure class="salon__piece salon__piece--d">
+          <a class="salon__frame" href="/inventory/" aria-label="1988 Ford Mustang GT Convertible, view in the inventory">
+            <span class="salon__mat"><img src="./img/featured/1988-ford-mustang-gt-convertible.webp" alt="The 1988 Ford Mustang GT Convertible in red with a white top, in the showroom" width="1100" height="1100" loading="lazy" decoding="async"></span>
+          </a>
+          <figcaption class="salon__label">
+            <span class="salon__meta"><span class="salon__n tnum">04</span><span class="salon__year tnum">1988</span></span>
+            <span class="salon__name">Ford Mustang GT Convertible</span>
+            <span class="salon__note">Original owner · 9,084 miles</span>
+          </figcaption>
+        </figure>
+        <figure class="salon__piece salon__piece--e">
+          <a class="salon__frame" href="/inventory/" aria-label="1933 BSA 249cc, view in the inventory">
+            <span class="salon__mat"><img src="./img/featured/1933-bsa-249cc.webp" alt="The 1933 BSA 249cc motorcycle in green, in the showroom" width="1100" height="1100" loading="lazy" decoding="async"></span>
+          </a>
+          <figcaption class="salon__label">
+            <span class="salon__meta"><span class="salon__n tnum">05</span><span class="salon__year tnum">1933</span></span>
+            <span class="salon__name">BSA 249cc</span>
+            <span class="salon__note">Birmingham Small Arms Co. · Imported from the UK</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
 
