@@ -254,68 +254,42 @@
          dim (a spotlight, not movement). Cars and notes: the client's own Instagram features, verbatim
          (reference/sold/SOLD.md); availability NOT confirmed, so "Featured · availability on enquiry", never "in stock".
          It appears in place after the Ferrari (main.js initFeatured). -->
-    <section class="act act-featured act-salon" id="featured" aria-labelledby="feat-title">
-      <div class="feat__head">
-        <div>
-          <p class="label hero__kicker">Currently Featured</p>
-          <h2 class="feat__title" id="feat-title">The Salon.</h2>
-        </div>
-        <div class="feat__head-side">
-          <p class="feat__status">Featured by Robb Francis · Availability on enquiry</p>
-          <a class="btn btn--lg btn--line" href="/inventory/">View Inventory <span aria-hidden="true">→</span></a>
-        </div>
+    <section class="act act-featured act-stage" id="featured" aria-labelledby="stage-title">
+      <h2 class="sr-only" id="stage-title">Now Showing</h2>
+      <div class="stage__media" aria-hidden="true">
+        <img class="stage__img is-on" src="/img/stage/1974-de-tomaso-pantera.webp" alt="" width="1920" height="1200" style="--pos:50% 55%" decoding="async">
+        <img class="stage__img" src="/img/stage/1948-mg-tc.webp" alt="" width="1440" height="1440" style="--pos:50% 72%" loading="lazy" decoding="async">
+        <img class="stage__img" src="/img/stage/1999-land-rover-defender-90.webp" alt="" width="1440" height="1440" style="--pos:50% 62%" loading="lazy" decoding="async">
       </div>
-      <div class="salon">
-        <figure class="salon__piece salon__piece--lead">
-          <a class="salon__frame" href="/inventory/" aria-label="1948 MG TC, view in the inventory">
-            <span class="salon__mat"><img src="/img/featured/1948-mg-tc.webp" alt="The 1948 MG TC in ivory with green upholstery, parked on the street" width="1100" height="1100" loading="lazy" decoding="async"></span>
-          </a>
-          <figcaption class="salon__label">
-            <span class="salon__meta"><span class="salon__n tnum">01</span><span class="salon__year tnum">1948</span></span>
-            <span class="salon__name">MG TC</span>
-            <span class="salon__note">Ivory over Green Apple · Right-hand drive</span>
-          </figcaption>
-        </figure>
-        <figure class="salon__piece salon__piece--b">
-          <a class="salon__frame" href="/inventory/" aria-label="1999 Land Rover Defender 90, view in the inventory">
-            <span class="salon__mat"><img src="/img/featured/1999-land-rover-defender-90.webp" alt="The 1999 Land Rover Defender 90 in Coniston Green outside the Robb Francis building in Peapack" width="1100" height="1100" loading="lazy" decoding="async"></span>
-          </a>
-          <figcaption class="salon__label">
-            <span class="salon__meta"><span class="salon__n tnum">02</span><span class="salon__year tnum">1999</span></span>
-            <span class="salon__name">Land Rover Defender 90</span>
-            <span class="salon__note">Coniston Green · Italian delivery</span>
-          </figcaption>
-        </figure>
-        <figure class="salon__piece salon__piece--c">
-          <a class="salon__frame" href="/inventory/" aria-label="1965 Sunbeam Tiger 260, view in the inventory">
-            <span class="salon__mat"><img src="/img/featured/1965-sunbeam-tiger-260.webp" alt="The 1965 Sunbeam Tiger 260 in Forest Green in the Peapack showroom" width="1100" height="1100" loading="lazy" decoding="async"></span>
-          </a>
-          <figcaption class="salon__label">
-            <span class="salon__meta"><span class="salon__n tnum">03</span><span class="salon__year tnum">1965</span></span>
-            <span class="salon__name">Sunbeam Tiger 260</span>
-            <span class="salon__note">Forest Green · Rootes Group demonstrator</span>
-          </figcaption>
-        </figure>
-        <figure class="salon__piece salon__piece--d">
-          <a class="salon__frame" href="/inventory/" aria-label="1988 Ford Mustang GT Convertible, view in the inventory">
-            <span class="salon__mat"><img src="/img/featured/1988-ford-mustang-gt-convertible.webp" alt="The 1988 Ford Mustang GT Convertible in red with a white top, in the showroom" width="1100" height="1100" loading="lazy" decoding="async"></span>
-          </a>
-          <figcaption class="salon__label">
-            <span class="salon__meta"><span class="salon__n tnum">04</span><span class="salon__year tnum">1988</span></span>
-            <span class="salon__name">Ford Mustang GT Convertible</span>
-            <span class="salon__note">Original owner · 9,084 miles</span>
-          </figcaption>
-        </figure>
-        <figure class="salon__piece salon__piece--e">
-          <a class="salon__frame" href="/inventory/" aria-label="1933 BSA 249cc, view in the inventory">
-            <span class="salon__mat"><img src="/img/featured/1933-bsa-249cc.webp" alt="The 1933 BSA 249cc motorcycle in green, in the showroom" width="1100" height="1100" loading="lazy" decoding="async"></span>
-          </a>
-          <figcaption class="salon__label">
-            <span class="salon__meta"><span class="salon__n tnum">05</span><span class="salon__year tnum">1933</span></span>
-            <span class="salon__name">BSA 249cc</span>
-            <span class="salon__note">Birmingham Small Arms Co. · Imported from the UK</span>
-          </figcaption>
-        </figure>
+      <div class="stage__scrim" aria-hidden="true"></div>
+      <div class="stage__inner">
+        <p class="label stage__kicker">Now Showing <span class="stage__count tnum" aria-hidden="true"><span data-stage-n>01</span> / 03</span></p>
+        <div class="stage__copy" aria-live="polite">
+          <article class="stage__car is-on" data-car="0">
+            <p class="stage__year tnum">1974</p>
+            <h3 class="stage__name">De Tomaso Pantera</h3>
+            <p class="stage__note">Ghia-styled Italian body · Mid-mounted Ford V8</p>
+          </article>
+          <article class="stage__car" data-car="1" hidden>
+            <p class="stage__year tnum">1948</p>
+            <h3 class="stage__name">MG TC</h3>
+            <p class="stage__note">Ivory over Green Apple · Right-hand drive</p>
+          </article>
+          <article class="stage__car" data-car="2" hidden>
+            <p class="stage__year tnum">1999</p>
+            <h3 class="stage__name">Land Rover Defender 90</h3>
+            <p class="stage__note">Coniston Green · Italian delivery</p>
+          </article>
+        </div>
+        <div class="stage__actions">
+          <a class="btn btn--lg btn--fill" href="/contact-us/">Enquire <span aria-hidden="true">→</span></a>
+          <a class="btn btn--lg btn--line" href="/inventory/">View Inventory</a>
+        </div>
+        <div class="stage__pick" role="group" aria-label="Choose a car">
+          <button class="stage__btn is-on" type="button" aria-pressed="true" data-go="0"><span class="stage__btn-year tnum">1974</span><span class="stage__btn-name">De Tomaso Pantera</span></button>
+          <button class="stage__btn" type="button" aria-pressed="false" data-go="1"><span class="stage__btn-year tnum">1948</span><span class="stage__btn-name">MG TC</span></button>
+          <button class="stage__btn" type="button" aria-pressed="false" data-go="2"><span class="stage__btn-year tnum">1999</span><span class="stage__btn-name">Land Rover Defender 90</span></button>
+        </div>
       </div>
     </section>
 

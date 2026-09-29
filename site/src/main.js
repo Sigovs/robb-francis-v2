@@ -199,3 +199,37 @@ function initFeatured() {
   ScrollTrigger.refresh();
 }
 initFeatured();
+
+// Now Showing: three buttons choose the car. The picture crossfades and settles from a slight push-in; the name
+// swaps with a short rise. Nothing advances by itself (Alex's audience reads at its own pace).
+function initStage() {
+  const sec = document.querySelector('.act-stage');
+  if (!sec) return;
+  const imgs = [...sec.querySelectorAll('.stage__img')];
+  const cars = [...sec.querySelectorAll('.stage__car')];
+  const btns = [...sec.querySelectorAll('.stage__btn')];
+  const num = sec.querySelector('[data-stage-n]');
+  let cur = 0;
+  const show = (i) => {
+    if (i === cur) return;
+    const still = reduceMotion.matches;
+    const [imgOut, imgIn, carOut, carIn] = [imgs[cur], imgs[i], cars[cur], cars[i]];
+    btns.forEach((b, k) => { b.classList.toggle('is-on', k === i); b.setAttribute('aria-pressed', String(k === i)); });
+    if (num) num.textContent = String(i + 1).padStart(2, '0');
+    imgs.forEach((im) => { gsap.killTweensOf(im); if (im !== imgOut && im !== imgIn) gsap.set(im, { autoAlpha: 0 }); });
+    cars.forEach((c) => { gsap.killTweensOf(c.children); if (c !== carIn) c.hidden = true; });
+    imgIn.classList.add('is-on'); imgOut.classList.remove('is-on');
+    carIn.hidden = false;
+    if (still) {
+      gsap.set(imgOut, { autoAlpha: 0 }); gsap.set(imgIn, { autoAlpha: 1, scale: 1 });
+    } else {
+      gsap.set(imgIn, { zIndex: 1 }); gsap.set(imgOut, { zIndex: 0 });
+      gsap.fromTo(imgIn, { autoAlpha: 0, scale: 1.06 }, { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'expo.out', onComplete: () => gsap.set(imgOut, { autoAlpha: 0 }) });
+      gsap.fromTo(carIn.children, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.07, delay: 0.1 });
+    }
+    carOut.hidden = true;
+    cur = i;
+  };
+  btns.forEach((b) => b.addEventListener('click', () => show(+b.dataset.go)));
+}
+initStage();
