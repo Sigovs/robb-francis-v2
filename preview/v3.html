@@ -25,8 +25,8 @@
   <link rel="preload" as="image" href="./img/hero-poster-1920.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
   <link rel="preload" as="image" href="./img/hero-poster-m-720.avif" type="image/avif" media="(max-width: 767.98px)" fetchpriority="high">
 
-  <script defer src="./assets/v3-Ch5h4KqO.js"></script>
-  <link rel="stylesheet" href="./assets/style-DQoCy105.css">
+  <script defer src="./assets/v3-DOH7Arxr.js"></script>
+  <link rel="stylesheet" href="./assets/style-DUiq9ihf.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -243,19 +243,22 @@
     <section class="act act-scrub act-turn" id="collection" aria-labelledby="turn-title" data-scrub="f550">
       <div class="scrub__stage">
         <img class="scrub__still" src="./frames/f550/097.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
-        <canvas class="scrub__canvas" data-frames="./frames/f550/" data-count="97" data-shift="-0.07" aria-hidden="true"></canvas>
+        <canvas class="scrub__canvas" data-frames="./frames/f550/" data-count="97" data-shift="-0.07" data-lower="0.02" aria-hidden="true"></canvas>
         <div class="scrub__fade" aria-hidden="true"></div>
       </div>
       <!-- v3 (Alex, 2026-09-29): the walk-around is a Ferrari 550 Barchetta Pininfarina (_video/newferrari scrub.mp4 →
            _masters/video/scrub-f550-barchetta.mp4, 97 frames). The card is model-level history, not a stock claim:
            the film's car is not listed inventory, so the plate says "Model notes". Figures: Ferrari's published model data. -->
-      <aside class="spec-card" data-card aria-labelledby="spec-title">
-        <p class="label spec-card__kicker">Model&nbsp;notes&nbsp;·&nbsp;Ferrari</p>
+      <!-- Alex's layout (2026-09-29): the film is the event; this card stays hidden through the scrub and arrives only
+           at the final stop — a reward for watching, not a panel that competes with the car. A hairline, not a box.
+           Model-level figures: verify against the specific car before launch. -->
+      <aside class="spec-card spec-card--line" data-card aria-labelledby="spec-title">
+        <p class="label spec-card__kicker">Ferrari</p>
         <h3 class="spec-card__title" id="spec-title">550 Barchetta Pininfarina</h3>
         <dl class="spec-card__plate">
           <dt>Built</dt><dd class="tnum">2000–2001</dd>
-          <dt>Made</dt><dd class="tnum">448&nbsp;examples</dd>
-          <dt>Engine</dt><dd>Front-mounted V12, 5.5&nbsp;L</dd>
+          <dt>Made</dt><dd class="tnum">448&nbsp;built</dd>
+          <dt>Engine</dt><dd>Front-mounted V12 · 5.5&nbsp;L</dd>
           <dt>Output</dt><dd class="tnum">485&nbsp;PS</dd>
           <dt>Gearbox</dt><dd>Six-speed&nbsp;manual</dd>
         </dl>
@@ -264,9 +267,21 @@
       <div class="scrub__veil" aria-hidden="true"></div>
       <div class="scrub__copy turn__copy">
         <p class="label hero__kicker" data-scrub-in>The Collection</p>
+        <span class="turn__rule" data-scrub-in aria-hidden="true"></span>
         <h2 class="display display--hero turn__title" id="turn-title" data-scrub-in><span class="hl">Every Angle.</span> <span class="hl">Every Detail.</span></h2>
-        <a class="text-link" href="/inventory/" data-scrub-in>View Inventory <span aria-hidden="true">→</span></a>
       </div>
+      <!-- a thin progress indicator: which of the four stops of the turn you are at (motion/scrub.js) -->
+      <div class="turn-progress" data-turn-progress aria-hidden="true">
+        <p class="turn-progress__row"><span class="turn-progress__now tnum" data-turn-step>01</span><span class="turn-progress__dash"></span><span class="tnum">04</span><span class="turn-progress__sep">/</span><span>Scroll to explore</span></p>
+        <span class="turn-progress__track"><span class="turn-progress__fill" data-turn-fill></span></span>
+      </div>
+      <!-- three numbered notes in their own band under the film — never on the bodywork. Each lights as the turn
+           reaches it. Model-level notes: verify against the specific car before launch. -->
+      <ol class="turn-notes" data-turn-notes aria-label="Details">
+        <li class="turn-notes__item"><span class="turn-notes__n tnum">01</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Pininfarina-designed open bodywork</span></li>
+        <li class="turn-notes__item"><span class="turn-notes__n tnum">02</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Naturally aspirated V12</span></li>
+        <li class="turn-notes__item"><span class="turn-notes__n tnum">03</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Six-speed gated manual</span></li>
+      </ol>
     </section>
 
     <section class="act act-next" aria-label="Next section (placeholder)"></section>

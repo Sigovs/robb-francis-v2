@@ -1035,3 +1035,58 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 }
 /* the card sits above the title's box: on a phone they share one place, and the hidden title must not take its taps */
 .act-hero .hero__side { z-index: calc(var(--z-copy) + 1); }
+
+/* ---------- v3 · The Collection after Alex's layout (2026-09-29) ----------
+   The Ferrari's turn is the event: title and a thin progress indicator hold the left, the spec card is a hairline
+   panel that arrives only at the final stop, and three numbered notes sit in their own band under the film. */
+.turn__rule { display: block; width: 1.5rem; height: 1px; background: var(--c-hair); margin: var(--s-3) 0 0; }
+.spec-card--line {
+  background: none; border: 0; border-left: 1px solid var(--c-hair); backdrop-filter: none; -webkit-backdrop-filter: none;
+  padding: var(--s-2) 0 var(--s-2) var(--s-7); width: min(22rem, 26vw); top: 46%;
+}
+.spec-card--line .spec-card__kicker { color: var(--c-ink-3); }
+.spec-card--line .spec-card__title { font-size: clamp(1.75rem, 2.3vw, 2.5rem); margin: var(--s-3) 0 var(--s-5); }
+.spec-card--line .spec-card__plate { grid-template-columns: 6.5rem 1fr; }
+.spec-card--line .spec-card__plate dd { font-size: 0.9375rem; }
+.turn-progress { position: absolute; z-index: 3; left: 3.5vw; bottom: calc(var(--notes-h) + var(--s-7)); width: min(19rem, 26vw); }
+.turn-progress__row { display: flex; align-items: center; gap: var(--s-3); font-size: var(--fs-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-3); }
+.turn-progress__now { color: var(--c-ink); }
+.turn-progress__dash { width: 1.25rem; height: 1px; background: var(--c-hair); }
+.turn-progress__sep { opacity: 0.6; }
+.turn-progress__track { position: relative; display: block; height: 1px; margin-top: var(--s-4); background: rgba(236, 238, 241, 0.14); overflow: hidden; }
+.turn-progress__fill { position: absolute; inset: 0; background: var(--c-ink); transform-origin: 0 50%; transform: scaleX(0); }
+.act-turn { --notes-h: clamp(6rem, 15vh, 9rem); }
+.turn-notes {
+  position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; height: var(--notes-h); margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--c-hair);
+  background: linear-gradient(180deg, rgba(var(--c-scrim), 0.72), rgb(var(--c-scrim)));
+}
+.turn-notes__item { display: flex; align-items: center; gap: var(--s-3); padding: 0 2.5vw; min-width: 0; }
+.turn-notes__item:first-child { padding-left: 3.5vw; }
+.turn-notes__item + .turn-notes__item { border-left: 1px solid rgba(236, 238, 241, 0.12); }
+.turn-notes__n { font-size: var(--fs-label); letter-spacing: 0.08em; color: var(--c-ink-3); }
+.turn-notes__rule { flex: 0 0 2rem; height: 1px; background: var(--c-hair); transform-origin: 0 50%; }
+.turn-notes__t { font-family: var(--font-display); font-weight: var(--display-wght); font-size: clamp(0.9375rem, 1.18vw, 1.3rem); line-height: 1.2; color: var(--c-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.turn-notes__item.is-past .turn-notes__t { color: var(--c-ink-2); }
+.turn-notes__item.is-active .turn-notes__t, .turn-notes__item.is-active .turn-notes__n { color: var(--c-ink); }
+.turn-notes__item.is-active .turn-notes__rule { background: var(--c-ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .turn-notes__t, .turn-notes__n { transition: color 0.6s var(--ease-out); }
+  .turn-notes__rule { transition: background-color 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+  .turn-notes__item:not(.is-active) .turn-notes__rule { transform: scaleX(0.6); }
+}
+/* static / reduced motion: every note is simply lit */
+.act-turn:not(.is-live) .turn-notes__t { color: var(--c-ink-2); }
+@media (max-width: 767.98px) {
+  .act-turn { --notes-h: auto; }
+  .turn-notes { grid-template-columns: 1fr; height: auto; padding: var(--s-3) 0 var(--s-4); }
+  .turn-notes__item { padding: var(--s-2) var(--gutter); }
+  .turn-notes__item + .turn-notes__item { border-left: 0; }
+  .turn-notes__rule { flex-basis: 1.5rem; }
+  .turn-notes__t { font-size: 1rem; white-space: normal; }
+  .turn-progress { display: none; }   /* a phone reads the lit note as its progress */
+  .spec-card--line { border-left: 0; padding: 0; width: auto; top: calc(var(--header-h) + var(--s-4)); }
+}
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .turn-notes__t { white-space: normal; }   /* narrow desktop: a note may take two lines rather than be cut */
+}

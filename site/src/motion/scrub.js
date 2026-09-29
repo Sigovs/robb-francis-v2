@@ -93,7 +93,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   if (!canvas) return;
   const turn = section.classList.contains('act-turn');
   // shift: a film whose car ends wide (the v3 Ferrari, data-shift) sits a little left so the spec card keeps its air
-  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1, shift: mobile ? 0 : +(canvas.dataset.shift || 0) });
+  const fc = frameCanvas(canvas, { contain: turn, containScale: mobile ? 1.12 : 0.84, lower: mobile ? 0.18 : 0.1, shift: mobile ? 0 : +(canvas.dataset.shift || 0), ...(canvas.dataset.lower && !mobile ? { lower: +canvas.dataset.lower } : {}) });
   const ro = new ResizeObserver(() => fc.size());
   ro.observe(canvas);
   const near = ScrollTrigger.create({ trigger: section, start: 'top bottom+=200%', onEnter: fc.load, onEnterBack: fc.load });
@@ -149,6 +149,21 @@ export function scrubSection(section, { mobile = false } = {}) {
     }
   };
 
+  // v3: the turn's four stops — a counter and a thin track (bottom left), and the numbered notes under the film,
+  // each lit when the turn reaches it (stop 2 → note 01 …). Only state classes and one scaleX: no scrubbed text.
+  const stepEl = section.querySelector('[data-turn-step]');
+  const fillEl = section.querySelector('[data-turn-fill]');
+  const notes = [...section.querySelectorAll('.turn-notes__item')];
+  let lastStep = 0;
+  const stops = (p) => {
+    if (fillEl) fillEl.style.transform = `scaleX(${p.toFixed(3)})`;
+    const step = Math.min(4, Math.floor(p * 4) + 1);
+    if (step === lastStep) return;
+    lastStep = step;
+    if (stepEl) stepEl.textContent = String(step).padStart(2, '0');
+    notes.forEach((n, i) => { n.classList.toggle('is-active', i === step - 2); n.classList.toggle('is-past', i < step - 2); });
+  };
+
   cardAt = f * 0.9; cardOff = f * 0.72;                        // the card lands on the last frames of the turn
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
@@ -160,7 +175,7 @@ export function scrubSection(section, { mobile = false } = {}) {
       onLeaveBack: () => appear && gsap.to(section, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
       // never scroll away visible: when the pin lets go, the veil is complete whatever the scrub lag (Alex)
       onLeave: () => { const v = section.querySelector('.scrub__veil'); if (v && isTurn) { gsap.killTweensOf(v); gsap.set(v, { opacity: 1 }); } },
-      onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleCard(self.progress); },
+      onUpdate: (self) => { fc.draw(Math.round(Math.min(1, self.progress / f) * (fc.count - 1))); toggleCard(self.progress); stops(Math.min(1, self.progress / f)); },
     },
   });
   tl.to({}, { duration: 1 }, 0);
