@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robb Francis Design System</title>
+  <meta name="description" content="Tokens and components of the Robb Francis Sports Cars homepage, rendered from the site's own stylesheet.">
+  <meta name="theme-color" content="#12161d">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500&display=swap">
+  <!-- the site's own stylesheet: every component below is the production class, not a copy -->
+  <link rel="stylesheet" href="/src/styles/main.css">
+  <link rel="stylesheet" href="/src/styles/ds.css">
+  <script type="module" src="/src/ds.js"></script>
+</head>
+<body class="ds">
+
+  <header class="ds-bar">
+    <a class="ds-bar__brand" href="#top"><img src="/img/brand/rf-logo.svg" alt="Robb Francis Sports Cars" width="206" height="52"></a>
+    <nav class="ds-bar__nav" aria-label="Design system">
+      <a href="#colour">Colour</a><a href="#type">Type</a><a href="#space">Space</a><a href="#shape">Shape</a><a href="#motion">Motion</a><a href="#components">Components</a><a href="#rules">Rules</a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <section class="ds-intro">
+      <p class="label ds-kicker">Design System · Handoff</p>
+      <h1 class="display display--xl ds-intro__title">Robb Francis Sports&nbsp;Cars</h1>
+      <p class="lead ds-intro__lead">Every token and component of the homepage (v3), rendered from the site's own stylesheet. Values on this page are read live from the CSS, so it never drifts from the build.</p>
+      <dl class="ds-facts">
+        <div><dt class="label">Tokens</dt><dd><code>src/styles/tokens.css</code></dd></div>
+        <div><dt class="label">Components</dt><dd><code>src/styles/main.css</code></dd></div>
+        <div><dt class="label">Fonts</dt><dd>Gloock 400 · Figtree 400/500 (Google Fonts)</dd></div>
+        <div><dt class="label">Theme</dt><dd>Dark only</dd></div>
+        <div><dt class="label">Motion</dt><dd>GSAP 3 + ScrollTrigger, Lenis</dd></div>
+      </dl>
+    </section>
+
+    <!-- ============ COLOUR ============ -->
+    <section class="ds-sec" id="colour" aria-labelledby="colour-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">01</p>
+        <h2 class="ds-sec__title" id="colour-t">Colour</h2>
+        <p class="body ds-sec__note">A near-black ground with a trace of the gallery navy, cool inks, and one red sampled from the showroom door frame. No warm neutrals. Contrast is measured live against <code>--c-ground</code>.</p>
+      </header>
+      <div class="ds-swatches" data-swatches>
+        <div class="ds-sw" data-token="--c-ground" data-note="Page ground. Every section's default."></div>
+        <div class="ds-sw" data-token="--c-ground-2" data-note="One step up: vehicle-card body."></div>
+        <div class="ds-sw" data-token="--c-deep" data-note="One step down: closing scene, footer."></div>
+        <div class="ds-sw" data-token="--c-ink" data-note="Primary text, titles, nav, button labels." data-text></div>
+        <div class="ds-sw" data-token="--c-ink-2" data-note="Body copy, leads, specs, prices." data-text></div>
+        <div class="ds-sw" data-token="--c-ink-3" data-note="Labels, captions, counters only. Never body copy." data-text></div>
+        <div class="ds-sw" data-token="--c-hair" data-note="Hairlines, card rules, text-link underline."></div>
+        <div class="ds-sw" data-token="--c-hair-strong" data-note="Button border."></div>
+        <div class="ds-sw" data-token="--c-oxblood" data-note="Door-frame red. Fills and glows only, never text."></div>
+        <div class="ds-sw" data-token="--c-oxblood-lit" data-note="Focus ring, active mark, rule head." data-text></div>
+      </div>
+      <div class="ds-grounds">
+        <div class="ds-ground ds-ground--inventory"><span class="label">Inventory ground</span><code>img/inventory-ground.jpg</code><p>A dithered radial gradient baked to an image: smoke behind the centre card, a cold bruise top left, an oxblood breath at the foot. Its last quarter lands exactly on <code>--c-deep</code>. CSS gradients this dark band into steps, so it stays an image.</p></div>
+        <div class="ds-ground ds-ground--band"><span class="label">Header band</span><code>rgba(var(--c-scrim), .97 → 0)</code><p>Past the hero the header sits on the ground, solid behind the links, dissolving over 64px through a 14px frosted blur. No hard edge, no hairline.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ TYPE ============ -->
+    <section class="ds-sec" id="type" aria-labelledby="type-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">02</p>
+        <h2 class="ds-sec__title" id="type-t">Type</h2>
+        <p class="body ds-sec__note">Two voices. Gloock, a heavy didone, for display only and never below 24px. Figtree for everything that is read or operated. Display sizes are fluid; the figures shown are measured at this window width.</p>
+      </header>
+      <div class="ds-type" data-type>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">d1 · act title</span><code>.display.display--xl</code><span class="ds-m"></span></div><p class="display display--xl ds-m-target">New Jersey California</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">section title</span><code>.ch__title</code><span class="ds-m"></span></div><p class="ch__title ds-m-target">Every Angle. Every Detail.</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">list title</span><code>.cards__title</code><span class="ds-m"></span></div><p class="cards__title ds-m-target">Available Now.</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">d2 · display prose</span><code>.display.display--about</code><span class="ds-m"></span></div><p class="display display--about ds-m-target">An Independent Full Service Boutique.</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">spec title</span><code>.spec-card__title</code><span class="ds-m"></span></div><p class="spec-card--line"><span class="spec-card__title ds-m-target">550 Barchetta Pininfarina</span></p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">card title</span><code>.vcard__title</code><span class="ds-m"></span></div><p class="vcard__title ds-m-target">Shelby GT500</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">lead</span><code>.lead</code><span class="ds-m"></span></div><p class="lead ds-m-target">Now purchasing collector and performance vehicles across both coasts.</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">body</span><code>.body</code><span class="ds-m"></span></div><p class="body ds-m-target">Financing arranged for collector, classic and current sports cars, shaped around how you buy.</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">card body</span><code>.vcard__about</code><span class="ds-m"></span></div><p class="vcard__about ds-m-target">Carroll Shelby's big-block Mustang: the 428 V8, the fibreglass nose and the tail-light panel that set it apart from every other fastback of its day.</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">vehicle name</span><code>.vehicle</code><span class="ds-m"></span></div><p class="vehicle ds-m-target">1974 De Tomaso Pantera Custom</p></div>
+        <div class="ds-spec"><div class="ds-spec__meta"><span class="label">label</span><code>.label</code><span class="ds-m"></span></div><p class="label ds-m-target">For Sale · Open to Discussion</p></div>
+      </div>
+    </section>
+
+    <!-- ============ SPACE ============ -->
+    <section class="ds-sec" id="space" aria-labelledby="space-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">03</p>
+        <h2 class="ds-sec__title" id="space-t">Space</h2>
+        <p class="body ds-sec__note">One scale, no magic numbers. Nothing touches by default: every element has inner padding and at least <code>--s-3</code> of air to its neighbours.</p>
+      </header>
+      <div class="ds-scale" data-scale>
+        <div data-token="--s-1"></div><div data-token="--s-2"></div><div data-token="--s-3"></div><div data-token="--s-4"></div>
+        <div data-token="--s-5"></div><div data-token="--s-6"></div><div data-token="--s-7"></div><div data-token="--s-8"></div>
+        <div data-token="--s-9"></div><div data-token="--s-10"></div><div data-token="--s-11"></div>
+      </div>
+      <h3 class="ds-sub">Frame</h3>
+      <div class="ds-table" data-sizes>
+        <div data-token="--gutter" data-note="Page side gutter (16px under 768px)."></div>
+        <div data-token="--header-h" data-note="Header safe zone. Content never rests inside it."></div>
+        <div data-token="--btn-h" data-note="Button height."></div>
+        <div data-token="--btn-h-sm" data-note="Small button, and every tap target."></div>
+        <div data-token="--shield-h" data-note="Logo lockup height."></div>
+        <div data-token="--measure" data-note="Running-text measure."></div>
+        <div data-token="--text-inset" data-note="Where act copy starts from the left edge."></div>
+        <div data-static="75rem" data-name="content column" data-note="Inventory head and footer sit on this column."></div>
+      </div>
+    </section>
+
+    <!-- ============ SHAPE ============ -->
+    <section class="ds-sec" id="shape" aria-labelledby="shape-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">04</p>
+        <h2 class="ds-sec__title" id="shape-t">Shape &amp; depth</h2>
+        <p class="body ds-sec__note">The house is square. Radius appears only where an object sits on a photograph. Hierarchy comes from tone and hairlines, not shadows.</p>
+      </header>
+      <div class="ds-shapes">
+        <figure><span class="ds-shape" style="border-radius:0"></span><figcaption><span class="label">0</span>Buttons, frames, chapter pictures.</figcaption></figure>
+        <figure><span class="ds-shape" style="border-radius:2px"></span><figcaption><span class="label">2px</span>Glass badges on photos.</figcaption></figure>
+        <figure><span class="ds-shape" style="border-radius:4px"></span><figcaption><span class="label">4px</span>Vehicle cards, thumbnails.</figcaption></figure>
+        <figure><span class="ds-shape ds-shape--glass"></span><figcaption><span class="label">10px + shadow</span>The glass location card only: <code>0 18px 40px -20px rgba(0,0,0,.7)</code>.</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- ============ MOTION ============ -->
+    <section class="ds-sec" id="motion" aria-labelledby="motion-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">05</p>
+        <h2 class="ds-sec__title" id="motion-t">Motion</h2>
+        <p class="body ds-sec__note">Lenis carries the scroll (lerp 0.055, on the GSAP ticker). Scroll-scrubbed acts map to scroll ranges; event motion takes its duration and easing from these tokens. Under reduced motion nothing moves and every section rests in its final state.</p>
+      </header>
+      <div class="ds-motion" data-motion>
+        <div data-ease="--ease-out" data-note="Entering, expanding."></div>
+        <div data-ease="--ease-in" data-note="Exiting, collapsing."></div>
+        <div data-ease="--ease-in-out" data-note="State swaps in place."></div>
+      </div>
+      <button class="btn btn--sm ds-replay" type="button" data-replay>Replay <span aria-hidden="true">↻</span></button>
+      <div class="ds-table" data-sizes>
+        <div data-token="--dur-1" data-note="Hover, focus."></div>
+        <div data-token="--dur-2" data-note="Small state change."></div>
+        <div data-token="--dur-3" data-note="One element arriving."></div>
+        <div data-token="--dur-4" data-note="A whole entrance, the ceiling."></div>
+        <div data-token="--stagger-1" data-note="Words, small items."></div>
+        <div data-token="--stagger-2" data-note="Lines."></div>
+      </div>
+    </section>
+
+    <!-- ============ COMPONENTS ============ -->
+    <section class="ds-sec" id="components" aria-labelledby="comp-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">06</p>
+        <h2 class="ds-sec__title" id="comp-t">Components</h2>
+        <p class="body ds-sec__note">Production markup and classes from <code>v3.html</code>. Page-level placement (fixed, sticky, pinned, absolute over film) belongs to each act and is neutralised here so the component can be seen on its own.</p>
+      </header>
+
+      <article class="ds-comp" id="c-button">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Button</h3><code>.btn · .btn--sm · .btn--line</code><p>An outlined rectangle, uppercase label, text arrow. <code>.btn</code> fills with ink on hover; <code>.btn--line</code> brightens its border and nudges the arrow 3px. Two buttons never sit flush: at least <code>--s-3</code> between them.</p></div>
+        <div class="ds-stage ds-row">
+          <a class="btn" href="#c-button">View Inventory</a>
+          <a class="btn btn--sm" href="#c-button">We buy cars</a>
+          <a class="btn btn--lg btn--line" href="#c-button">Enquire <span aria-hidden="true">→</span></a>
+          <a class="btn btn--sm btn--line" href="#c-button">Enquire <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+
+      <article class="ds-comp" id="c-textlink">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Text link</h3><code>.text-link</code><p>A quieter action: tracked caps on a hairline that turns ink on hover.</p></div>
+        <div class="ds-stage"><a class="text-link" href="#c-textlink">Visit by Appointment <span aria-hidden="true">→</span></a></div>
+      </article>
+
+      <article class="ds-comp ds-comp--wide" id="c-header">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Header</h3><code>.site-header · .util · .split-nav · .brand</code><p>Fixed. At 1181px+ one row: the logo centred between two halves of the nav. Below that, Menu · logo · Call with everything in a drawer. Past the hero it gains <code>.is-solid</code>: a solid band that dissolves through a blur. It never moves or hides on scroll.</p></div>
+        <div class="ds-stage ds-stage--flush ds-stage--header">
+          <header class="site-header is-solid ds-static">
+            <div class="util">
+              <div class="util__left"><span class="util__item tnum">(908) 234-2100</span><span class="util__item">By Appointment Only</span></div>
+              <nav class="split-nav split-nav--l" aria-label="Example"><ul><li><a href="#c-header">Inventory</a></li><li><a href="#c-header">Financing</a></li><li><a href="#c-header">Consign</a></li></ul></nav>
+              <a class="brand" href="#c-header" aria-label="Robb Francis Sports Cars"><img src="/img/brand/rf-logo.svg" alt="" width="206" height="52"></a>
+              <nav class="split-nav split-nav--r" aria-label="Example, continued"><ul><li><a href="#c-header">Virtual Tour</a></li><li><a href="#c-header">About</a></li><li><a href="#c-header">Contact</a></li></ul></nav>
+              <div class="util__right"><span class="util__item">My Collection <span class="tnum">(00)</span></span><span class="btn btn--sm">We buy cars</span></div>
+              <span class="menu-toggle"><span class="menu-toggle__label">Menu</span><span class="menu-toggle__bars" aria-hidden="true"></span></span>
+              <span class="util-call">Call</span>
+            </div>
+          </header>
+        </div>
+      </article>
+
+      <article class="ds-comp" id="c-head">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Section head</h3><code>.label + .cards__title</code><p>A tracked kicker over a display title. The kicker says what kind of thing this is; the title says it in the house voice.</p></div>
+        <div class="ds-stage"><div><p class="label cards__kicker">For Sale · Open to Discussion</p><h4 class="cards__title">Available Now.</h4></div></div>
+      </article>
+
+      <article class="ds-comp" id="c-vcard">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Vehicle card</h3><code>.vcard · .vcard__media · .vcard__badge · .vcard__body</code><p>The inventory unit. Photo 5:4 (16:10 on short screens) with a glass badge, display title, specs, a three-line About, price and Enquire. In the carousel <code>--k</code> (0 centred … 1 aside) scales it to .84 and dims it to .5; the centred card gets <code>.is-center</code>.</p></div>
+        <div class="ds-stage ds-row ds-row--cards">
+          <div class="vcard is-center ds-vcard" style="--k:0">
+            <div class="vcard__media"><img src="/frames/f550/097.webp" alt="" width="1600" height="900" style="--pos: 38% 60%"><span class="vcard__badge">Featured</span></div>
+            <div class="vcard__body">
+              <h4 class="vcard__title">Ferrari 550 Barchetta</h4>
+              <ul class="vcard__specs"><li>Open two-seater</li><li>5.5 L V12</li><li>Manual</li></ul>
+              <p class="vcard__about">Pininfarina's open 550: 448 built, a front-mounted V12 and a six-speed gated manual, with a roof that was never meant to go up.</p>
+              <div class="vcard__foot"><span class="vcard__price">Price on request</span><span class="btn btn--sm btn--line vcard__btn">Enquire <span aria-hidden="true">→</span></span></div>
+            </div>
+          </div>
+          <div class="vcard ds-vcard" style="--k:1">
+            <div class="vcard__media"><img src="/frames/f550/097.webp" alt="" width="1600" height="900" style="--pos: 38% 60%"><span class="vcard__badge">New Arrival</span></div>
+            <div class="vcard__body">
+              <h4 class="vcard__title">Side state · --k: 1</h4>
+              <ul class="vcard__specs"><li>scale .84</li><li>opacity .5</li></ul>
+              <p class="vcard__about">A card beside the centre. Clicking it brings it to the centre; its Enquire is inert until then.</p>
+              <div class="vcard__foot"><span class="vcard__price">Price on request</span><span class="btn btn--sm btn--line vcard__btn">Enquire <span aria-hidden="true">→</span></span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="ds-comp" id="c-spec">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Spec card</h3><code>.spec-card.spec-card--line · .spec-card__plate</code><p>Model notes beside a hero car: a hairline on the left, never a box. Label/value plate in a two-column grid. On the page it arrives at the end of the Ferrari scrub, placed from the car.</p></div>
+        <div class="ds-stage">
+          <aside class="spec-card spec-card--line ds-static">
+            <p class="label spec-card__kicker">Ferrari</p>
+            <h4 class="spec-card__title">550 Barchetta Pininfarina</h4>
+            <dl class="spec-card__plate">
+              <dt>Built</dt><dd class="tnum">2000–2001</dd>
+              <dt>Made</dt><dd class="tnum">448&nbsp;built</dd>
+              <dt>Engine</dt><dd>Front-mounted V12 · 5.5&nbsp;L</dd>
+              <dt>Output</dt><dd class="tnum">485&nbsp;PS</dd>
+              <dt>Gearbox</dt><dd>Six-speed&nbsp;manual</dd>
+            </dl>
+            <span class="btn btn--lg btn--line cta">Open to Discussion <span aria-hidden="true">→</span></span>
+          </aside>
+        </div>
+      </article>
+
+      <article class="ds-comp" id="c-chapter">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Chapter</h3><code>.ch__inner · .ch__count · .ch__title · .ch__text</code><p>A service in three steps (01 Finance, 02 Consign, 03 Inventory). Square picture, a counter on a hairline, title, one sentence, one action. On the page the picture is sticky and the texts scroll past it.</p></div>
+        <div class="ds-stage ds-chapter act-chapters--line">
+          <figure class="ds-chapter__frame"><img src="/img/chapters/v3/01.webp" alt="" width="1200" height="1200"></figure>
+          <div class="ch__inner ds-static">
+            <p class="ch__count"><span class="ch__n">01</span><span class="ch__dash" aria-hidden="true"></span>03</p>
+            <h4 class="ch__title">Finance</h4>
+            <p class="ch__text">Financing arranged for collector, classic and current sports cars, shaped around how you buy.</p>
+            <span class="btn btn--lg btn--line cta">Financing <span aria-hidden="true">→</span></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="ds-comp ds-comp--wide" id="c-notes">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Detail notes</h3><code>.turn-notes · .turn-notes__item.is-active</code><p>Three numbered notes in a band under a film, never on the bodywork. Each lights (<code>.is-past</code>, <code>.is-active</code>) as the turn reaches it.</p></div>
+        <div class="ds-stage ds-stage--flush">
+          <ol class="turn-notes ds-static">
+            <li class="turn-notes__item is-past"><span class="turn-notes__n tnum">01</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Pininfarina-designed open bodywork</span></li>
+            <li class="turn-notes__item is-active"><span class="turn-notes__n tnum">02</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Naturally aspirated V12</span></li>
+            <li class="turn-notes__item"><span class="turn-notes__n tnum">03</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Six-speed gated manual</span></li>
+          </ol>
+        </div>
+      </article>
+
+      <article class="ds-comp" id="c-gcard">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Location card</h3><code>.gcard</code><p>The one glass object: a small announcement over the hero film. Thumbnail, title, place, link; the whole card is the link. Blur 16px, radius 10px, the only shadow in the system.</p></div>
+        <div class="ds-stage ds-stage--photo">
+          <a class="gcard" href="#c-gcard">
+            <span class="gcard__thumb"><img src="/img/ca-place.webp" alt="" width="900" height="1125"></span>
+            <span class="gcard__copy">
+              <span class="gcard__title">Now on the California Coast.</span>
+              <span class="gcard__place">Montecito, California</span>
+              <span class="gcard__link">Visit by Appointment <span class="gcard__arrow" aria-hidden="true">→</span></span>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="ds-comp" id="c-closing">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Closing title</h3><code>.closing__kicker · .closing__title .cl</code><p>The page's release: a lead over a two-line d1 title, centred over the three cars. Each line rises out of its own mask when the scene is in view.</p></div>
+        <div class="ds-stage ds-closing">
+          <p class="lead closing__kicker">Now purchasing collector and performance vehicles across both coasts</p>
+          <h4 class="display display--xl closing__title"><span class="cl"><span class="cl__in">New Jersey</span></span> <span class="cl"><span class="cl__in">California</span></span></h4>
+        </div>
+      </article>
+
+      <article class="ds-comp ds-comp--wide" id="c-footer">
+        <div class="ds-comp__meta"><h3 class="ds-comp__title">Footer</h3><code>.site-footer · .footer__grid · .footer__legal</code><p>On <code>--c-deep</code>, on the page's 75rem column. Brand, New Jersey, California, hours, contact; legal row on a hairline.</p></div>
+        <div class="ds-stage ds-stage--flush">
+          <footer class="site-footer">
+            <div class="footer__grid">
+              <div class="footer__brand"><img class="footer__logo" src="/img/brand/rf-logo.svg" alt="Robb Francis Sports Cars" width="300" height="76"><p class="body body--quiet">An Independent Full Service Dealership.</p></div>
+              <div><p class="label">New Jersey</p><p class="body">Historic Peapack, NJ<br>By Appointment Only</p><p class="body tnum">(201) 247-0003</p></div>
+              <div><p class="label">California</p><p class="body">Appointments and inquiries</p><p class="body tnum">(908) 234-2100</p></div>
+              <div><p class="label">Hours</p><p class="body tnum">Mon, Wed–Sat<br>9:30 AM – 5:00 PM</p><p class="body">Tue &amp; Sun by appointment only</p></div>
+              <div><p class="label">Contact</p><p class="body">sales@rfsportscars.com</p><p class="body footer__social"><span>Instagram</span> <span>Facebook</span></p></div>
+            </div>
+            <div class="footer__legal">
+              <p class="label label--quiet">Robb Francis Sports Cars</p>
+              <p class="label label--quiet footer__links"><span>Warranty</span> <span>Privacy Policy</span> <span>Back to top</span></p>
+            </div>
+          </footer>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ RULES ============ -->
+    <section class="ds-sec" id="rules" aria-labelledby="rules-t">
+      <header class="ds-sec__head">
+        <p class="label ds-kicker">07</p>
+        <h2 class="ds-sec__title" id="rules-t">Rules</h2>
+      </header>
+      <ol class="ds-rules">
+        <li><strong>Nothing touches.</strong> Texts never stick together, buttons never sit flush, content never rests under the header. Every element has inner padding and at least <code>--s-3</code> of air, in every pinned and animated state.</li>
+        <li><strong>The header never moves.</strong> No hide-on-scroll, no collapse. Past the hero it sits on a solid band that dissolves; no hairline under it.</li>
+        <li><strong>One page.</strong> Every nav item lands on its own section (<code>#inventory #financing #consign #collection #about #contact</code>). A pinned act is reached through its ScrollTrigger range, not its measured top.</li>
+        <li><strong>Voice.</strong> Proper names for cars, sentence case for leads, tracked caps only for short labels. The house phrases: <em>By Appointment Only</em>, <em>Price on request</em>, <em>Open to Discussion</em>, <em>Enquire</em>. No invented years or claims; model-level facts are marked for the client to confirm.</li>
+        <li><strong>Colour.</strong> Cool neutrals and one red from the building. Oxblood is a fill or a glow, never text. Focus is a 2px <code>--c-oxblood-lit</code> ring, 3px offset.</li>
+        <li><strong>Imagery.</strong> The car is the subject and the largest thing on screen. No third-party watermarks on published pages; the mockup's for-sale photos are placeholders to be replaced with the client's own.</li>
+        <li><strong>Motion.</strong> Lenis on every page; transform and opacity only; reduced motion shows every section complete and still.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="ds-end"><p class="label label--quiet">Robb Francis Sports Cars · Design System · rendered from main.css</p></footer>
+</body>
+</html>
