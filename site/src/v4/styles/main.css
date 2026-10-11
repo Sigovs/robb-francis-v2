@@ -1355,3 +1355,46 @@ p, dd, .ch__text, .about__text, .lead { text-wrap: pretty; }
 /* v3 hero intro in steps: ground-coloured columns over the film, lifted away one after another (hero-scrub.js) */
 .hero__steps { position: absolute; inset: 0; z-index: var(--z-scrim); display: flex; pointer-events: none; }
 .hero__steps span { flex: 1 1 0; background: var(--c-ground); transform-origin: 50% 0; margin-right: -1px; }
+
+/* =========================================================================
+   v4 · Phone, recomposed (client, 2026-10-11: "the mobile version is a 1/10"). One block, last, so it wins.
+   Every section reads top to bottom in flow: no sticky frame over text, no blur on copy, no pin except the
+   Ferrari's scrub. Hero: copy → film (4:5) → California card. Chapters: each its own picture, then its copy.
+   About: film (4:5), then its copy on the ground.
+   ========================================================================= */
+.ch__pic-frame, .ch__pic { display: none; }
+@media (max-width: 767.98px) {
+  /* hero: the film first, the copy under it (client: "hero better under the video"), then the card */
+  .act-hero .hero__media { order: 1; }
+  .act-hero .hero__copy { order: 2; }
+  .act-hero.is-scrub { height: auto; }
+  .act-hero.is-scrub .hero__media { aspect-ratio: 4 / 5; flex: none; }
+  .act-hero[data-hero-corner] .hero__side,
+  .act-hero[data-hero-corner].is-scrub .hero__side { position: relative; order: 3; inset: auto; width: auto; max-width: none; transform: none; padding: var(--s-6) var(--gutter) 0; }
+  .act-hero[data-hero-corner] .ca-card--glass { width: auto; }
+
+  /* chapters */
+  .act-chapters .ch__media, .act-chapters .ch__rule { display: none; }
+  .act-chapters .ch__texts { margin-top: 0; }
+  .act-chapters .ch__copy { height: auto; padding: var(--s-9) var(--gutter) 0; }
+  .act-chapters .ch__copy:last-child { padding-bottom: var(--s-9); }
+  .act-chapters .ch__pic-frame { display: block; overflow: hidden; aspect-ratio: 4 / 5; }
+  .act-chapters .ch__pic { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .act-chapters .ch__inner { position: static; top: auto; margin-top: var(--s-5); height: auto; }
+
+  /* About */
+  .act-scrub.act-about { height: auto; min-height: 0; overflow: visible; display: flex; flex-direction: column; }
+  .act-about .scrub__stage { position: relative; inset: auto; aspect-ratio: 4 / 5; overflow: hidden; }
+  .act-about .scrub__copy { position: relative; inset: auto; transform: none; width: auto; max-width: none; padding: var(--s-6) var(--gutter) var(--s-9); }
+  .act-about .scrub__dim { display: none; }
+}
+@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+  /* the Ferrari without its scrub (reduced motion): title, the car (its last frame, whole), the spec plate, the notes */
+  .act-scrub.act-turn { height: auto; min-height: 0; overflow: visible; display: flex; flex-direction: column; }
+  .act-turn .turn__copy { order: 1; position: relative; inset: auto; transform: none; padding: var(--s-9) var(--gutter) var(--s-5); }
+  .act-turn .scrub__stage { order: 2; position: relative; inset: auto; aspect-ratio: 16 / 10; }
+  .act-turn .scrub__still { object-fit: contain; }
+  .act-turn .spec-card.spec-card--line { order: 3; position: relative; inset: auto; width: auto; transform: none; padding: var(--s-6) var(--gutter); }
+  .act-turn .turn-notes { order: 4; position: relative; inset: auto; padding-bottom: var(--s-8); }
+  .act-turn .scrub__veil { display: none; }
+}

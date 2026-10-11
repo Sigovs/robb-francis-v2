@@ -77,8 +77,9 @@ Appointment Only, "We buy cars", My Collection).
   frame: it is a pull-back, so a loop would jump-cut to the close-up every 8s. Pause/Play kept. Reduced motion shows
   the last frame as the still. Rejected for this film: a centred crop, a California card on the right (the car fills
   the right in every frame — the card takes the title's place on scroll instead, `data-hero-swap`).
-- **v4: Finance section removed (client, 2026-10-11).** Chapters are now 01 Consign · 02 Inventory (counters 01/02);
-  its picture (`img/chapters/v3/01.webp`) dropped from the frame. Financing is no longer on the v4 page or in its nav.
+- **v4 chapters (client, 2026-10-11):** Finance removed; **01 Sell Your Car · 02 Consign · 03 Inventory**, the nav's
+  order. Sell Your Car copy is the client's own pop-up line verbatim, action "We Buy Cars" (their utility-bar line),
+  picture the garage (180609). Financing is no longer on the v4 page or in its nav.
 - **v4 films swapped (client, 2026-10-11):** hero = Jaguar, About = the Porsche 356 film from the earlier hero. Both
   play by themselves (autoplay on scroll: About starts when it comes into view, pauses off screen), never scrubbed.
   Client wants **video, not scroll animation** — don't bring frame scrubs back for these.
@@ -94,3 +95,13 @@ Appointment Only, "We buy cars", My Collection).
 - **v4 scroll speed (client: "too slow, no scrub here except the Ferrari"):** Lenis back to defaults (lerp 0.1,
   wheel 1). Pins that only carried a handover are short: hero 55% of a screen (desktop), About 90%; chapters 120svh
   per chapter (was 190). The Ferrari walk-around keeps its scrub and its length. Don't lengthen pins without a scrub.
+- **v4 phone, recomposed (client: "the mobile version is a 1/10", 2026-10-11).** Everything reads top to bottom in
+  flow: hero = film (4:5) first, copy under it ("hero better under the video"), then the California card; chapters =
+  each its own picture (`.ch__pic`) then copy, no sticky frame, no blur; About = film then copy, not pinned (film
+  just plays, `filmOnly`). Only the Ferrari keeps its scrub. Header goes solid as soon as the phone scrolls.
+  **Rejected on phone:** desktop choreography squeezed down (sticky frame over text, blurred copy, card swapping
+  with the title, pins without a scrub). Review phone as its own composition, every change.
+- **v4 phone motion (client: "why remove all the animation?").** Phone keeps motion of its own, not none:
+  chapter pictures CUT IN from the side by the scroll (01 left, 02 right, 03 left; clip wipe, image settling inside
+  its frame), About's film opens from an inset frame, copy follows by itself (title out of its mask).
+  `src/v4/motion/phone.js`. Never answer "broken on phone" by deleting motion — recompose it for the phone.

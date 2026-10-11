@@ -160,7 +160,8 @@ function initHeaderCollapse() {
     const y = window.scrollY, dy = y - last;
     if (Math.abs(dy) < 4) return;
     const run = hero.parentElement?.classList.contains('pin-spacer') ? hero.parentElement : hero;   // the hero pins now
-    const past = y > run.offsetHeight * 0.8;
+    // v4 phone: the hero runs past one screen in flow, so its copy would pass under a clear header — solid once moving
+    const past = isMobile.matches ? y > 24 : y > run.offsetHeight * 0.8;
     const drawerOpen = document.querySelector('[data-drawer]')?.hidden === false;
     const focused = header.contains(document.activeElement) && document.activeElement !== document.body;
     // past the hero it stays put on a solid band (Alex, 2026-09-29: nothing may slide under the nav or show

@@ -21,8 +21,9 @@ export function heroScrub(section, { mobile = false } = {}) {
   section.classList.add('is-scrub');
   // v4 (client, 2026-10-11): the California card stands in the hero's bottom right corner from the start (CSS), arriving
   // with the title instead of on scroll. The phone keeps its turn-taking with the title.
-  const corner = !mobile && section.hasAttribute('data-hero-corner');
-  const swap = mobile;
+  // Phone (client, 2026-10-11: "the mobile version is a 1/10"): no pin, no swap — copy, film, card in flow.
+  const corner = section.hasAttribute('data-hero-corner');
+  const swap = !corner && mobile;
 
   // the canvas crops exactly like the still under it (object-position from CSS: 20% 45% landscape, centred on a phone)
   const pos = () => (getComputedStyle(still || canvas).objectPosition || '50% 50%').split(' ').map((v) => parseFloat(v) / 100);
@@ -89,6 +90,7 @@ export function heroScrub(section, { mobile = false } = {}) {
   if (side) gsap.set(sideParts, { autoAlpha: 0, x: ENTER() * 1.5, filter: 'blur(12px)' });
   const placeSide = () => {
     if (!side || !inner) return;
+    if (corner) return;   // v4: placed by CSS
     if (mobile) { side.style.top = `${inner.parentElement.offsetTop + inner.offsetTop}px`; return; }   // phone: exactly where the title stands
     if (corner) return;   // v4: placed by CSS, bottom right
     // landscape desktop (Alex, 2026-09-29: "align it"): the card's foot sits on the CTA's foot — one line across
@@ -130,13 +132,13 @@ export function heroScrub(section, { mobile = false } = {}) {
   const f = run / total, fh = (run + hold) / total, fd = 1;
   const dim = section.querySelector('.scrub__dim');
   const next = section.parentElement.querySelector('.act-chapters');
-  if (next) {
+  if (next && !mobile) {
     next.style.marginTop = mobile ? '-100svh' : '-100vh';     // travels up hidden behind the pin, reaches the top as the dark completes
     next.style.zIndex = '3';
     gsap.set(next, { autoAlpha: 0 });
   }
 
-  const tl = gsap.timeline({
+  const tl = mobile ? null : gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {
       trigger: section, start: 'top top', end: `+=${total}%`, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: placeSide,
@@ -145,18 +147,18 @@ export function heroScrub(section, { mobile = false } = {}) {
       onEnterBack: () => next && gsap.to(next, { autoAlpha: 0, duration: 0.4, ease: 'power1.in', overwrite: true }),
     },
   });
-  tl.to({}, { duration: 1 }, 0);
+  tl?.to({}, { duration: 1 }, 0);
   // no drift on the message while the film runs: the card's foot is aligned to the CTA's foot (Alex)
-  if (inner) tl.to(inner, { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh);
-  if (side) tl.fromTo(side, { autoAlpha: 1 }, { autoAlpha: 0, filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in', immediateRender: false }, fh);   // leaves with the title, into the dark (no y: the CSS centring owns transform)
+  if (inner && tl) tl.to(inner, { autoAlpha: 0, y: '-=30', filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in' }, fh);
+  if (side && tl) tl.fromTo(side, { autoAlpha: 1 }, { autoAlpha: 0, filter: 'blur(10px)', duration: 0.7 * (fd - fh), ease: 'power1.in', immediateRender: false }, fh);   // leaves with the title, into the dark (no y: the CSS centring owns transform)
   const foot = section.querySelector('.hero__foot');
-  if (foot) tl.fromTo(foot, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.5 * (fd - fh), immediateRender: false }, fh);   // the film control goes with the film
-  if (dim) tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh);   // only darkens to the ground, no scale (Alex)
+  if (foot && tl) tl.fromTo(foot, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.5 * (fd - fh), immediateRender: false }, fh);   // the film control goes with the film
+  if (dim && tl) tl.to(dim, { opacity: 0.94, duration: fd - fh, ease: 'power1.in' }, fh);   // only darkens to the ground, no scale (Alex)
 
   return () => {
     alive = false;
     intro.progress(1).kill(); steps?.remove();
-    tl.scrollTrigger?.kill(); tl.kill(); ro?.disconnect();
+    tl?.scrollTrigger?.kill(); tl?.kill(); ro?.disconnect();
     removeEventListener('resize', placeSoon);
     if (side) { side.style.top = ''; side.style.bottom = ''; side.classList.remove('is-on'); }
     if (next) { next.style.marginTop = ''; next.style.zIndex = ''; gsap.set(next, { clearProps: 'opacity,visibility' }); }

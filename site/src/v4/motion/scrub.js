@@ -131,6 +131,16 @@ function filmLoop(video, section, { mobile = false } = {}) {
   };
 }
 
+// Phone (client, 2026-10-11): About is not pinned — its film simply plays once the section comes near.
+export function filmOnly(section) {
+  const video = section.querySelector('.scrub__video');
+  if (!video) return;
+  const fc = filmLoop(video, section, { mobile: true });
+  const near = new IntersectionObserver(([e]) => { if (e.isIntersecting) { fc.load(); near.disconnect(); } }, { rootMargin: '150% 0px' });
+  near.observe(section);
+  return () => { near.disconnect(); fc.destroy(); section.classList.remove('is-live'); };
+}
+
 export function scrubSection(section, { mobile = false } = {}) {
   const canvas = section.querySelector('.scrub__canvas');
   const video = section.querySelector('.scrub__video');
@@ -151,7 +161,7 @@ export function scrubSection(section, { mobile = false } = {}) {
   const isTurn = section.classList.contains('act-turn');
   // appear in place instead of sliding up: the turn after About, and (v3, data-appear) About after the chapters —
   // it travels up hidden behind the section before it and fades up once that one has gone dark
-  const appear = (isTurn && !!document.querySelector('.act-about')) || section.hasAttribute('data-appear');
+  const appear = (isTurn && !mobile && !!document.querySelector('.act-about')) || section.hasAttribute('data-appear');   // v4: on the phone About is in flow, so the turn arrives in flow too
   if (appear) gsap.set(section, { autoAlpha: 0 });
   if (section.hasAttribute('data-appear')) { section.style.marginTop = mobile ? '-100svh' : '-100vh'; section.style.zIndex = '3'; }   // over the section it covers (the chapters are z 3 too; later in the page wins)
   const run = isTurn ? (mobile ? 280 : 400) : video ? 40 : (mobile ? 160 : 230);   // v4: a playing film only needs a short read (client: "too slow")   // film run, % of a screen (the turn: slow, Alex 2026-09-28)

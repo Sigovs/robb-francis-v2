@@ -11,8 +11,9 @@ import './tokens.js';
 import { heroEntrance } from './text.js';
 import { heroSequence } from './hero.js';
 import { heroScrub } from './hero-scrub.js';
-import { scrubSection } from './scrub.js';
+import { scrubSection, filmOnly } from './scrub.js';
 import { chaptersSection } from './chapters.js';
+import { phoneReveals } from './phone.js';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -38,8 +39,11 @@ export function initMotion(root) {
       run(heroEntrance, act('.act-hero'));   // V2: the page is the hero only (Alex, 2026-09-25)
       run((el) => heroSequence(el, { mobile: !desktop }), act('.act-hero'));   // two messages over the film (2026-09-28)
     }
-    run((el) => chaptersSection(el, { mobile: !desktop }), act('.act-chapters'));   // act 2: chapters 01/03 (sticky picture, scrolling text)
-    root.querySelectorAll('.act-scrub').forEach((el) => run((x) => scrubSection(x, { mobile: !desktop }), el));   // acts 2–3: scrubbed films
+    // v4 phone (client: "1/10"): the chapters stack (each its own picture, CSS) and About's film just plays; only the
+    // Ferrari keeps its scrub
+    if (desktop) run((el) => chaptersSection(el, { mobile: false }), act('.act-chapters'));
+    if (!desktop) run(phoneReveals, root);   // the phone's own motion: pictures cut in from the side, copy follows   // act 2: chapters 01/03 (sticky picture, scrolling text)
+    root.querySelectorAll('.act-scrub').forEach((el) => run((x) => (!desktop && x.classList.contains('act-about') ? filmOnly(x) : scrubSection(x, { mobile: !desktop })), el));   // acts 2–3
 
     // Refresh is declared (G8): once when webfonts land (they change the height of every text block
     // above the later pins). Images carry width/height, so they do not move geometry.
