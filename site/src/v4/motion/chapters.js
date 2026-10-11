@@ -1,0 +1,92 @@
+// ACT 2 · Chapters 01/03, built the way the reference is (Alex, 2026-09-28: "the image appears inside the image,
+// the right side with the text scrolls"). The picture side is sticky; the text column scrolls past it in ordinary
+// flow. As each chapter's text rises into view, its picture is revealed INSIDE the same square frame (a wipe from
+// the bottom, settling from a slight push-in) and its soft field comes up behind. The frame drifts a little across
+// the whole section and a rule along the bottom tracks it.
+// Scrubbed against the scroll (linear inside, smoothed by scrub against Lenis). Without motion: the first picture
+// holds and the texts scroll by — the page is complete (G7).
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function chaptersSection(section, { mobile = false } = {}) {
+  const imgs = [...section.querySelectorAll('.ch__img')];
+  const fields = [...section.querySelectorAll('.ch__field')];
+  const copies = [...section.querySelectorAll('.ch__copy')];
+  if (imgs.length < 2 || copies.length !== imgs.length) return;
+  section.classList.add('is-seq');
+  const frame = section.querySelector('.ch__frame');
+  const rule = section.querySelector('.ch__rule span');
+  const triggers = [];
+
+  imgs.slice(1).forEach((img) => gsap.set(img, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.12 }));
+  fields.slice(1).forEach((f) => gsap.set(f, { opacity: 0 }));
+
+  // each chapter after the first: its picture comes up inside the frame as its text comes up the column
+  for (let k = 1; k < imgs.length; k++) {
+    const tl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: { trigger: copies[k], start: 'top 75%', end: 'top 5%', scrub: 0.8 },   // as the next copy rises into place
+    });
+    tl.to(imgs[k], { clipPath: 'inset(0% 0% 0% 0%)', duration: 1 }, 0)
+      .to(imgs[k], { scale: 1, duration: 1 }, 0)
+      .to(imgs[k - 1], { scale: 1.06, duration: 1 }, 0);
+    if (fields[k]) tl.to(fields[k], { opacity: 1, duration: 0.8 }, 0.1);   // v3 has no photo fields (the ground + shapes instead)
+    triggers.push(tl);
+  }
+
+  // each copy group comes out of a blur as it rises to the middle, holds sharp, and lets go as it leaves
+  copies.forEach((c, k) => {
+    const g = c.querySelector('.ch__inner');
+    if (!g) return;
+    if (k > 0) {
+      const tin = gsap.timeline({ scrollTrigger: { trigger: c, start: mobile ? 'top 62%' : 'top 100%', end: mobile ? 'top 8%' : 'top 22%', scrub: 0.6 } });   // sharp by the time it lands (phone: the copy sits low, so it arrives later)
+      tin.fromTo(g.children, { autoAlpha: 0, y: 30, filter: 'blur(8px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', stagger: 0.08, ease: 'none' });
+      triggers.push(tin);
+    }
+    if (k < copies.length - 1) {
+      const tout = gsap.timeline({ scrollTrigger: { trigger: c, start: mobile ? 'bottom 62%' : 'bottom 84%', end: mobile ? 'bottom 22%' : 'bottom 40%', scrub: 0.6 } });   // only once it is pushed out; overlaps the next arrival
+      tout.to(g.children, { autoAlpha: 0, y: -30, filter: 'blur(8px)', stagger: 0.06, ease: 'none' });
+      triggers.push(tout);
+    }
+  });
+
+  // the frame drifts across the section; the rule tracks it
+  const whole = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.8 } });
+  if (frame) whole.fromTo(frame, { xPercent: -4 }, { xPercent: 4, duration: 1 }, 0);
+  if (rule) whole.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 1 }, 0);
+  // v3: the soft shapes of the ground drift a little, each its own way, across the whole section
+  const shapes = [...section.querySelectorAll('.ch__shape')];
+  const drift = [[8, 14, 12], [-10, 8, -9], [-6, -12, 7], [12, -6, -14]];
+  shapes.forEach((s, i) => { const [x, y, r] = drift[i % drift.length]; whole.fromTo(s, { xPercent: -x / 2, yPercent: -y / 2, rotation: -r / 2 }, { xPercent: x / 2, yPercent: y / 2, rotation: r / 2, duration: 1 }, 0); });
+  triggers.push(whole);
+
+  // v3 (Alex, 2026-09-29): the chapters hand over to the Jaguar the way the hero hands over to them — the last
+  // screen goes dark and the next scene appears in place (scrub.js, data-appear). The next section overlaps this
+  // one's last screen (-100vh), so that screen is the dark: the last text lets go, then the ground closes over.
+  const nextEl = section.nextElementSibling;
+  let dim = null;
+  if (nextEl?.hasAttribute('data-appear')) {
+    const media = section.querySelector('.ch__media');
+    dim = document.createElement('div');
+    dim.className = 'ch__dim';
+    media.append(dim);
+    const lastCopy = copies[copies.length - 1];
+    lastCopy.style.height = `calc(${getComputedStyle(lastCopy).height} + ${mobile ? '100svh' : '100vh'})`;   // the dark takes a screen: the last chapter keeps its full read
+    const last = lastCopy.querySelector('.ch__inner');
+    const out = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: section, start: 'bottom bottom+=100%', end: 'bottom bottom', scrub: 0.6 } });
+    if (last) out.to(last.children, { autoAlpha: 0, y: -30, filter: 'blur(8px)', duration: 0.5, stagger: 0.04, ease: 'power1.in' }, 0);
+    if (last) out.to(last, { borderLeftColor: 'rgba(236, 238, 241, 0)', duration: 0.5 }, 0);   // the hairline goes with its text
+    out.fromTo(dim, { opacity: 0 }, { opacity: 1, duration: 0.85, ease: 'power1.in' }, 0.1);
+    triggers.push(out);
+  }
+
+  return () => {
+    triggers.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); });
+    section.classList.remove('is-seq');
+    dim?.remove();
+    if (dim) { copies[copies.length - 1].style.height = ''; gsap.set(copies[copies.length - 1].querySelector('.ch__inner'), { clearProps: 'borderLeftColor' }); }
+    gsap.set([...imgs, ...fields, ...section.querySelectorAll('.ch__shape'), frame, rule, ...copies.flatMap((c) => [...(c.querySelector('.ch__inner')?.children || [])])].filter(Boolean), { clearProps: 'all' });
+  };
+}

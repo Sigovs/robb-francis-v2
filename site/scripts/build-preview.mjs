@@ -1,7 +1,7 @@
 // Builds ../preview/: a copy of the page that opens by double-click (file://) and doubles as the GitHub Pages
 // build. file:// cannot load ES modules, so the bundle is a classic IIFE script with relative paths, and only the
 // files the page actually references are copied (public/ holds ~60 MB of V1 images the page no longer uses).
-//   npm run preview:build   (index.html + v3.html)
+//   npm run preview:build   (index.html + v3.html + v4.html)
 import { build } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,7 +11,7 @@ const out = path.resolve(root, '../preview');
 
 fs.rmSync(out, { recursive: true, force: true });
 // one IIFE build per page (IIFE cannot code-split across inputs): index.html, and v3.html (the scrubbed hero)
-const pages = ['index.html', 'v3.html', 'ds.html'].filter((f) => fs.existsSync(path.join(root, f)));
+const pages = ['index.html', 'v3.html', 'v4.html', 'ds.html'].filter((f) => fs.existsSync(path.join(root, f)));
 let bytes = 0;
 const refs = new Set();
 for (const [n, page] of pages.entries()) {

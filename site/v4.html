@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robb Francis Sports Cars | Collector. Classic. Current. (v4)</title>
+  <meta name="description" content="Robb Francis Sports Cars is an Independent Full Service Boutique. Historic Peapack, NJ and California. By Appointment Only.">
+  <meta name="theme-color" content="#0a0b0f">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <!-- MOCKUP. Borrowed and generated media are listed in BRIEF.md §10 and are replaced before anything goes live. -->
+  <script>
+    document.documentElement.classList.replace('no-js', 'js');
+    // hold the hero back for its intro (motion allowed only); the intro releases it. Safety net: never longer than 2.5s.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('intro-wait');
+      setTimeout(function () { document.documentElement.classList.remove('intro-wait'); }, 2500);
+    }
+  </script>
+  <style>.intro-wait .site-header, .intro-wait .hero__media, .intro-wait .scrim--hero, .intro-wait .hero__copy--1, .intro-wait .hero__foot { opacity: 0; }</style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500&display=swap">
+
+  <link rel="preload" as="image" href="/img/hero-jaguar-poster-1920.webp" media="(min-width: 768px)" fetchpriority="high">
+  <link rel="preload" as="image" href="/img/hero-jaguar-poster-m-720.webp" media="(max-width: 767.98px)" fetchpriority="high">
+
+  <link rel="stylesheet" href="/src/v4/styles/main.css">
+  <script type="module" src="/src/v4/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ============ CHROME: utility bar + fixed nav. v4 IA (client, 2026-10-11): Inventory / Sell Your Car / Consign / About / Contact ============ -->
+  <header class="site-header" data-header>
+    <div class="util">
+      <div class="util__left">
+        <a class="util__item tnum" href="tel:+19082342100">(908) 234-2100</a>
+        <span class="util__item">By Appointment Only</span>
+      </div>
+
+      <a class="brand" href="#top" aria-label="Robb Francis Sports Cars, home">
+        <img src="/img/brand/rf-logo.svg" alt="" width="206" height="52">
+      </a>
+
+      <nav class="split-nav" aria-label="Primary">
+        <ul><li><a href="#inventory">Inventory</a></li><li><a href="#sell">Sell Your Car</a></li><li><a href="#consign">Consign</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
+      </nav>
+      <div class="util__right">
+        <a class="util__item" href="#collection">My Collection <span class="tnum">(00)</span></a>
+        <a class="btn btn--sm" href="#consign">We buy cars</a>
+      </div>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-drawer" data-menu-toggle>
+        <span class="menu-toggle__label">Menu</span>
+        <span class="menu-toggle__bars" aria-hidden="true"></span>
+      </button>
+      <a class="util-call" href="tel:+19082342100" aria-label="Call (908) 234-2100">Call</a>
+    </div>
+
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        <li><a href="#top" aria-current="page">Home</a></li>
+        <li><a href="#inventory">Inventory</a></li>
+        <li><a href="#sell">Sell Your Car</a></li>
+        <li><a href="#consign">Consign</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Mobile drawer: Home + the 5 items + the utility bar -->
+  <div class="drawer" id="nav-drawer" data-drawer hidden data-lenis-prevent>
+    <nav aria-label="Primary, mobile">
+      <ul class="drawer__nav">
+        <li><a href="#top" aria-current="page">Home</a></li>
+        <li><a href="#inventory">Inventory</a></li>
+        <li><a href="#sell">Sell Your Car</a></li>
+        <li><a href="#consign">Consign</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="drawer__util">
+      <a class="btn" href="#consign">We buy cars</a>
+      <a href="#collection">My Collection <span class="tnum">(00)</span></a>
+      <a class="tnum" href="tel:+19082342100">(908) 234-2100</a>
+      <span class="label">By Appointment Only</span>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ============ ACT 1 · HERO · the Jaguar film (client, 2026-10-11: video, not scroll animation) ============ -->
+    <section class="act act-hero" id="top" aria-labelledby="hero-title" data-act="1" data-hero-scrub data-hero-corner>
+      <div class="hero__media" aria-hidden="true">
+        <!-- v4: the E-Type film (generated, see BRIEF §10) plays by itself and loops THROUGH THE DARK (client, 2026-10-11):
+             it is a pull-back from the car to the coast road, so a plain loop would cut back to the close-up. Over its last
+             second it fades to the page ground (.hero__veil), jumps to frame 1 under it and comes up again (main.js).
+             The poster is frame 1 (the whole picture without motion); the visitor keeps Pause/Play. -->
+        <picture class="hero__poster">
+          <!-- reduced motion: the film never starts, so the still is its last frame (the composed wide shot) -->
+          <source media="(prefers-reduced-motion: reduce) and (max-width: 767.98px)" srcset="/img/hero-jaguar-end-m-720.webp">
+          <source media="(prefers-reduced-motion: reduce)" srcset="/img/hero-jaguar-end-1920.webp">
+          <source media="(max-width: 767.98px)" srcset="/img/hero-jaguar-poster-m-720.webp">
+          <img src="/img/hero-jaguar-poster-1920.webp" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
+        </picture>
+        <video class="hero__video" muted playsinline preload="none" data-fade-loop
+          data-src-desktop="/video/hero-jaguar-1080.mp4" data-src-desktop-av1="/video/hero-jaguar-1080.av1.mp4"
+          data-src-mobile="/video/hero-jaguar-720x900.mp4"></video>
+        <div class="hero__veil" aria-hidden="true"></div>
+      </div>
+      <div class="scrim scrim--hero" aria-hidden="true"></div>
+      <div class="scrub__dim" aria-hidden="true"></div>
+
+      <div class="hero__copy hero__copy--1">
+        <div class="hero__copy-inner" data-seq-out>
+          <p class="label hero__kicker">Robb Francis Sports Cars</p>
+          <h1 class="hero__title" id="hero-title">
+            <span class="display display--hero"><span class="hl">Collector.</span> <span class="hl">Classic. Current.</span></span>
+            <span class="lead"><span class="lead__l">Now purchasing collector and performance vehicles.</span></span>
+          </h1>
+          <!-- v4: the film's Pause/Play sits beside the action, so the copy can stand on the hero's bottom line -->
+          <div class="hero__actions">
+            <a class="btn btn--lg btn--line hero__cta hero__cta--line" href="#inventory">View Inventory <span aria-hidden="true">→</span></a>
+            <button class="hero__pause" type="button" data-video-toggle aria-pressed="false" hidden>
+              <span class="sr-only" data-video-label>Pause film</span>
+              <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
+              <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- v3 (Alex's hero mock, 2026-09-29): a small, quiet glass announcement card, lower right, clear of the car:
+           a thumbnail of the California gallery, the place, one line, one link (the whole card is the link).
+           It arrives on scroll (motion/hero-scrub.js). -->
+      <aside class="hero__side ca-card ca-card--glass" data-hero-side aria-labelledby="ca-title">
+        <div class="ca-card__inner" data-loc-inner>
+          <a class="gcard" href="#contact">
+            <span class="gcard__thumb"><img src="/img/ca-place.webp" alt="" width="900" height="1125" loading="lazy" decoding="async"></span>
+            <span class="gcard__copy">
+              <span class="gcard__title" id="ca-title">Now on the California Coast.</span>
+              <span class="gcard__place">Montecito, California</span>
+              <span class="gcard__link">Visit by Appointment <span class="gcard__arrow" aria-hidden="true">→</span></span>
+            </span>
+          </a>
+        </div>
+      </aside>
+
+    </section>
+
+
+    <!-- ============ ACT 2 · CHAPTERS 01/02 (Forge's device, Alex 2026-09-28; v4: Finance removed, client 2026-10-11) ============
+         Each chapter: a square inset over a soft full-bleed field of the same photograph; the next chapter rises
+         from below and covers the last. Photos: drop 01/02/03 into site/_masters/chapters and run npm run chapters.
+         The current images are placeholders until Alex's photographs land. -->
+    <section class="act act-chapters act-chapters--line" id="services" aria-label="Consignment and inventory" data-chapters>
+      <!-- Forge's structure: the picture side is sticky (a soft full-bleed field + a square frame); the text column
+           scrolls past it in normal flow, and each chapter's picture is revealed INSIDE the same frame as its text
+           arrives. Photos: site/_masters/chapters → npm run chapters (Forge placeholders for now). -->
+      <div class="ch__media" aria-hidden="true">
+        <!-- v3 (Alex, 2026-09-29): the page's own ground instead of the photographs' blurred fields, with a gradient built
+             from a few irregular soft shapes (cool slate and steel from the site, one breath of the sampled oxblood).
+             They drift a little across the section (motion/chapters.js). -->
+        <div class="ch__fields ch__fields--shapes">
+          <span class="ch__shape ch__shape--a"></span>
+          <span class="ch__shape ch__shape--b"></span>
+          <span class="ch__shape ch__shape--c"></span>
+          <span class="ch__shape ch__shape--d"></span>
+        </div>
+        <figure class="ch__frame">
+            <!-- v4 (client, 2026-10-11): real premises. Consign: the office looking through to the garage (HEIC 180316).
+                 Inventory: the night facade, the two glass garage doors (HEIC 180522; the white pickup was removed with an
+                 AI edit, only that region composited back: _masters/place/180522-no-truck.jpg). -->
+            <img class="ch__img" src="/img/chapters/v4/consign.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="0">
+            <img class="ch__img" src="/img/chapters/v4/inventory.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="1">
+        </figure>
+      </div>
+      <div class="ch__texts">
+        <div class="ch__copy" id="consign" data-ch aria-labelledby="ch02-title">
+          <div class="ch__inner">
+            <p class="ch__count"><span class="ch__n">01</span><span class="ch__dash" aria-hidden="true"></span>02</p>
+            <h2 class="ch__title" id="ch02-title">Consign</h2>
+            <p class="ch__text">Your car, presented privately to the right buyer, by appointment only.</p>
+            <a class="btn btn--lg btn--line cta" href="#contact">Consign Your Car <span aria-hidden="true">→</span></a>
+</div>
+        </div>
+        <div class="ch__copy" data-ch aria-labelledby="ch03-title">
+          <div class="ch__inner">
+            <p class="ch__count"><span class="ch__n">02</span><span class="ch__dash" aria-hidden="true"></span>02</p>
+            <h2 class="ch__title" id="ch03-title">Inventory</h2>
+            <p class="ch__text">A small, carefully kept collection of collector, classic and current sports cars. Viewings by&nbsp;appointment.</p>
+            <a class="btn btn--lg btn--line cta" href="#inventory">View the Inventory <span aria-hidden="true">→</span></a>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ACT 2 · ABOUT over a film ============
+         v4 (client, 2026-10-11): the E-Type moved up to the hero, so About takes the Porsche 356 film from the earlier
+         hero. It plays by itself and loops (motion/scrub.js filmLoop), no scrub; the pin, the copy and the handover to
+         the walk-around are unchanged. Static / reduced motion: the poster (frame 1) as the still. -->
+    <section class="act act-scrub act-about" id="about" aria-labelledby="about-title" data-scrub="porsche-film" data-appear>
+      <div class="scrub__stage">
+        <picture>
+          <source media="(max-width: 767.98px)" srcset="/img/hero-poster-m-720.webp">
+          <img class="scrub__still" src="/img/hero-poster-1920.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async">
+        </picture>
+        <video class="scrub__video" muted loop playsinline preload="none" aria-hidden="true"
+          data-src-desktop="/video/hero-1080.mp4" data-src-desktop-av1="/video/hero-1080.av1.mp4"
+          data-src-mobile="/video/hero-720x900.mp4"></video>
+        <div class="scrub__fade" aria-hidden="true"></div>
+      </div>
+      <div class="scrub__copy about__copy" data-soft-in>
+        <p class="label hero__kicker">About</p>
+        <h2 class="about__title" id="about-title">An Independent<br>Full Service Boutique.</h2>
+        <p class="about__text">We specialize in the purchase and sale of superior quality import and domestic collector, classic and current state of the art sports cars.</p>
+        <a class="btn btn--lg btn--line cta" href="#contact">About Robb Francis <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero__foot about__foot">
+        <button class="hero__pause" type="button" data-film-toggle aria-pressed="false" hidden>
+          <span class="sr-only" data-film-label>Pause film</span>
+          <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
+          <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
+        </button>
+      </div>
+      <div class="scrub__dim" aria-hidden="true"></div>
+    </section>
+
+    <!-- ============ ACT 3 · THE WALK-AROUND: the 356 turns on scroll ============ -->
+    <section class="act act-scrub act-turn" id="collection" aria-labelledby="turn-title" data-scrub="f550">
+      <div class="scrub__stage">
+        <img class="scrub__still" src="/frames/f550/097.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+        <canvas class="scrub__canvas" data-frames="/frames/f550/" data-count="97" data-shift="-0.07" data-lower="0.02" data-car="0.086,0.362,0.639,0.63" data-hold="170" aria-hidden="true"></canvas>
+        <div class="scrub__fade" aria-hidden="true"></div>
+      </div>
+      <!-- v3 (Alex, 2026-09-29): the walk-around is a Ferrari 550 Barchetta Pininfarina (_video/newferrari scrub.mp4 →
+           _masters/video/scrub-f550-barchetta.mp4, 97 frames). The card is model-level history, not a stock claim:
+           the film's car is not listed inventory, so the plate says "Model notes". Figures: Ferrari's published model data. -->
+      <!-- Alex's layout (2026-09-29): the film is the event; this card stays hidden through the scrub and arrives only
+           at the final stop — a reward for watching, not a panel that competes with the car. A hairline, not a box.
+           Model-level figures: verify against the specific car before launch. -->
+      <aside class="spec-card spec-card--line" data-card aria-labelledby="spec-title">
+        <p class="label spec-card__kicker">Ferrari</p>
+        <h3 class="spec-card__title" id="spec-title">550 Barchetta Pininfarina</h3>
+        <dl class="spec-card__plate">
+          <dt>Built</dt><dd class="tnum">2000–2001</dd>
+          <dt>Made</dt><dd class="tnum">448&nbsp;built</dd>
+          <dt>Engine</dt><dd>Front-mounted V12 · 5.5&nbsp;L</dd>
+          <dt>Output</dt><dd class="tnum">485&nbsp;PS</dd>
+          <dt>Gearbox</dt><dd>Six-speed&nbsp;manual</dd>
+        </dl>
+        <a class="btn btn--lg btn--line cta" href="#contact">Open to Discussion <span aria-hidden="true">→</span></a>
+      </aside>
+      <div class="scrub__veil" aria-hidden="true"></div>
+      <div class="scrub__copy turn__copy">
+        <p class="label hero__kicker" data-scrub-in>From the Private Collection</p>
+        <h2 class="display display--hero turn__title" id="turn-title" data-scrub-in><span class="hl">Every Angle.</span> <span class="hl">Every Detail.</span></h2>
+      </div>
+      <!-- three numbered notes in their own band under the film — never on the bodywork. Each lights as the turn
+           reaches it. Model-level notes: verify against the specific car before launch. -->
+      <ol class="turn-notes" data-turn-notes aria-label="Details">
+        <li class="turn-notes__item"><span class="turn-notes__n tnum">01</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Pininfarina-designed open bodywork</span></li>
+        <li class="turn-notes__item"><span class="turn-notes__n tnum">02</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Naturally aspirated V12</span></li>
+        <li class="turn-notes__item"><span class="turn-notes__n tnum">03</span><span class="turn-notes__rule" aria-hidden="true"></span><span class="turn-notes__t">Six-speed gated manual</span></li>
+      </ol>
+    </section>
+
+    <!-- ============ v3 · THE SALON (Alex chose direction B, 2026-09-29) ============
+         The client's cars hung the way the Montecito gallery hangs its motorsport art: an asymmetric salon wall on the
+         page ground — one lead lot large, four smaller at mixed sizes on shared top lines — each with a printed museum
+         label beneath. Still on purpose: after two scrubbed pins, the calm is the contrast. Hover a frame and the others
+         dim (a spotlight, not movement). Cars and notes: the client's own Instagram features, verbatim
+         (reference/sold/SOLD.md); availability NOT confirmed, so "Featured · availability on enquiry", never "in stock".
+         It appears in place after the Ferrari (main.js initFeatured). -->
+    <section class="act act-featured act-cards" id="inventory" aria-labelledby="cards-title">
+      <div class="cards__wrap">
+        <div class="cards__head">
+          <div>
+            <p class="label cards__kicker">For Sale · Open to Discussion</p>
+            <h2 class="cards__title" id="cards-title">Available Now.</h2>
+          </div>
+        </div>
+      </div>
+      <ul class="cards__track" data-car-track aria-label="Cars for sale">
+        <li class="vcard">
+          <div class="vcard__media">
+            <img src="/img/forsale/ferrari-275-gtb.webp" alt="" width="1400" height="933" style="--pos:50% 60%" loading="lazy" decoding="async">
+            <span class="vcard__badge">Featured</span>
+          </div>
+          <div class="vcard__body">
+            <h3 class="vcard__title">Ferrari 275 GTB</h3>
+            <ul class="vcard__specs"><li>Coupé</li><li>Colombo V12</li><li>Manual</li></ul>
+            <p class="vcard__about">Pininfarina's long-nosed berlinetta and the car that brought a transaxle and independent rear suspension to the road-going Ferrari. The Colombo V12 sings to seven thousand, and every line of the body looks right from any angle.</p>
+            <div class="vcard__foot">
+              <span class="vcard__price">Price on request</span>
+              <a class="btn btn--sm btn--line vcard__btn" href="#contact" aria-label="Enquire about the Ferrari 275 GTB">Enquire <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </li>
+        <li class="vcard">
+          <div class="vcard__media">
+            <img src="/img/forsale/porsche-911-st.webp" alt="" width="1400" height="933" style="--pos:50% 62%" loading="lazy" decoding="async">
+            <span class="vcard__badge">New Arrival</span>
+          </div>
+          <div class="vcard__body">
+            <h3 class="vcard__title">Porsche 911 S/T</h3>
+            <ul class="vcard__specs"><li>Coupé</li><li>4.0 L flat-six</li><li>Six-speed manual</li></ul>
+            <p class="vcard__about">Built to mark sixty years of the 911: the GT3 RS engine, a lightweight clutch and a manual gearbox, with no rear wing to spoil the line. A modern 911 made for drivers who still want to change gear themselves.</p>
+            <div class="vcard__foot">
+              <span class="vcard__price">Price on request</span>
+              <a class="btn btn--sm btn--line vcard__btn" href="#contact" aria-label="Enquire about the Porsche 911 S/T">Enquire <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </li>
+        <li class="vcard">
+          <div class="vcard__media">
+            <img src="/img/forsale/shelby-gt500.webp" alt="" width="1400" height="933" style="--pos:50% 60%" loading="lazy" decoding="async">
+            <span class="vcard__badge">Featured</span>
+          </div>
+          <div class="vcard__body">
+            <h3 class="vcard__title">Shelby GT500</h3>
+            <ul class="vcard__specs"><li>Fastback</li><li>428 V8</li></ul>
+            <p class="vcard__about">Carroll Shelby's big-block Mustang: the 428 V8, the fibreglass nose and the tail-light panel that set it apart from every other fastback of its day. Among the most wanted American cars of the sixties.</p>
+            <div class="vcard__foot">
+              <span class="vcard__price">Price on request</span>
+              <a class="btn btn--sm btn--line vcard__btn" href="#contact" aria-label="Enquire about the Shelby GT500">Enquire <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </li>
+        <li class="vcard">
+          <div class="vcard__media">
+            <img src="/img/forsale/ford-bronco.webp" alt="" width="1400" height="933" style="--pos:50% 66%" loading="lazy" decoding="async">
+            <span class="vcard__badge">New Arrival</span>
+          </div>
+          <div class="vcard__body">
+            <h3 class="vcard__title">Ford Bronco</h3>
+            <ul class="vcard__specs"><li>4×4</li><li>Removable top</li></ul>
+            <p class="vcard__about">The first-generation Bronco: compact, square-shouldered and happiest with the top off. Equally at home on the beach road and at the club, it has become one of the most loved classics of the last decade.</p>
+            <div class="vcard__foot">
+              <span class="vcard__price">Price on request</span>
+              <a class="btn btn--sm btn--line vcard__btn" href="#contact" aria-label="Enquire about the Ford Bronco">Enquire <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </li>
+        <li class="vcard">
+          <div class="vcard__media">
+            <img src="/img/forsale/porsche-911-safari.webp" alt="" width="1400" height="933" style="--pos:50% 66%" loading="lazy" decoding="async">
+            <span class="vcard__badge">Featured</span>
+          </div>
+          <div class="vcard__body">
+            <h3 class="vcard__title">Porsche 911 Safari</h3>
+            <ul class="vcard__specs"><li>Rally-built</li><li>Air-cooled flat-six</li></ul>
+            <p class="vcard__about">An air-cooled 911 raised, reinforced and fitted for the rough road, in the spirit of the East African Safari rally cars. Roof rack, spot lamps and all-terrain tyres: a classic Porsche built to be used anywhere.</p>
+            <div class="vcard__foot">
+              <span class="vcard__price">Price on request</span>
+              <a class="btn btn--sm btn--line vcard__btn" href="#contact" aria-label="Enquire about the Porsche 911 Safari">Enquire <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============ ACT 8 · CLOSING · release ============ -->
+    <section class="act act-closing" id="contact" aria-labelledby="closing-title" data-act="8">
+      <div class="closing__plate" aria-hidden="true">
+        <picture class="closing__facade">
+          <source type="image/avif" srcset="/img/facade-night-1440.avif 1440w, /img/facade-night-2560.avif 2560w" sizes="100vw">
+          <img src="/img/facade-night-1440.jpg" alt="" width="1440" height="553" loading="lazy" decoding="async">
+        </picture>
+        <picture class="closing__cars">
+          <source media="(max-width: 767.98px)" type="image/avif" srcset="/img/gen/gen-close-single-m-900.avif">
+          <source media="(max-width: 767.98px)" srcset="/img/gen/gen-close-single-m-900.jpg">
+          <source type="image/avif" srcset="/img/gen/gen-close-trio-1440.avif 1440w, /img/gen/gen-close-trio-2400.avif 2400w" sizes="100vw">
+          <img src="/img/gen/gen-close-trio-1440.jpg" alt="" width="1440" height="804" loading="lazy" decoding="async">
+        </picture>
+      </div>
+
+      <div class="closing__copy">
+        <p class="lead closing__kicker">Now purchasing collector and performance vehicles across both coasts</p>
+        <h2 class="display display--xl closing__title" id="closing-title"><span class="cl"><span class="cl__in">New Jersey</span></span> <span class="cl"><span class="cl__in">California</span></span></h2>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img class="footer__logo" src="/img/brand/rf-logo.svg" alt="Robb Francis Sports Cars" width="300" height="76" loading="lazy">
+        <p class="body body--quiet">An Independent Full Service Dealership.</p>
+      </div>
+      <div>
+        <h2 class="label">New Jersey</h2>
+        <p class="body">Historic Peapack, NJ<br>By Appointment Only</p>
+        <p class="body"><a class="tnum" href="tel:+12012470003">(201) 247-0003</a></p>
+      </div>
+      <div>
+        <h2 class="label">California</h2>
+        <p class="body">Appointments and inquiries</p>
+        <p class="body"><a class="tnum" href="tel:+19082342100">(908) 234-2100</a></p>
+      </div>
+      <div>
+        <h2 class="label">Hours</h2>
+        <p class="body tnum">Mon, Wed–Sat<br>9:30 AM – 5:00 PM</p>
+        <p class="body">Tue &amp; Sun by appointment only</p>
+      </div>
+      <div>
+        <h2 class="label">Contact</h2>
+        <p class="body"><a href="mailto:sales@rfsportscars.com">sales@rfsportscars.com</a></p>
+        <p class="body footer__social"><a href="https://www.instagram.com/robbfrancis_sportscars" rel="noopener" target="_blank">Instagram</a> <a href="https://www.facebook.com/robbfrancisportscars/" rel="noopener" target="_blank">Facebook</a></p>
+      </div>
+    </div>
+    <div class="footer__legal">
+      <p class="label label--quiet">Robb Francis Sports Cars</p>
+      <p class="label label--quiet footer__links"><a href="/warranty/">Warranty</a> <a href="/privacy-policy/">Privacy Policy</a> <a href="#top">Back to top</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
