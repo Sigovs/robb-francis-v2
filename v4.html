@@ -25,8 +25,8 @@
   <link rel="preload" as="image" href="./img/hero-jaguar-poster-1920.webp" media="(min-width: 768px)" fetchpriority="high">
   <link rel="preload" as="image" href="./img/hero-jaguar-poster-m-720.webp" media="(max-width: 767.98px)" fetchpriority="high">
 
-  <script defer src="./assets/v4-BOmxogzH.js"></script>
-  <link rel="stylesheet" href="./assets/style-2upKcsK9.css">
+  <script defer src="./assets/v4-BNOwmT07.js"></script>
+  <link rel="stylesheet" href="./assets/style-BTxomga5.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -152,11 +152,11 @@
     </section>
 
 
-    <!-- ============ ACT 2 · CHAPTERS 01/02 (Forge's device, Alex 2026-09-28; v4: Finance removed, client 2026-10-11) ============
+    <!-- ============ ACT 2 · CHAPTERS 01/03 (Forge's device, Alex 2026-09-28; v4: Finance removed, Sell Your Car in its place, client 2026-10-11) ============
          Each chapter: a square inset over a soft full-bleed field of the same photograph; the next chapter rises
          from below and covers the last. Photos: drop 01/02/03 into site/_masters/chapters and run npm run chapters.
          The current images are placeholders until Alex's photographs land. -->
-    <section class="act act-chapters act-chapters--line" id="services" aria-label="Consignment and inventory" data-chapters>
+    <section class="act act-chapters act-chapters--line" id="services" aria-label="Sell your car, consignment and inventory" data-chapters>
       <!-- Forge's structure: the picture side is sticky (a soft full-bleed field + a square frame); the text column
            scrolls past it in normal flow, and each chapter's picture is revealed INSIDE the same frame as its text
            arrives. Photos: site/_masters/chapters → npm run chapters (Forge placeholders for now). -->
@@ -174,22 +174,36 @@
             <!-- v4 (client, 2026-10-11): real premises. Consign: the office looking through to the garage (HEIC 180316).
                  Inventory: the night facade, the two glass garage doors (HEIC 180522; the white pickup was removed with an
                  AI edit, only that region composited back: _masters/place/180522-no-truck.jpg). -->
-            <img class="ch__img" src="./img/chapters/v4/consign.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="0">
-            <img class="ch__img" src="./img/chapters/v4/inventory.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="1">
+            <img class="ch__img" src="./img/chapters/v4/sell.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="0">
+            <img class="ch__img" src="./img/chapters/v4/consign.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="1">
+            <img class="ch__img" src="./img/chapters/v4/inventory.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async" data-k="2">
         </figure>
       </div>
       <div class="ch__texts">
-        <div class="ch__copy" id="consign" data-ch aria-labelledby="ch02-title">
+        <!-- v4 (client, 2026-10-11): Sell Your Car takes Finance's place. Copy verbatim from the client's own pop-up
+             (BRIEF §0); the action is their utility-bar line, "We buy cars". Picture: the garage (HEIC 180609). -->
+        <div class="ch__copy" id="sell" data-ch aria-labelledby="ch01-title">
+          <span class="ch__pic-frame"><img class="ch__pic" src="./img/chapters/v4/sell.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async"></span>
           <div class="ch__inner">
-            <p class="ch__count"><span class="ch__n">01</span><span class="ch__dash" aria-hidden="true"></span>02</p>
+            <p class="ch__count"><span class="ch__n">01</span><span class="ch__dash" aria-hidden="true"></span>03</p>
+            <h2 class="ch__title" id="ch01-title">Sell Your Car</h2>
+            <p class="ch__text">Now purchasing collector and performance vehicles across both coasts. Wherever you are, our team is ready to evaluate your car.</p>
+            <a class="btn btn--lg btn--line cta" href="#contact">We Buy Cars <span aria-hidden="true">→</span></a>
+</div>
+        </div>
+        <div class="ch__copy" id="consign" data-ch aria-labelledby="ch02-title">
+          <span class="ch__pic-frame"><img class="ch__pic" src="./img/chapters/v4/consign.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async"></span>
+          <div class="ch__inner">
+            <p class="ch__count"><span class="ch__n">02</span><span class="ch__dash" aria-hidden="true"></span>03</p>
             <h2 class="ch__title" id="ch02-title">Consign</h2>
             <p class="ch__text">Your car, presented privately to the right buyer, by appointment only.</p>
             <a class="btn btn--lg btn--line cta" href="#contact">Consign Your Car <span aria-hidden="true">→</span></a>
 </div>
         </div>
         <div class="ch__copy" data-ch aria-labelledby="ch03-title">
+          <span class="ch__pic-frame"><img class="ch__pic" src="./img/chapters/v4/inventory.webp" alt="" width="1200" height="1200" loading="lazy" decoding="async"></span>
           <div class="ch__inner">
-            <p class="ch__count"><span class="ch__n">02</span><span class="ch__dash" aria-hidden="true"></span>02</p>
+            <p class="ch__count"><span class="ch__n">03</span><span class="ch__dash" aria-hidden="true"></span>03</p>
             <h2 class="ch__title" id="ch03-title">Inventory</h2>
             <p class="ch__text">A small, carefully kept collection of collector, classic and current sports cars. Viewings by&nbsp;appointment.</p>
             <a class="btn btn--lg btn--line cta" href="#inventory">View the Inventory <span aria-hidden="true">→</span></a>
@@ -211,6 +225,13 @@
         <video class="scrub__video" muted loop playsinline preload="none" aria-hidden="true"
           data-src-desktop="./video/hero-1080.mp4" data-src-desktop-av1="./video/hero-1080.av1.mp4"
           data-src-mobile="./video/hero-720x900.mp4"></video>
+        <div class="hero__foot about__foot">
+          <button class="hero__pause" type="button" data-film-toggle aria-pressed="false" hidden>
+            <span class="sr-only" data-film-label>Pause film</span>
+            <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
+            <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
+          </button>
+        </div>
         <div class="scrub__fade" aria-hidden="true"></div>
       </div>
       <div class="scrub__copy about__copy" data-soft-in>
@@ -218,13 +239,6 @@
         <h2 class="about__title" id="about-title">An Independent<br>Full Service Boutique.</h2>
         <p class="about__text">We specialize in the purchase and sale of superior quality import and domestic collector, classic and current state of the art sports cars.</p>
         <a class="btn btn--lg btn--line cta" href="#contact">About Robb Francis <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="hero__foot about__foot">
-        <button class="hero__pause" type="button" data-film-toggle aria-pressed="false" hidden>
-          <span class="sr-only" data-film-label>Pause film</span>
-          <svg class="hero__pause-icon hero__pause-icon--pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.5" height="10" rx="0.5"/><rect x="9.5" y="3" width="2.5" height="10" rx="0.5"/></svg>
-          <svg class="hero__pause-icon hero__pause-icon--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6a.5.5 0 0 0 .77.42l7.2-4.8a.5.5 0 0 0 0-.84l-7.2-4.8A.5.5 0 0 0 5 3.2z"/></svg>
-        </button>
       </div>
       <div class="scrub__dim" aria-hidden="true"></div>
     </section>
